@@ -46,6 +46,66 @@ function addDbPointer(file) {
 	languages.push(langCode);
 }
 
+function langPut(req, res) {
+	const data = req.body.data;
+	const langCode = req.params.langCode;
+	if (languages.indexOf(langCode) < 0) {
+		throw new Error('Language does not exist!');
+	} else {
+		Object.keys(data).forEach(tag => {
+			let oldValue = dbs[langCode].get(tag);
+			let newValue = data[tag];
+			if (oldValue !== newValue) {
+				dbs[langCode].set(tag, data[tag]);
+				io.emit('dbEvent', {
+					type: 'TRANSLATION_CHANGED',
+					data: {
+						[langCode]: { [tag]: { newValue: newValue, oldValue: oldValue } }
+					}
+				});
+			}
+		});
+	}
+}
+
+function tagPost(req, res) {
+	const tag = req.body.tag;
+
+	if (!tag) {
+		throw new Error('Wrong tag!');
+	}
+
+	let exists = false;
+	languages.forEach(lang => {
+		if (dbs[lang].has(tag)) {
+			exists = true;
+		}
+	});
+
+	if (exists) {
+		throw new Error('Already exists!');
+	} else {
+		let payload = {};
+		languages.forEach(lang => {
+			dbs[lang].set(tag, '');
+			payload[lang] = { [tag]: '' };
+		});
+		io.emit('dbEvent', { type: 'TAG_ADDED', data: payload });
+	}
+}
+
+function apiFunction(req, res, action) {
+	let result = { error: null, success: true, data: {} };
+	try {
+		result = action(req, res) || result;
+	} catch (e) {
+		result.error = e.toString();
+		result.success = false;
+		res.send(result);
+	} finally {
+		res.send(result);
+	}
+}
 // ----- create server app with routing from external file
 const app = express();
 
@@ -113,63 +173,12 @@ app.post('/lang', (req, res) => {
 // 	}
 // });
 app.put('/lang/:langCode', (req, res) => {
-	let result = { error: null, success: true };
-	try {
-		const data = req.body.data;
-		const langCode = req.params.langCode;
-		if (languages.indexOf(langCode) < 0) {
-			throw new Error('Language does not exist!');
-		} else {
-			Object.keys(data).forEach(tag => {
-				let oldValue = dbs[langCode].get(tag);
-				let newValue = data[tag];
-				if (oldValue !== newValue) {
-					dbs[langCode].set(tag, data[tag]);
-					io.emit('dbEvent', {
-						type: 'TRANSLATION_CHANGED',
-						data: {
-							[langCode]: { [tag]: { newValue: newValue, oldValue: oldValue } }
-						}
-					});
-				}
-			});
-		}
-	} catch (e) {
-		result.error = e.toString();
-		result.success = false;
-	} finally {
-		res.send(result);
-	}
+	apiFunction(req, res, langPut);
 });
 
 //------------tag ----------------------
 app.post('/tag', (req, res) => {
-	let result = { error: null, success: true };
-	try {
-		const tag = req.body.tag;
-		let exists = false;
-		languages.forEach(lang => {
-			if (dbs[lang].has(tag)) {
-				exists = true;
-			}
-		});
-
-		if (exists) {
-			throw new Error('Already exists!');
-		} else {
-			let payload = {};
-			languages.forEach(lang => {
-				dbs[lang].set(tag, '');
-				payload[lang] = { [tag]: '' };
-			});
-			io.emit('dbEvent', { type: 'TAG_ADDED', data: payload });
-		}
-	} catch (e) {
-		result.error = e.toString();
-		result.success = false;
-	} finally {
-		res.send(result);
-	}
+	apiFunction(req, res, tagPost);
 });
 
 //-----------extra features -----------
