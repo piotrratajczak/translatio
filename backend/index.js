@@ -46,6 +46,40 @@ function addDbPointer(file) {
 	languages.push(langCode);
 }
 
+function langPost(req, res) {
+	let result = { error: null, success: true };
+	const langCode = req.body.langCode;
+	if (languages.indexOf(langCode) > -1 || dbs[langCode]) {
+		throw new Error('Already exists!');
+	} else {
+		let newLang = {};
+
+		// if there already exist any data copy it with empty values
+		let existingLangs = Object.keys(dbs);
+		if (existingLangs.length) {
+			newLang = _.mapValues(dbs[existingLangs[0]].JSON(), () => '');
+		}
+
+		const fileName = config.filesUrl + '/' + langCode + '.json';
+
+		fs.writeFile(fileName, JSON.stringify(newLang), function(err) {
+			if (err) {
+				throw new Error('Could not createa a db file!');
+			}
+
+			addDbPointer(fileName);
+		});
+
+		// emit event
+		io.emit('dbEvent', {
+			type: 'LANGUAGE_ADDED',
+			data: { [langCode]: newLang }
+		});
+
+		res.send(result);
+	}
+}
+
 function langPut(req, res) {
 	const data = req.body.data;
 	const langCode = req.params.langCode;
@@ -66,6 +100,8 @@ function langPut(req, res) {
 			}
 		});
 	}
+
+	return {};
 }
 
 function tagPost(req, res) {
@@ -92,18 +128,67 @@ function tagPost(req, res) {
 		});
 		io.emit('dbEvent', { type: 'TAG_ADDED', data: payload });
 	}
+
+	return {};
 }
 
-function apiFunction(req, res, action) {
+function getEmptyTags(res, req) {
+	let result = { data: {} };
+	languages.forEach(lang => {
+		let empties = _.pickBy(dbs[lang].JSON(), tag => !tag.length);
+		if (Object.keys(empties).length) {
+			result.data[lang] = empties;
+		}
+	});
+	return result;
+}
+
+function checkCoherence(res, req) {
+	let result = { data: {} };
+	let keys = [];
+
+	languages.forEach(lang => {
+		keys = [...keys, ...Object.keys(dbs[lang].JSON())];
+	});
+
+	let reducedKeys = keys.reduce((prev, cur, index) => {
+		// initial action for 0  - it starts with second element as cur (index === 1)
+		if (index === 1) {
+			let a = {};
+			a[prev] = 1;
+			prev = a;
+		}
+		// normal action for all elements
+		if (prev[cur]) {
+			prev[cur]++;
+		} else {
+			prev[cur] = 1;
+		}
+
+		return prev;
+	});
+
+	const length = languages.length;
+
+	result.data = _.chain(reducedKeys)
+		.pickBy(amount => amount !== length)
+		.keys();
+
+	return result;
+}
+
+function apiFunction(req, res, action, sendRes = true) {
 	let result = { error: null, success: true, data: {} };
 	try {
-		result = action(req, res) || result;
+		result = Object.assign(result, action(req, res));
 	} catch (e) {
 		result.error = e.toString();
 		result.success = false;
 		res.send(result);
 	} finally {
-		res.send(result);
+		if (sendRes || result.error) {
+			res.send(result);
+		}
 	}
 }
 // ----- create server app with routing from external file
@@ -116,43 +201,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 // ----------- lang ---------------------
 app.get('/lang', (req, res) => res.send(languages)); //list
 app.post('/lang', (req, res) => {
-	let result = { error: null, success: true };
-	try {
-		const langCode = req.body.langCode;
-		if (languages.indexOf(langCode) > -1 || dbs[langCode]) {
-			throw new Error('Already exists!');
-		} else {
-			let newLang = {};
-
-			// if there already exist any data copy it with empty values
-			let existingLangs = Object.keys(dbs);
-			if (existingLangs.length) {
-				newLang = _.mapValues(dbs[existingLangs[0]].JSON(), () => '');
-			}
-
-			const fileName = config.filesUrl + '/' + langCode + '.json';
-
-			fs.writeFile(fileName, JSON.stringify(newLang), function(err) {
-				if (err) {
-					throw new Error('Could not createa a db file!');
-				}
-
-				addDbPointer(fileName);
-			});
-
-			// emit event
-			io.emit('dbEvent', {
-				type: 'LANGUAGE_ADDED',
-				data: { [langCode]: newLang }
-			});
-
-			res.send(result);
-		}
-	} catch (e) {
-		result.error = e.toString();
-		result.success = false;
-		res.send(result);
-	}
+	apiFunction(req, res, langPost, false);
 });
 
 //------------ lang / :LANGCODE ------------------
@@ -183,66 +232,17 @@ app.post('/tag', (req, res) => {
 
 //-----------extra features -----------
 app.get('/extra/emptytags', (req, res) => {
-	let result = { error: null, success: true, data: {} };
-
-	try {
-		languages.forEach(lang => {
-			let empties = _.pickBy(dbs[lang].JSON(), tag => !tag.length);
-			if (Object.keys(empties).length) {
-				result.data[lang] = empties;
-			}
-		});
-	} catch (e) {
-		result.error = e.toString();
-		result.success = false;
-	} finally {
-		res.send(result);
-	}
+	apiFunction(req, res, getEmptyTags);
 });
 
 // return info about incoherente tags
 app.get('/extra/coherence', (req, res) => {
-	let result = { error: null, success: true, data: {} };
-	try {
-		keys = [];
-
-		languages.forEach(lang => {
-			keys = [...keys, ...Object.keys(dbs[lang].JSON())];
-		});
-
-		let reducedKeys = keys.reduce((prev, cur, index) => {
-			// initial action for 0  - it starts with second element as cur (index === 1)
-			if (index === 1) {
-				let a = {};
-				a[prev] = 1;
-				prev = a;
-			}
-			// normal action for all elements
-			if (prev[cur]) {
-				prev[cur]++;
-			} else {
-				prev[cur] = 1;
-			}
-
-			return prev;
-		});
-
-		const length = languages.length;
-
-		result.data = _.chain(reducedKeys)
-			.pickBy(amount => amount !== length)
-			.keys();
-	} catch (e) {
-		result.error = e.toString();
-		result.success = false;
-	} finally {
-		res.send(result);
-	}
+	apiFunction(req, res, checkCoherence);
 });
 
 // ---------- server home page --------------
 app.get('/', (req, res) => {
-	res.send({ response: 'Translation server is alive' }).status(200);
+	res.send({ response: 'Translation Server' }).status(200);
 });
 
 // get necessary data - db pointers and avaible languages list
@@ -268,5 +268,3 @@ io.on('connection', socket => {
 server.listen(config.port, () =>
 	console.log('Translation server is listening on port ' + config.port)
 );
-
-// SERVER IS RUNNING
