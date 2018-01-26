@@ -172,6 +172,65 @@ app.post('/tag', (req, res) => {
 	}
 });
 
+//-----------extra features -----------
+app.get('/extra/emptytags', (req, res) => {
+	let result = { error: null, success: true, data: {} };
+
+	try {
+		languages.forEach(lang => {
+			let empties = _.pickBy(dbs[lang].JSON(), tag => !tag.length);
+			if (Object.keys(empties).length) {
+				result.data[lang] = empties;
+			}
+		});
+	} catch (e) {
+		result.error = e.toString();
+		result.success = false;
+	} finally {
+		res.send(result);
+	}
+});
+
+// return info about incoherente tags
+app.get('/extra/coherence', (req, res) => {
+	let result = { error: null, success: true, data: {} };
+	try {
+		keys = [];
+
+		languages.forEach(lang => {
+			keys = [...keys, ...Object.keys(dbs[lang].JSON())];
+		});
+
+		let reducedKeys = keys.reduce((prev, cur, index) => {
+			// initial action for 0  - it starts with second element as cur (index === 1)
+			if (index === 1) {
+				let a = {};
+				a[prev] = 1;
+				prev = a;
+			}
+			// normal action for all elements
+			if (prev[cur]) {
+				prev[cur]++;
+			} else {
+				prev[cur] = 1;
+			}
+
+			return prev;
+		});
+
+		const length = languages.length;
+
+		result.data = _.chain(reducedKeys)
+			.pickBy(amount => amount !== length)
+			.keys();
+	} catch (e) {
+		result.error = e.toString();
+		result.success = false;
+	} finally {
+		res.send(result);
+	}
+});
+
 // ---------- server home page --------------
 app.get('/', (req, res) => {
 	res.send({ response: 'Translation server is alive' }).status(200);
