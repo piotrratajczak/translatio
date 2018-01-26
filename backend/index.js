@@ -1,46 +1,21 @@
 const config = require('./config.js');
 const _ = require('lodash');
-const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const JSONdb = require('simple-json-db');
 const bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
+const helpers = require('./helpers');
 let languages = [], //avaible languages list
 	dbs = {}; // db pointers
-
-// search given folder for files with given extension
-function recFindByExt(base, ext, files, result) {
-	files = files || fs.readdirSync(base);
-	result = result || [];
-
-	files.forEach(function(file) {
-		var newbase = path.join(base, file);
-		if (fs.statSync(newbase).isDirectory()) {
-			result = recFindByExt(newbase, ext, fs.readdirSync(newbase), result);
-		} else {
-			if (file.substr(-1 * (ext.length + 1)) == '.' + ext) {
-				result.push(newbase);
-			}
-		}
-	});
-	return result;
-}
-
-// change list translation file to it's code
-function fileNameToCode(file) {
-	let to = file.indexOf('.json'),
-		from = config.filesUrl.length - 1;
-	return file.substr(from, to - from);
-}
 
 // makes db pointers and languageCode
 function addDbPointer(file) {
 	let db = new JSONdb(file, {
 		syncOnWrite: true
 	});
-	let langCode = fileNameToCode(file);
+	let langCode = helpers.fileNameToCode(file, config.filesUrl);
 
 	dbs[langCode] = db;
 	languages.push(langCode);
@@ -57,6 +32,7 @@ function langPost(req, res) {
 		// if there already exist any data copy it with empty values
 		let existingLangs = Object.keys(dbs);
 		if (existingLangs.length) {
+			//todo map values all - also incoherent, distinct
 			newLang = _.mapValues(dbs[existingLangs[0]].JSON(), () => '');
 		}
 
@@ -151,22 +127,7 @@ function checkCoherence(res, req) {
 		keys = [...keys, ...Object.keys(dbs[lang].JSON())];
 	});
 
-	let reducedKeys = keys.reduce((prev, cur, index) => {
-		// initial action for 0  - it starts with second element as cur (index === 1)
-		if (index === 1) {
-			let a = {};
-			a[prev] = 1;
-			prev = a;
-		}
-		// normal action for all elements
-		if (prev[cur]) {
-			prev[cur]++;
-		} else {
-			prev[cur] = 1;
-		}
-
-		return prev;
-	});
+	let reducedKeys = keys.reduce(helpers.keysReduce);
 
 	const length = languages.length;
 
@@ -245,11 +206,11 @@ app.get('/', (req, res) => {
 	res.send({ response: 'Translation Server' }).status(200);
 });
 
+//START
 // get necessary data - db pointers and avaible languages list
-let languageFiles = recFindByExt(config.filesUrl, 'json'); // existing language files
-
-// prepare language db pointers
-languageFiles.forEach(langFile => addDbPointer(langFile));
+helpers
+	.recFindByExt(config.filesUrl, 'json')
+	.forEach(langFile => addDbPointer(langFile));
 
 //create server and wire up socket.io
 
@@ -264,7 +225,7 @@ io.on('connection', socket => {
 	socket.emit('InitialData', { languages: languages });
 });
 
-// start server
+// start listenign on server
 server.listen(config.port, () =>
 	console.log('Translation server is listening on port ' + config.port)
 );
