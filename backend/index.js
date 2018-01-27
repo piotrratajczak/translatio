@@ -101,22 +101,6 @@ app.post('/lang', (req, res) => {
 });
 
 //------------ lang / :LANGCODE ------------------
-// app.get('/lang/:langCode', (req, res) => {
-// 	let result = { error: null, success: true };
-// 	try {
-// 		const langCode = req.params.langCode;
-// 		if (languages.indexOf(langCode) > -1) {
-// 			result.data = dbs[langCode].JSON();
-// 		} else {
-// 			throw new Error('Does not exist!');
-// 		}
-// 	} catch (e) {
-// 		result.error = e.toString();
-// 		result.success = false;
-// 	} finally {
-// 		res.send(result);
-// 	}
-// });
 app.put('/lang/:langCode', (req, res) => {
 	apiFunction(req, res, langPut);
 });
@@ -128,7 +112,9 @@ app.post('/tag', (req, res) => {
 
 //-----------extra features -----------
 app.get('/extra/emptytags', (req, res) => {
-	apiFunction(req, res, db.getEmptyTags);
+	apiFunction(req, res, () => {
+		return { data: db.getEmptyTags() };
+	});
 });
 
 // return info about incoherente tags

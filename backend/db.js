@@ -36,11 +36,11 @@ function checkCoherence() {
 }
 
 function getEmptyTags() {
-	let result = { data: {} };
+	let result = {};
 	languages.forEach(lang => {
 		let empties = _.pickBy(dbs[lang].JSON(), tag => !tag.length);
 		if (Object.keys(empties).length) {
-			result.data[lang] = empties;
+			result[lang] = empties;
 		}
 	});
 	return result;
