@@ -7,54 +7,6 @@ const socketIo = require('socket.io');
 const helpers = require('./helpers');
 const db = require('./db');
 
-function langPost(req, res) {
-	let result = { error: null, success: true };
-	const langCode = req.body.langCode;
-
-	let newLang = db.addLang(langCode, config.filesUrl);
-	// emit event
-	io.emit('dbEvent', {
-		type: 'LANGUAGE_ADDED',
-		data: { [langCode]: newLang }
-	});
-
-	res.send(result);
-}
-
-function langPut(req, res) {
-	const data = req.body.data;
-	const langCode = req.params.langCode;
-
-	let payload = db.updateLang(langCode, data);
-	io.emit('dbEvent', {
-		type: 'LANG_UPDATE',
-		data: payload
-	});
-
-	return {};
-}
-
-function tagPost(req) {
-	let payload = db.addTag(req.body.tag);
-	io.emit('dbEvent', { type: 'TAG_ADDED', data: payload });
-	return {};
-}
-
-function apiFunction(req, res, action, sendRes = true) {
-	let result = { error: null, success: true, data: {} };
-	try {
-		result = Object.assign(result, action(req, res));
-	} catch (e) {
-		result.error = e.toString();
-		result.success = false;
-		res.send(result);
-	} finally {
-		if (sendRes || result.error) {
-			res.send(result);
-		}
-	}
-}
-
 // ----- create server app with routing from external file
 const app = express();
 
@@ -62,8 +14,12 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 // import and inject routing
-const routing = require('./routes.js');
-app.use(routing);
+// const routing = require('./routes.js');
+app.use(require('./routes.js'));
+app.use(function(req, res, next) {
+	console.log('HERE we have to place IO emit');
+	next();
+});
 
 //START
 db.init(config);
