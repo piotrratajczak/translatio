@@ -67,31 +67,9 @@ function langPut(req, res) {
 	return {};
 }
 
-function tagPost(req, res) {
-	const tag = req.body.tag;
-
-	if (!tag) {
-		throw new Error('Wrong tag!');
-	}
-
-	let exists = false;
-	languages.forEach(lang => {
-		if (dbs[lang].has(tag)) {
-			exists = true;
-		}
-	});
-
-	if (exists) {
-		throw new Error('Already exists!');
-	} else {
-		let payload = {};
-		languages.forEach(lang => {
-			dbs[lang].set(tag, '');
-			payload[lang] = { [tag]: '' };
-		});
-		io.emit('dbEvent', { type: 'TAG_ADDED', data: payload });
-	}
-
+function tagPost(req) {
+	let payload = db.addTag(req.body.tag);
+	io.emit('dbEvent', { type: 'TAG_ADDED', data: payload });
 	return {};
 }
 
@@ -103,25 +81,6 @@ function getEmptyTags(res, req) {
 			result.data[lang] = empties;
 		}
 	});
-	return result;
-}
-
-function checkCoherence(res, req) {
-	let result = { data: {} };
-	let keys = [];
-
-	languages.forEach(lang => {
-		keys = [...keys, ...Object.keys(dbs[lang].JSON())];
-	});
-
-	let reducedKeys = keys.reduce(helpers.keysReduce);
-
-	const length = languages.length;
-
-	result.data = _.chain(reducedKeys)
-		.pickBy(amount => amount !== length)
-		.keys();
-
 	return result;
 }
 
@@ -185,7 +144,9 @@ app.get('/extra/emptytags', (req, res) => {
 
 // return info about incoherente tags
 app.get('/extra/coherence', (req, res) => {
-	apiFunction(req, res, checkCoherence);
+	apiFunction(req, res, () => {
+		return { data: db.checkCoherence() };
+	});
 });
 
 // ---------- server home page --------------
@@ -195,8 +156,6 @@ app.get('/', (req, res) => {
 
 //START
 db.init(config);
-let dbs = db.getDbs();
-let languages = db.getLangs();
 
 //create server and wire up socket.io
 const server = http.createServer(app);
