@@ -112,6 +112,23 @@ function addLang(lang, filesUrl) {
 	return newLang;
 }
 
+function updateLang(lang, data) {
+	if (!langExist(lang)) {
+		throw new Error('There is no such a language!');
+	}
+	let payload = { [lang]: {} };
+
+	Object.keys(data).forEach(tag => {
+		let oldValue = dbs[lang].get(tag);
+		let newValue = data[tag];
+		if (oldValue !== newValue) {
+			dbs[lang].set(tag, data[tag]);
+			payload[lang][tag] = { newValue: newValue, oldValue: oldValue };
+		}
+	});
+	return payload;
+}
+
 module.exports = {
 	init: init,
 	getDbs: () => dbs,
@@ -119,5 +136,6 @@ module.exports = {
 	checkCoherence: checkCoherence,
 	addTag: addTag,
 	getEmptyTags: getEmptyTags,
-	addLang: addLang
+	addLang: addLang,
+	updateLang: updateLang
 };

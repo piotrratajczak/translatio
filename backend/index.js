@@ -1,6 +1,5 @@
 const config = require('./config.js');
 const _ = require('lodash');
-const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
@@ -22,27 +21,15 @@ function langPost(req, res) {
 	res.send(result);
 }
 
-//TODO - moved to db
 function langPut(req, res) {
 	const data = req.body.data;
 	const langCode = req.params.langCode;
-	if (languages.indexOf(langCode) < 0) {
-		throw new Error('Language does not exist!');
-	} else {
-		Object.keys(data).forEach(tag => {
-			let oldValue = dbs[langCode].get(tag);
-			let newValue = data[tag];
-			if (oldValue !== newValue) {
-				dbs[langCode].set(tag, data[tag]);
-				io.emit('dbEvent', {
-					type: 'TRANSLATION_CHANGED',
-					data: {
-						[langCode]: { [tag]: { newValue: newValue, oldValue: oldValue } }
-					}
-				});
-			}
-		});
-	}
+
+	let payload = db.updateLang(langCode, data);
+	io.emit('dbEvent', {
+		type: 'LANG_UPDATE',
+		data: payload
+	});
 
 	return {};
 }
@@ -67,6 +54,7 @@ function apiFunction(req, res, action, sendRes = true) {
 		}
 	}
 }
+
 // ----- create server app with routing from external file
 const app = express();
 
@@ -121,7 +109,7 @@ io.on('connection', socket => {
 	console.log('New client connected');
 	socket.on('disconnect', () => console.log('Client disconnected'));
 
-	socket.emit('InitialData', { languages: languages });
+	socket.emit('InitialData', { languages: db.getLangs() });
 });
 
 // start listenign on server
