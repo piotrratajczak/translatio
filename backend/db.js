@@ -1,6 +1,7 @@
 const JSONdb = require('simple-json-db');
 const helpers = require('./helpers');
 const _ = require('lodash');
+const fs = require('fs');
 
 let dbs = {};
 let languages = [];
@@ -20,11 +21,7 @@ function init(config) {
 }
 
 function checkCoherence() {
-	let keys = [];
-
-	languages.forEach(lang => {
-		keys = [...keys, ...Object.keys(dbs[lang].JSON())];
-	});
+	let keys = getAllTags();
 
 	let reducedKeys = keys.reduce(helpers.keysReduce);
 
@@ -74,11 +71,53 @@ function addTag(tag) {
 	return payload;
 }
 
+function getAllTags(unique = false) {
+	let keys = [];
+
+	languages.forEach(lang => {
+		keys = [...keys, ...Object.keys(dbs[lang].JSON())];
+	});
+
+	return unique ? _.uniq(keys) : keys;
+}
+
+function langExist(lang) {
+	return languages.indexOf(lang) > -1 || dbs[lang];
+}
+
+function addLang(lang, filesUrl) {
+	if (!lang) {
+		throw new Error('No value found!');
+	}
+
+	if (langExist(lang)) {
+		throw new Error('Already exists!');
+	}
+
+	let newLang = {};
+	let tags = getAllTags(true);
+	tags.forEach(tag => (newLang[tag] = ''));
+
+	const fileName = filesUrl + '/' + lang + '.json';
+
+	// make it synchronous and do not cate about res, etc
+	fs.writeFile(fileName, JSON.stringify(newLang), function(err) {
+		if (err) {
+			throw new Error('Could not createa a db file!');
+		}
+
+		addDbPointer(fileName);
+	});
+
+	return newLang;
+}
+
 module.exports = {
 	init: init,
 	getDbs: () => dbs,
 	getLangs: () => languages,
 	checkCoherence: checkCoherence,
 	addTag: addTag,
-	getEmptyTags: getEmptyTags
+	getEmptyTags: getEmptyTags,
+	addLang: addLang
 };

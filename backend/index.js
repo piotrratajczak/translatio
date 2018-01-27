@@ -11,38 +11,18 @@ const db = require('./db');
 function langPost(req, res) {
 	let result = { error: null, success: true };
 	const langCode = req.body.langCode;
-	if (languages.indexOf(langCode) > -1 || dbs[langCode]) {
-		throw new Error('Already exists!');
-	} else {
-		let newLang = {};
 
-		// if there already exist any data copy it with empty values
-		let existingLangs = Object.keys(dbs);
-		if (existingLangs.length) {
-			//todo map values all - also incoherent, distinct
-			newLang = _.mapValues(dbs[existingLangs[0]].JSON(), () => '');
-		}
+	let newLang = db.addLang(langCode, config.filesUrl);
+	// emit event
+	io.emit('dbEvent', {
+		type: 'LANGUAGE_ADDED',
+		data: { [langCode]: newLang }
+	});
 
-		const fileName = config.filesUrl + '/' + langCode + '.json';
-
-		fs.writeFile(fileName, JSON.stringify(newLang), function(err) {
-			if (err) {
-				throw new Error('Could not createa a db file!');
-			}
-
-			addDbPointer(fileName);
-		});
-
-		// emit event
-		io.emit('dbEvent', {
-			type: 'LANGUAGE_ADDED',
-			data: { [langCode]: newLang }
-		});
-
-		res.send(result);
-	}
+	res.send(result);
 }
 
+//TODO - moved to db
 function langPut(req, res) {
 	const data = req.body.data;
 	const langCode = req.params.langCode;
@@ -97,7 +77,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 // ----------- lang ---------------------
 app.get('/lang', (req, res) => res.send(languages)); //list
 app.post('/lang', (req, res) => {
-	apiFunction(req, res, langPost, false);
+	apiFunction(req, res, langPost, false); // fix all this asynchronous stuff with params
 });
 
 //------------ lang / :LANGCODE ------------------
