@@ -35,6 +35,17 @@ function checkCoherence() {
 		.keys();
 }
 
+function getEmptyTags() {
+	let result = { data: {} };
+	languages.forEach(lang => {
+		let empties = _.pickBy(dbs[lang].JSON(), tag => !tag.length);
+		if (Object.keys(empties).length) {
+			result.data[lang] = empties;
+		}
+	});
+	return result;
+}
+
 function tagExist(tag) {
 	let exists = false;
 	for (let i = 0; i < languages.length; i++) {
@@ -68,5 +79,6 @@ module.exports = {
 	getDbs: () => dbs,
 	getLangs: () => languages,
 	checkCoherence: checkCoherence,
-	addTag: addTag
+	addTag: addTag,
+	getEmptyTags: getEmptyTags
 };

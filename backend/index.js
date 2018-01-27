@@ -73,17 +73,6 @@ function tagPost(req) {
 	return {};
 }
 
-function getEmptyTags(res, req) {
-	let result = { data: {} };
-	languages.forEach(lang => {
-		let empties = _.pickBy(dbs[lang].JSON(), tag => !tag.length);
-		if (Object.keys(empties).length) {
-			result.data[lang] = empties;
-		}
-	});
-	return result;
-}
-
 function apiFunction(req, res, action, sendRes = true) {
 	let result = { error: null, success: true, data: {} };
 	try {
@@ -139,7 +128,7 @@ app.post('/tag', (req, res) => {
 
 //-----------extra features -----------
 app.get('/extra/emptytags', (req, res) => {
-	apiFunction(req, res, getEmptyTags);
+	apiFunction(req, res, db.getEmptyTags);
 });
 
 // return info about incoherente tags
