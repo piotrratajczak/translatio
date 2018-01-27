@@ -2,24 +2,11 @@ const config = require('./config.js');
 const _ = require('lodash');
 const fs = require('fs');
 const express = require('express');
-const JSONdb = require('simple-json-db');
 const bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
 const helpers = require('./helpers');
-let languages = [], //avaible languages list
-	dbs = {}; // db pointers
-
-// makes db pointers and languageCode
-function addDbPointer(file) {
-	let db = new JSONdb(file, {
-		syncOnWrite: true
-	});
-	let langCode = helpers.fileNameToCode(file, config.filesUrl);
-
-	dbs[langCode] = db;
-	languages.push(langCode);
-}
+const db = require('./db');
 
 function langPost(req, res) {
 	let result = { error: null, success: true };
@@ -207,13 +194,11 @@ app.get('/', (req, res) => {
 });
 
 //START
-// get necessary data - db pointers and avaible languages list
-helpers
-	.recFindByExt(config.filesUrl, 'json')
-	.forEach(langFile => addDbPointer(langFile));
+db.init(config);
+let dbs = db.getDbs();
+let languages = db.getLangs();
 
 //create server and wire up socket.io
-
 const server = http.createServer(app);
 const io = socketIo(server);
 
