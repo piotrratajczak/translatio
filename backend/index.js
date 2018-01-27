@@ -61,41 +61,9 @@ const app = express();
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
-// routing
-// ----------- lang ---------------------
-app.get('/lang', (req, res) => res.send(languages)); //list
-app.post('/lang', (req, res) => {
-	apiFunction(req, res, langPost, false); // fix all this asynchronous stuff with params
-});
-
-//------------ lang / :LANGCODE ------------------
-app.put('/lang/:langCode', (req, res) => {
-	apiFunction(req, res, langPut);
-});
-
-//------------tag ----------------------
-app.post('/tag', (req, res) => {
-	apiFunction(req, res, tagPost);
-});
-
-//-----------extra features -----------
-app.get('/extra/emptytags', (req, res) => {
-	apiFunction(req, res, () => {
-		return { data: db.getEmptyTags() };
-	});
-});
-
-// return info about incoherente tags
-app.get('/extra/coherence', (req, res) => {
-	apiFunction(req, res, () => {
-		return { data: db.checkCoherence() };
-	});
-});
-
-// ---------- server home page --------------
-app.get('/', (req, res) => {
-	res.send({ response: 'Translation Server' }).status(200);
-});
+// import and inject routing
+const routing = require('./routes.js');
+app.use(routing);
 
 //START
 db.init(config);
