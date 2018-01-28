@@ -6,18 +6,6 @@ const config = require('./config.js');
 //TODO
 // connect io.emit with it.
 
-function langPost(req) {
-	return db.addLang(req.body.langCode, config.filesUrl);
-}
-
-function langPut(req) {
-	return db.updateLang(req.params.langCode, req.body.data);
-}
-
-function tagPost(req) {
-	return db.addTag(req.body.tag);
-}
-
 function apiFunction(req, res, action) {
 	let result = { error: null, success: true, data: {} };
 	try {
@@ -33,19 +21,21 @@ function apiFunction(req, res, action) {
 // ----------- lang ---------------------
 router.get('/lang', (req, res) => res.send(db.getLangs())); //list
 router.post('/lang', (req, res, next) => {
-	apiFunction(req, res, langPost);
+	apiFunction(req, res, req => db.addLang(req.body.langCode, config.filesUrl));
 	next();
 });
 
 //------------ lang / :LANGCODE ------------------
 router.put('/lang/:langCode', (req, res, next) => {
-	apiFunction(req, res, langPut);
+	apiFunction(req, res, req =>
+		db.updateLang(req.params.langCode, req.body.data)
+	);
 	next();
 });
 
 //------------tag ----------------------
 router.post('/tag', (req, res, next) => {
-	apiFunction(req, res, tagPost);
+	apiFunction(req, res, req => db.addTag(req.body.tag));
 	next();
 });
 
