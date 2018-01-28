@@ -7,8 +7,6 @@ const socketIo = require('socket.io');
 const helpers = require('./helpers');
 const db = require('./db');
 
-//TODO make global config file!!!!
-
 // ----- create server app with routing from external file
 const app = express();
 
@@ -27,7 +25,7 @@ app.use(function(req, res, next) {
 });
 
 //START
-db.init(config);
+db.init();
 
 //create server and wire up socket.io
 const server = http.createServer(app);

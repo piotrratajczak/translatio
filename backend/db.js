@@ -1,4 +1,5 @@
 const JSONdb = require('simple-json-db');
+const config = require('./config.js');
 const helpers = require('./helpers');
 const _ = require('lodash');
 const fs = require('fs');
@@ -6,7 +7,7 @@ const fs = require('fs');
 let dbs = {};
 let languages = [];
 
-function addDbPointer(file, config) {
+function addDbPointer(file) {
 	let db = new JSONdb(file, { syncOnWrite: true });
 	let langCode = helpers.fileNameToCode(file, config.filesUrl);
 
@@ -14,7 +15,7 @@ function addDbPointer(file, config) {
 	languages.push(langCode);
 }
 
-function init(config) {
+function init() {
 	helpers
 		.recFindByExt(config.filesUrl, 'json')
 		.forEach(langFile => addDbPointer(langFile, config));
@@ -85,7 +86,7 @@ function langExist(lang) {
 	return languages.indexOf(lang) > -1 || dbs[lang];
 }
 
-function addLang(lang, filesUrl) {
+function addLang(lang) {
 	if (!lang) {
 		throw new Error('No value found!');
 	}
@@ -98,11 +99,11 @@ function addLang(lang, filesUrl) {
 	let tags = getAllTags(true);
 	tags.forEach(tag => (newLang[tag] = ''));
 
-	const fileName = filesUrl + '/' + lang + '.json';
+	const fileName = config.filesUrl + '/' + lang + '.json';
 
 	fs.writeFileSync(fileName, JSON.stringify(newLang));
 
-	addDbPointer(fileName, { filesUrl });
+	addDbPointer(fileName);
 
 	return { [lang]: newLang };
 }

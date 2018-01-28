@@ -3,11 +3,8 @@ const router = express.Router();
 const db = require('./db.js');
 const config = require('./config.js');
 
-//TODO
-// connect io.emit with it.
-
 function langPost(req, res) {
-	let payload = db.addLang(req.body.langCode, config.filesUrl);
+	let payload = db.addLang(req.body.langCode);
 	res.locals.toEmit = { payload, eventType: 'LANG_ADDED' };
 	return payload;
 }
