@@ -16,10 +16,13 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 // import and inject routing
-// const routing = require('./routes.js');
 app.use(require('./routes.js'));
+
+//inject socket emit on db changes by api
 app.use(function(req, res, next) {
-	console.log('HERE we have to place IO emit');
+	if (res.locals.toEmit) {
+		io.emit('dbEvent', res.locals.toEmit);
+	}
 	next();
 });
 
