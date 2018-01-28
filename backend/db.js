@@ -100,16 +100,11 @@ function addLang(lang, filesUrl) {
 
 	const fileName = filesUrl + '/' + lang + '.json';
 
-	// make it synchronous and do not cate about res, etc
-	fs.writeFile(fileName, JSON.stringify(newLang), function(err) {
-		if (err) {
-			throw new Error('Could not createa a db file!');
-		}
+	fs.writeFileSync(fileName, JSON.stringify(newLang));
 
-		addDbPointer(fileName);
-	});
+	addDbPointer(fileName, { filesUrl });
 
-	return newLang;
+	return { [lang]: newLang };
 }
 
 function updateLang(lang, data) {
