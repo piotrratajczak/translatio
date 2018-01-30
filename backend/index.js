@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
+const socketioJwt = require('socketio-jwt');
 const helpers = require('./helpers');
 const db = require('./db');
 
@@ -29,11 +30,21 @@ db.init();
 
 //create server and wire up socket.io
 const server = http.createServer(app);
-const io = socketIo(server);
+
+const io = socketIo.listen(server);
+
+io.set(
+	'authorization',
+	socketioJwt.authorize({
+		secret: config.jwtSecret,
+		handshake: true
+	})
+);
 
 // configure SOCKET.IO
 io.on('connection', socket => {
-	console.log('New client connected');
+	console.log(socket.client.decoded_token.email, 'connected');
+
 	socket.on('disconnect', () => console.log('Client disconnected'));
 
 	socket.emit('InitialData', { languages: db.getLangs() });

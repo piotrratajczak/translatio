@@ -9,7 +9,12 @@ class App extends Component {
 	}
 	componentDidMount() {
 		const { endpoint } = this.state;
-		const socket = socketIOClient(endpoint);
+		const socket = socketIOClient(endpoint, {
+			// todo correctly here just testing socket with jwt
+			query:
+				'token=' +
+				'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdF9uYW1lIjoiSm9obiIsImxhc3RfbmFtZSI6IkRvZSIsImVtYWlsIjoiam9obkBkb2UuY29tIiwiaWQiOjEyMywiaWF0IjoxNTE3MzEwMzE1LCJleHAiOjE1MTczMTM5MTV9.gJ6XDKFU2h4sx3G9J7IGf1o3cq0Bv9B6imJzEbheoYE'
+		});
 		socket.on('InitialData', data => console.log('initial', data));
 		socket.on('dbEvent', data => console.log('event', data));
 	}

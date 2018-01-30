@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('./db.js');
 const config = require('./config.js');
+const jwt = require('jsonwebtoken');
 
 function langPost(req, res) {
 	let payload = db.addLang(req.body.langCode);
@@ -32,6 +33,27 @@ function apiFunction(req, res, action) {
 		res.send(result);
 	}
 }
+
+//-------------login ----------------
+
+router.post('/login', function(req, res) {
+	// TODO:
+	// validate incoming data
+	// reject if not ok or
+	// return the actual user user
+
+	var profile = {
+		first_name: 'John',
+		last_name: 'Doe',
+		email: 'john@doe.com',
+		id: 123
+	};
+
+	// we are sending the profile in the token
+	var token = jwt.sign(profile, config.jwtSecret, { expiresIn: 60 * 60 });
+
+	res.json({ token: token });
+});
 
 // ----------- lang ---------------------
 router.get('/lang', (req, res) => res.send(db.getLangs())); //list
