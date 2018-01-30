@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import socketIOClient from 'socket.io-client';
+import 'bootstrap/dist/css/bootstrap.css';
+
 class App extends Component {
 	constructor() {
 		super();
