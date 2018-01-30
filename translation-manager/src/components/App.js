@@ -1,33 +1,74 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import socketIOClient from 'socket.io-client';
+import Loader from './Loader';
 import 'bootstrap/dist/css/bootstrap.css';
 
 class App extends Component {
 	constructor() {
 		super();
 		this.state = {
-			endpoint: 'http://127.0.0.1:3001' // to get from config, do not keep it in state!!!!
+			socketConnection: null
 		};
+
+		this.createSocketConnection = this.createSocketConnection.bind(this);
 	}
+
+	componentWillMount() {
+		let token = localStorage.getItem('token');
+		this.props.dispatch({ type: 'SET_TOKEN', payload: token });
+	}
+
 	componentDidMount() {
-		const { endpoint } = this.state;
-		const socket = socketIOClient(endpoint, {
-			// todo correctly here just testing socket with jwt
-			query:
-				'token=' +
-				'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdF9uYW1lIjoiSm9obiIsImxhc3RfbmFtZSI6IkRvZSIsImVtYWlsIjoiam9obkBkb2UuY29tIiwiaWQiOjEyMywiaWF0IjoxNTE3MzEwMzE1LCJleHAiOjE1MTczMTM5MTV9.gJ6XDKFU2h4sx3G9J7IGf1o3cq0Bv9B6imJzEbheoYE'
-		});
-		socket.on('InitialData', data => console.log('initial', data));
-		socket.on('dbEvent', data => console.log('event', data));
+		this.createSocketConnection(this.props);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		this.createSocketConnection(nextProps);
 	}
 
 	componentWillUnmount() {
 		//todo disconnect socket is it necessary?
 	}
 
+	createSocketConnection(props) {
+		console.log(!this.state.socketConnection, props.initialized, props.token);
+		if (!this.state.socketConnection && props.initialized && props.token) {
+			const socket = socketIOClient('http://127.0.0.1:3001', {
+				// todo correctly here just testing socket with jwt
+				query: `token=${props.token}`
+			});
+			socket.on('InitialData', data => console.log('initial', data));
+			socket.on('dbEvent', data => console.log('event', data));
+			this.setState({ socketConnection: socket });
+		}
+	}
+
 	render() {
-		const { response } = this.state;
-		return <div>Should be on.connectEvent on backend</div>;
+		const { props } = this;
+		return (
+			<div>
+				{!props.initialized && <Loader />}
+				{props.initialized &&
+					props.token && <div>Initialized and with token</div>}
+				{props.initialized &&
+					!props.token && <div> todo redirect to login </div>}
+			</div>
+		);
 	}
 }
-export default App;
+
+App.defaultProps = {
+	initialized: false,
+	token: null
+};
+
+function mapStateToProps(state) {
+	return {
+		initialized: state.app.initialized,
+		token: state.app.token
+	};
+}
+
+export default connect(mapStateToProps)(App);
