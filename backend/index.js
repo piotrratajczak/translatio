@@ -43,7 +43,7 @@ io.set(
 
 // configure SOCKET.IO
 io.on('connection', socket => {
-	console.log(socket.client.decoded_token.email, 'connected');
+	console.log(socket.client.request.decoded_token.email, 'connected');
 
 	socket.on('disconnect', () => console.log('Client disconnected'));
 
