@@ -1,9 +1,16 @@
+import 'bootstrap/dist/css/bootstrap.css';
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import socketIOClient from 'socket.io-client';
 import Loader from './Loader';
-import 'bootstrap/dist/css/bootstrap.css';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Container } from 'reactstrap';
+import jwt from 'jsonwebtoken';
+import NoMatchPage from './NoMatch';
+import Login from './Login';
+import Manager from './Manager';
 
 class App extends Component {
 	constructor() {
@@ -12,28 +19,38 @@ class App extends Component {
 			socketConnection: null
 		};
 
-		this.createSocketConnection = this.createSocketConnection.bind(this);
+		this.checkSocketConnection = this.checkSocketConnection.bind(this);
 	}
 
 	componentWillMount() {
-		let token = localStorage.getItem('token');
-		this.props.dispatch({ type: 'SET_TOKEN', payload: token });
+		this.getAndSetToken();
 	}
 
 	componentDidMount() {
-		this.createSocketConnection(this.props);
+		this.checkSocketConnection(this.props);
 	}
 
 	componentWillReceiveProps(nextProps) {
-		this.createSocketConnection(nextProps);
+		this.checkSocketConnection(nextProps);
 	}
 
 	componentWillUnmount() {
-		//todo disconnect socket is it necessary?
+		if (this.state.socketConnection) {
+			this.state.socketConnection.disconnect();
+		}
 	}
 
-	createSocketConnection(props) {
-		console.log(!this.state.socketConnection, props.initialized, props.token);
+	getAndSetToken() {
+		let payload = null;
+		const token = localStorage.getItem('token');
+		if (token) {
+			payload =
+				jwt.decode(token).exp * 1000 > new Date().getTime() ? token : null;
+		}
+		this.props.dispatch({ type: 'SET_TOKEN', payload });
+	}
+
+	checkSocketConnection(props) {
 		if (!this.state.socketConnection && props.initialized && props.token) {
 			const socket = socketIOClient('http://127.0.0.1:3001', {
 				// todo correctly here just testing socket with jwt
@@ -43,18 +60,28 @@ class App extends Component {
 			socket.on('dbEvent', data => console.log('event', data));
 			this.setState({ socketConnection: socket });
 		}
+
+		if (this.state.socketConnection && !props.token) {
+			this.state.socketConnection.disconnect();
+			this.setState({ socketConnection: null });
+		}
 	}
 
 	render() {
 		const { props } = this;
 		return (
-			<div>
-				{!props.initialized && <Loader />}
-				{props.initialized &&
-					props.token && <div>Initialized and with token</div>}
-				{props.initialized &&
-					!props.token && <div> todo redirect to login </div>}
-			</div>
+			<Router>
+				<Container>
+					{!props.initialized && <Loader />}
+					{props.initialized && (
+						<Switch>
+							<Route exact path="/login" component={Login} />
+							<Route exact path="/" component={Manager} />
+							<Route component={NoMatchPage} />
+						</Switch>
+					)}
+				</Container>
+			</Router>
 		);
 	}
 }
