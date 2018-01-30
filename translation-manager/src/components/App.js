@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
 
+import { SET_TOKEN } from '../actions/app';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -7,10 +8,10 @@ import socketIOClient from 'socket.io-client';
 import Loader from './Loader';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Container } from 'reactstrap';
-import jwt from 'jsonwebtoken';
 import NoMatchPage from './NoMatch';
 import Login from './Login';
 import Manager from './Manager';
+import Auth from '../modules/Auth';
 
 class App extends Component {
 	constructor() {
@@ -42,12 +43,11 @@ class App extends Component {
 
 	getAndSetToken() {
 		let payload = null;
-		const token = localStorage.getItem('token');
+		const token = Auth.getToken();
 		if (token) {
-			payload =
-				jwt.decode(token).exp * 1000 > new Date().getTime() ? token : null;
+			payload = Auth.checkTokenValidity(token) ? token : null;
 		}
-		this.props.dispatch({ type: 'SET_TOKEN', payload });
+		this.props.dispatch({ type: SET_TOKEN, payload });
 	}
 
 	checkSocketConnection(props) {

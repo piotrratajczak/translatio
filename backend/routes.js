@@ -41,18 +41,23 @@ router.post('/login', function(req, res) {
 	// validate incoming data
 	// reject if not ok or
 	// return the actual user user
+	let { email, password } = req.body;
 
 	var profile = {
 		first_name: 'John',
 		last_name: 'Doe',
-		email: 'john@doe.com',
-		id: 123
+		email
 	};
 
 	// we are sending the profile in the token
-	var token = jwt.sign(profile, config.jwtSecret, { expiresIn: 60 * 60 });
+	let token = jwt.sign(profile, config.jwtSecret, { expiresIn: 60 * 60 });
+	let error = null;
 
-	res.json({ token: token });
+	if (email !== 'admin@admin.pl' && password !== 'admin') {
+		token = null;
+	}
+
+	res.json({ token, error });
 });
 
 // ----------- lang ---------------------
