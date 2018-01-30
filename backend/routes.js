@@ -16,7 +16,7 @@ function langPut(req, res) {
 }
 
 function tagPost(req, res) {
-	let payload = db.addTag(req.body.tag);
+	let payload = db.addTag(req.body);
 	res.locals.toEmit = { payload, eventType: 'TAG_ADDED' };
 	return payload;
 }

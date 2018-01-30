@@ -55,7 +55,9 @@ function tagExist(tag) {
 	return exists;
 }
 
-function addTag(tag) {
+function addTag(params) {
+	let tag = params.tag;
+
 	if (!tag) {
 		throw new Error('Na tag value found!');
 	}
@@ -65,9 +67,11 @@ function addTag(tag) {
 	}
 
 	let payload = {};
+	let text;
 	languages.forEach(lang => {
-		dbs[lang].set(tag, '');
-		payload[lang] = { [tag]: '' };
+		text = params[lang] ? params[lang] : '';
+		dbs[lang].set(tag, text);
+		payload[lang] = { [tag]: text };
 	});
 	return payload;
 }
