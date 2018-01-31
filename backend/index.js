@@ -61,6 +61,19 @@ io.on('connection', socket => {
 		new Date()
 	);
 
+	//TODO replace emit events instead of api requests!!
+	socket.on('data/SOCKET_LANG_UPDATED', data => {
+		console.log('todo lang updated');
+	});
+
+	socket.on('data/SOCKET_LANG_ADDED', data => {
+		console.log('todo lang added');
+	});
+
+	socket.on('data/SOCKET_TAG_ADDED', data => {
+		console.log('todo tag added');
+	});
+
 	socket.on('disconnect', () => console.log('Client disconnected'));
 
 	socket.emit('InitialData', {

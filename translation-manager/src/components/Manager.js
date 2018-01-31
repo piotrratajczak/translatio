@@ -16,23 +16,6 @@ class Manager extends Component {
 		this.handleSave = this.handleSave.bind(this);
 	}
 
-	componentWillMount() {
-		// this.checkLangData();
-	}
-
-	componentWillReceiveProps(nextProps) {
-		// if (nextProps.match.params.langCode !== this.props.match.params.langCode) {
-		// 	this.checkLangData(nextProps);
-		// }
-	}
-
-	// checkLangData(props = this.props) {
-	// 	const { langCode } = props.match.params;
-	// 	if (langCode && !props.data[langCode] && !props.dataAction) {
-	// 		console.log('We have to load this data!!!!', langCode);
-	// 	}
-	// }
-
 	handleLogout() {
 		this.props.dispatch(logoutUser());
 	}

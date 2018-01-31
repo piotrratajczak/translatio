@@ -64,6 +64,9 @@ class App extends Component {
 				console.log('event', data);
 				this.props.dispatch(propagateDbEvent(data));
 			});
+
+			socket.emit('clientEvent', { hello: 'world' }); // TODO really emit event instead of api
+
 			this.setState({ socketConnection: socket });
 		}
 
