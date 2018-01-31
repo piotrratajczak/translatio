@@ -52,6 +52,23 @@ class Navigation extends React.Component {
 								))}
 							</DropdownMenu>
 						</UncontrolledDropdown>
+						<UncontrolledDropdown nav="true">
+							<DropdownToggle nav caret>
+								Fast adding
+							</DropdownToggle>
+							<DropdownMenu>
+								<DropdownItem>
+									<Link className="nav-link" to="/add/tag">
+										Add tag
+									</Link>
+								</DropdownItem>
+								<DropdownItem>
+									<Link className="nav-link" to="/add/lang">
+										Add lang
+									</Link>
+								</DropdownItem>
+							</DropdownMenu>
+						</UncontrolledDropdown>
 						<NavLink onClick={this.props.onLogoutClick}>Logout</NavLink>
 					</ul>
 				</Collapse>
