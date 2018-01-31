@@ -15,21 +15,21 @@ class Manager extends Component {
 	}
 
 	componentWillMount() {
-		this.checkLangData();
+		// this.checkLangData();
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.match.params.langCode !== this.props.match.params.langCode) {
-			this.checkLangData(nextProps);
-		}
+		// if (nextProps.match.params.langCode !== this.props.match.params.langCode) {
+		// 	this.checkLangData(nextProps);
+		// }
 	}
 
-	checkLangData(props = this.props) {
-		const { langCode } = props.match.params;
-		if (!props.data[langCode] && !props.dataAction) {
-			console.log('We have to load this data!!!!', langCode);
-		}
-	}
+	// checkLangData(props = this.props) {
+	// 	const { langCode } = props.match.params;
+	// 	if (langCode && !props.data[langCode] && !props.dataAction) {
+	// 		console.log('We have to load this data!!!!', langCode);
+	// 	}
+	// }
 
 	handleLogout() {
 		this.props.dispatch(logoutUser());
@@ -44,13 +44,15 @@ class Manager extends Component {
 		return token ? (
 			<div>
 				<Navigation onLogoutClick={this.handleLogout} languages={languages} />
-				{data[langCode] && (
-					<Route
-						path={`/lang/:langCode`}
-						component={() => <LangPage data={langData} />}
-					/>
-				)}
-				{!data[langCode] && <Loader />}
+				{langCode &&
+					data[langCode] && (
+						<Route
+							path={`/lang/:langCode`}
+							component={() => <LangPage data={langData} lang={langCode} />}
+						/>
+					)}
+				{langCode && !data[langCode] && <Loader />}
+				{!langCode && <div> todo start page </div>}
 			</div>
 		) : (
 			<Redirect to="/login" />
