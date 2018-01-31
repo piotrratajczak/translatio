@@ -17,11 +17,13 @@ class LangPage extends Component {
 	}
 
 	componentWillMount() {
+		console.log('MOUNT');
 		this.checkLang();
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.lang !== this.props.lang) {
+			console.log('RECEIVE', nextProps.lang, this.props.lang);
 			this.checkLang(nextProps);
 		}
 	}
@@ -44,6 +46,7 @@ class LangPage extends Component {
 
 	checkLang({ lang, data } = this.props) {
 		if (lang !== this.state.lang) {
+			console.log('CHANGING STATE');
 			this.setState({ lang, data });
 		}
 	}

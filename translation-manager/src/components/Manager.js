@@ -87,15 +87,10 @@ class Manager extends Component {
 				<Navigation onLogoutClick={this.handleLogout} languages={languages} />
 				{langCode &&
 					data[langCode] && (
-						<Route
-							path={`/lang/:langCode`}
-							component={() => (
-								<LangPage
-									data={langData}
-									lang={langCode}
-									onSave={this.handleSave}
-								/>
-							)}
+						<LangPage
+							data={langData}
+							lang={langCode}
+							onSave={this.handleSave}
 						/>
 					)}
 				{langCode && !data[langCode] && <Loader />}

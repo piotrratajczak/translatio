@@ -14,7 +14,7 @@ import {
 //todo maybe form text if text is longer than ...xxxx
 
 // todo indicator that there is saving happening!!!!
-
+// todo toggle original/change
 const Translation = ({ tag, translation, onChange, original, onSave }) => {
 	const changed = translation !== original;
 	return (
