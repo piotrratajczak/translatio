@@ -1,13 +1,32 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import Navigation from './Navigation';
+import { logoutUser } from '../actionCreators/app';
 
-const Manager = props =>
-	props.token ? (
-		<div> todo manager {props.token} - what the fifi</div>
-	) : (
-		<Redirect to="/login" />
-	);
+class Manager extends Component {
+	constructor() {
+		super();
+
+		this.handleLogout = this.handleLogout.bind(this);
+	}
+
+	handleLogout() {
+		this.props.dispatch(logoutUser());
+	}
+
+	render() {
+		const { token } = this.props;
+		return token ? (
+			<div>
+				<Navigation onLogoutClick={this.handleLogout} />
+				todo manager - what the fifi
+			</div>
+		) : (
+			<Redirect to="/login" />
+		);
+	}
+}
 
 const mapStateToProps = state => ({
 	token: state.app.token

@@ -3,7 +3,7 @@ import './Login.css';
 import React, { Component } from 'react';
 import { Container } from 'reactstrap';
 import { connect } from 'react-redux';
-import { logUser } from '../actionCreators/app';
+import { loginUser } from '../actionCreators/app';
 import Loader from './Loader';
 
 const INITIAL_STATE = {
@@ -24,7 +24,7 @@ class Login extends Component {
 
 	onSubmit = event => {
 		let { email, password } = this.state;
-		this.props.dispatch(logUser({ email, password }, this.props.history));
+		this.props.dispatch(loginUser({ email, password }, this.props.history));
 		event.preventDefault();
 	};
 

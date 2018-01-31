@@ -50,6 +50,13 @@ function appReducer(state = INITIAL_STATE, action) {
 			};
 		}
 
+		case LOGOUT: {
+			return {
+				...INITIAL_STATE,
+				initialized: true
+			};
+		}
+
 		default:
 			return state;
 	}

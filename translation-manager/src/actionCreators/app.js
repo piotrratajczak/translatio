@@ -11,7 +11,7 @@ import Auth from '../modules/Auth';
 
 const API_URL = 'http://localhost:3001/'; // to move to settings
 
-export function logUser(userData, history) {
+export function loginUser(userData, history) {
 	return dispatch => {
 		dispatch({ type: FETCH_TOKEN_PENDING });
 
@@ -43,5 +43,12 @@ export function logUser(userData, history) {
 					type: FETCH_TOKEN_REJECTED
 				});
 			});
+	};
+}
+
+export function logoutUser() {
+	return dispatch => {
+		Auth.removeToken();
+		dispatch({ type: LOGOUT });
 	};
 }

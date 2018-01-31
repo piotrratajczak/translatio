@@ -5,8 +5,8 @@ class Auth {
 		localStorage.setItem('token', token);
 	}
 
-	static isUserAuthenticated() {
-		return 'TODO'; //localStorage.getItem('token') !== null;
+	static removeToken() {
+		return localStorage.removeItem('token');
 	}
 
 	static deauthenticateUser() {
