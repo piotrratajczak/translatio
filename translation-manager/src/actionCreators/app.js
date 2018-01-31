@@ -1,6 +1,7 @@
 import {
 	FETCH_TOKEN,
 	FETCH_TOKEN_FULFILLED,
+	FETCH_TOKEN_FULFILLED_NONE,
 	FETCH_TOKEN_PENDING,
 	FETCH_TOKEN_REJECTED,
 	LOGOUT,
@@ -23,16 +24,21 @@ export function logUser(userData, history) {
 			body: JSON.stringify(userData)
 		})
 			.then(response => response.json())
-			.then(data => {
-				dispatch({ type: FETCH_TOKEN_FULFILLED });
-				if (data.token) {
-					Auth.setToken(data.token);
-					dispatch({ type: SET_TOKEN, payload: data.token });
-					history.push('/');
+			.then(resp => {
+				if (resp.success) {
+					if (resp.data) {
+						//token
+						dispatch({ type: FETCH_TOKEN_FULFILLED, payload: resp.data });
+						Auth.setToken(resp.data);
+						history.push('/');
+					} else {
+						dispatch({ type: FETCH_TOKEN_FULFILLED_NONE });
+					}
+				} else {
+					throw new Error(resp.error || 'unknown error has happened!');
 				}
 			})
 			.catch(err => {
-				console.log(err);
 				dispatch({
 					type: FETCH_TOKEN_REJECTED
 				});

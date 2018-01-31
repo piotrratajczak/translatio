@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.css';
-
+import './App.css';
 import { SET_TOKEN } from '../actions/app';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';

@@ -3,6 +3,7 @@ const config = require('./config.js');
 const helpers = require('./helpers');
 const _ = require('lodash');
 const fs = require('fs');
+// const jwt = require('jsonwebtoken');
 
 let dbs = {};
 let languages = [];
@@ -129,6 +130,22 @@ function updateLang(lang, data) {
 	return payload;
 }
 
+function checkUser(email, password) {
+	//  just a mockup todo
+
+	const profile = {
+		first_name: 'Admin',
+		last_name: 'Admin',
+		email: 'admin@admin.pl',
+		password: 'admin'
+	};
+	if (email === profile.email && password === profile.password) {
+		return { email: profile.email, name: profile.first_name };
+	} else {
+		return null;
+	}
+}
+
 module.exports = {
 	init: init,
 	getDbs: () => dbs,
@@ -137,5 +154,6 @@ module.exports = {
 	addTag: addTag,
 	getEmptyTags: getEmptyTags,
 	addLang: addLang,
-	updateLang: updateLang
+	updateLang: updateLang,
+	checkUser: checkUser
 };

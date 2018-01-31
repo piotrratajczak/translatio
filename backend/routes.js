@@ -22,6 +22,18 @@ function tagPost(req, res) {
 	return payload;
 }
 
+function logUser(req, res) {
+	let { email, password } = req.body;
+	let token = null;
+	const profile = db.checkUser(email, password);
+
+	if (profile) {
+		token = jwt.sign(profile, config.jwtSecret, { expiresIn: 60 * 60 });
+	}
+
+	return token;
+}
+
 function apiFunction(req, res, action) {
 	let result = { error: null, success: true, data: {} };
 	try {
@@ -37,27 +49,7 @@ function apiFunction(req, res, action) {
 //-------------login ----------------
 
 router.post('/login', function(req, res) {
-	// TODO:
-	// validate incoming data
-	// reject if not ok or
-	// return the actual user user
-	let { email, password } = req.body;
-
-	var profile = {
-		first_name: 'John',
-		last_name: 'Doe',
-		email
-	};
-
-	// we are sending the profile in the token
-	let token = jwt.sign(profile, config.jwtSecret, { expiresIn: 60 * 60 });
-	let error = null;
-
-	if (email !== 'admin@admin.pl' && password !== 'admin') {
-		token = null;
-	}
-
-	res.json({ token, error });
+	apiFunction(req, res, logUser);
 });
 
 // ----------- lang ---------------------

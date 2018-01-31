@@ -1,6 +1,7 @@
 import {
 	FETCH_TOKEN,
 	FETCH_TOKEN_FULFILLED,
+	FETCH_TOKEN_FULFILLED_NONE,
 	FETCH_TOKEN_PENDING,
 	FETCH_TOKEN_REJECTED,
 	LOGOUT,
@@ -9,7 +10,8 @@ import {
 
 const INITIAL_STATE = {
 	initialized: false,
-	token: null
+	token: null,
+	loginStatus: null
 };
 
 function appReducer(state = INITIAL_STATE, action) {
@@ -22,10 +24,29 @@ function appReducer(state = INITIAL_STATE, action) {
 			};
 		}
 
+		case FETCH_TOKEN_PENDING: {
+			return {
+				...state,
+				loginStatus: 'pending'
+			};
+		}
 		case FETCH_TOKEN_FULFILLED: {
 			return {
 				...state,
-				token: action.payload
+				token: action.payload,
+				loginStatus: null
+			};
+		}
+		case FETCH_TOKEN_FULFILLED_NONE: {
+			return {
+				...state,
+				loginStatus: 'No user or  wrong password'
+			};
+		}
+		case FETCH_TOKEN_REJECTED: {
+			return {
+				...state,
+				loginStatus: 'There was an error'
 			};
 		}
 
