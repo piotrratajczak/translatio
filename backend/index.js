@@ -62,16 +62,18 @@ io.on('connection', socket => {
 	);
 
 	//TODO replace emit events instead of api requests!!
+	//TODO unify this there are so many repetitions
 	socket.on('data/SOCKET_LANG_UPDATED', data => {
-		console.log('todo lang updated');
+		let payload = db.updateLang(data.langCode, data.data);
+		io.emit('dbEvent', { payload, type: 'data/SOCKET_LANG_UPDATED' });
 	});
 
 	socket.on('data/SOCKET_LANG_ADDED', data => {
-		console.log('todo lang added');
+		console.log('todo lang added', data);
 	});
 
 	socket.on('data/SOCKET_TAG_ADDED', data => {
-		console.log('todo tag added');
+		console.log('todo tag added', data);
 	});
 
 	socket.on('disconnect', () => console.log('Client disconnected'));
