@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import Navigation from './Navigation';
 import { logoutUser } from '../actionCreators/app';
+import { updateLanguage } from '../actionCreators/data';
 import LangPage from './LangPage';
 import { Route } from 'react-router-dom';
 import Loader from './Loader';
@@ -12,6 +13,7 @@ class Manager extends Component {
 		super();
 
 		this.handleLogout = this.handleLogout.bind(this);
+		this.handleSave = this.handleSave.bind(this);
 	}
 
 	componentWillMount() {
@@ -35,6 +37,10 @@ class Manager extends Component {
 		this.props.dispatch(logoutUser());
 	}
 
+	handleSave(langCode, data) {
+		this.props.dispatch(updateLanguage(langCode, data));
+	}
+
 	render() {
 		const { token, data } = this.props;
 		const languages = Object.keys(data);
@@ -48,7 +54,13 @@ class Manager extends Component {
 					data[langCode] && (
 						<Route
 							path={`/lang/:langCode`}
-							component={() => <LangPage data={langData} lang={langCode} />}
+							component={() => (
+								<LangPage
+									data={langData}
+									lang={langCode}
+									onSave={this.handleSave}
+								/>
+							)}
 						/>
 					)}
 				{langCode && !data[langCode] && <Loader />}

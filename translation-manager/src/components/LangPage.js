@@ -27,8 +27,11 @@ class LangPage extends Component {
 	}
 
 	handleSingleSave(tag) {
-		console.log(tag);
+		let data = { [tag]: this.state.data[tag] };
+		this.props.onSave(this.state.lang, data);
 	}
+
+	//todo completeSAVE
 
 	handleTranslationChange({ target }) {
 		let tag = target.id;

@@ -11,8 +11,12 @@ function langPost(req, res) {
 }
 
 function langPut(req, res) {
+	console.log(req.params, req.body);
 	let payload = db.updateLang(req.params.langCode, req.body.data);
-	res.locals.toEmit = { payload, type: 'data/SOCKET_LANG_UPDATED' };
+	if (payload) {
+		res.locals.toEmit = { payload, type: 'data/SOCKET_LANG_UPDATED' };
+	}
+
 	return payload;
 }
 

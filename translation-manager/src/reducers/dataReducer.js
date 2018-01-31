@@ -18,6 +18,19 @@ function appReducer(state = INITIAL_STATE, action) {
 			};
 		}
 
+		case LANG_UPDATED: {
+			return {
+				...state,
+				langData: {
+					...state.langData,
+					[action.payload.langCode]: {
+						...state.langData[action.payload.langCode],
+						...action.payload.tags
+					}
+				}
+			};
+		}
+
 		default:
 			return state;
 	}

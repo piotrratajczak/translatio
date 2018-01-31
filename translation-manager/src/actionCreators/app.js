@@ -25,6 +25,7 @@ export function loginUser(userData, history) {
 		})
 			.then(response => response.json())
 			.then(resp => {
+				console.log(resp);
 				if (resp.success) {
 					if (resp.data) {
 						//token
