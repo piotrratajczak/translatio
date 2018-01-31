@@ -38,13 +38,13 @@ class Navigation extends React.Component {
 				</Link>
 				<Collapse isOpen={!this.state.collapsed} navbar>
 					<ul className="nav navbar-nav ml-auto w-100 justify-content-end">
-						<UncontrolledDropdown nav inNavbar>
+						<UncontrolledDropdown nav="true">
 							<DropdownToggle nav caret>
 								Languages
 							</DropdownToggle>
 							<DropdownMenu>
 								{this.props.languages.map(lang => (
-									<DropdownItem>
+									<DropdownItem key={lang}>
 										<Link className="nav-link" to={`lang/${lang}`}>
 											{lang}
 										</Link>
