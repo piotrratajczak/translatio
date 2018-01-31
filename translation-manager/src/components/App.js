@@ -12,6 +12,7 @@ import NoMatchPage from './NoMatch';
 import Login from './Login';
 import Manager from './Manager';
 import Auth from '../modules/Auth';
+import { propagateDbEvent } from '../actionCreators/data';
 
 class App extends Component {
 	constructor() {
@@ -56,8 +57,14 @@ class App extends Component {
 				// todo correctly here just testing socket with jwt
 				query: `token=${props.token}`
 			});
-			socket.on('InitialData', data => console.log('initial', data));
-			socket.on('dbEvent', data => console.log('event', data));
+			socket.on('InitialData', data => {
+				console.log('initial', data);
+				this.props.dispatch(propagateDbEvent(data));
+			});
+			socket.on('dbEvent', data => {
+				console.log('event', data);
+				this.props.dispatch(propagateDbEvent(data));
+			});
 			this.setState({ socketConnection: socket });
 		}
 

@@ -16,10 +16,10 @@ class Manager extends Component {
 	}
 
 	render() {
-		const { token } = this.props;
+		const { token, languages } = this.props;
 		return token ? (
 			<div>
-				<Navigation onLogoutClick={this.handleLogout} />
+				<Navigation onLogoutClick={this.handleLogout} languages={languages} />
 				todo manager - what the fifi
 			</div>
 		) : (
@@ -29,7 +29,8 @@ class Manager extends Component {
 }
 
 const mapStateToProps = state => ({
-	token: state.app.token
+	token: state.app.token,
+	languages: state.data.languages
 });
 
 export default connect(mapStateToProps)(Manager);

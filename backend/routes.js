@@ -6,19 +6,19 @@ const jwt = require('jsonwebtoken');
 
 function langPost(req, res) {
 	let payload = db.addLang(req.body.langCode);
-	res.locals.toEmit = { payload, eventType: 'LANG_ADDED' };
+	res.locals.toEmit = { payload, type: 'data/SOCKET_LANG_ADDED' };
 	return payload;
 }
 
 function langPut(req, res) {
 	let payload = db.updateLang(req.params.langCode, req.body.data);
-	res.locals.toEmit = { payload, eventType: 'LANG_UPDATED' };
+	res.locals.toEmit = { payload, type: 'data/SOCKET_LANG_UPDATED' };
 	return payload;
 }
 
 function tagPost(req, res) {
 	let payload = db.addTag(req.body);
-	res.locals.toEmit = { payload, eventType: 'TAG_ADDED' };
+	res.locals.toEmit = { payload, type: 'data/SOCKET_TAG_ADDED' };
 	return payload;
 }
 

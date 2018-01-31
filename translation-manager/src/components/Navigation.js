@@ -1,6 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Collapse, NavLink } from 'reactstrap';
+import {
+	Collapse,
+	NavLink,
+	UncontrolledDropdown,
+	DropdownToggle,
+	DropdownMenu,
+	DropdownItem
+} from 'reactstrap';
 
 class Navigation extends React.Component {
 	constructor(props) {
@@ -31,12 +38,20 @@ class Navigation extends React.Component {
 				</Link>
 				<Collapse isOpen={!this.state.collapsed} navbar>
 					<ul className="nav navbar-nav ml-auto w-100 justify-content-end">
-						{/* <Link className="nav-link" to="/languages">
-							Languages
-              </Link>
-              <Link className="nav-link" to="/tags">
-							Tags
-						</Link> */}
+						<UncontrolledDropdown nav inNavbar>
+							<DropdownToggle nav caret>
+								Languages
+							</DropdownToggle>
+							<DropdownMenu>
+								{this.props.languages.map(lang => (
+									<DropdownItem>
+										<Link className="nav-link" to={`lang/${lang}`}>
+											{lang}
+										</Link>
+									</DropdownItem>
+								))}
+							</DropdownMenu>
+						</UncontrolledDropdown>
 						<NavLink onClick={this.props.onLogoutClick}>Logout</NavLink>
 					</ul>
 				</Collapse>

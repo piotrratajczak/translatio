@@ -63,7 +63,10 @@ io.on('connection', socket => {
 
 	socket.on('disconnect', () => console.log('Client disconnected'));
 
-	socket.emit('InitialData', { languages: db.getLangs() });
+	socket.emit('InitialData', {
+		type: 'data/SOCKET_INITIAL_LANGUAGE_SET',
+		payload: db.getLangs()
+	});
 });
 
 // start listenign on server
