@@ -18,7 +18,6 @@ class Auth {
 	}
 
 	static checkTokenValidity(token) {
-		console.log(typeof token);
 		return jwt.decode(token).exp * 1000 > new Date().getTime();
 	}
 

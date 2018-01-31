@@ -146,6 +146,14 @@ function checkUser(email, password) {
 	}
 }
 
+function getAllData() {
+	let result = {};
+	languages.forEach(lang => {
+		result[lang] = dbs[lang].JSON();
+	});
+	return result;
+}
+
 module.exports = {
 	init: init,
 	getDbs: () => dbs,
@@ -155,5 +163,6 @@ module.exports = {
 	getEmptyTags: getEmptyTags,
 	addLang: addLang,
 	updateLang: updateLang,
-	checkUser: checkUser
+	checkUser: checkUser,
+	getAllData: getAllData
 };

@@ -38,20 +38,22 @@ class Navigation extends React.Component {
 				</Link>
 				<Collapse isOpen={!this.state.collapsed} navbar>
 					<ul className="nav navbar-nav ml-auto w-100 justify-content-end">
-						<UncontrolledDropdown nav="true">
-							<DropdownToggle nav caret>
-								Languages
-							</DropdownToggle>
-							<DropdownMenu>
-								{this.props.languages.map(lang => (
-									<DropdownItem key={lang}>
-										<Link className="nav-link" to={`lang/${lang}`}>
-											{lang}
-										</Link>
-									</DropdownItem>
-								))}
-							</DropdownMenu>
-						</UncontrolledDropdown>
+						{this.props.languages.length && (
+							<UncontrolledDropdown nav="true">
+								<DropdownToggle nav caret>
+									Languages
+								</DropdownToggle>
+								<DropdownMenu>
+									{this.props.languages.map(lang => (
+										<DropdownItem key={lang}>
+											<Link className="nav-link" to={`/lang/${lang}`}>
+												{lang}
+											</Link>
+										</DropdownItem>
+									))}
+								</DropdownMenu>
+							</UncontrolledDropdown>
+						)}
 						<UncontrolledDropdown nav="true">
 							<DropdownToggle nav caret>
 								Fast adding

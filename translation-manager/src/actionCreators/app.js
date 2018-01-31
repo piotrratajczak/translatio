@@ -9,7 +9,7 @@ import {
 } from '../actions/app';
 import Auth from '../modules/Auth';
 
-const API_URL = 'http://localhost:3001/'; // to move to settings
+const API_URL = 'http://localhost:3001/'; // todo move to settings
 
 export function loginUser(userData, history) {
 	return dispatch => {

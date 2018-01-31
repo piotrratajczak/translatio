@@ -58,7 +58,6 @@ class App extends Component {
 				query: `token=${props.token}`
 			});
 			socket.on('InitialData', data => {
-				console.log('initial', data);
 				this.props.dispatch(propagateDbEvent(data));
 			});
 			socket.on('dbEvent', data => {
@@ -84,6 +83,7 @@ class App extends Component {
 						<Switch>
 							<Route exact path="/login" component={Login} />
 							<Route exact path="/" component={Manager} />
+							<Route exact path="/lang/:langCode" component={Manager} />
 							<Route component={NoMatchPage} />
 						</Switch>
 					)}

@@ -65,7 +65,7 @@ io.on('connection', socket => {
 
 	socket.emit('InitialData', {
 		type: 'data/SOCKET_INITIAL_LANGUAGE_SET',
-		payload: db.getLangs()
+		payload: db.getAllData() //db.getLangs()
 	});
 });
 
