@@ -48,7 +48,10 @@ class Manager extends Component {
 	}
 
 	handleSave(langCode, data) {
-		this.state.socketConnection.emit(LANG_UPDATED, { langCode, data });
+		this.state.socketConnection.emit('clientEvent', {
+			type: LANG_UPDATED,
+			payload: { langCode, data }
+		});
 	}
 
 	checkSocketConnection(props) {

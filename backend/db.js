@@ -113,18 +113,17 @@ function addLang(lang) {
 	return { [lang]: newLang };
 }
 
-function updateLang(lang, data) {
-	console.log(lang, data);
-	if (!langExist(lang)) {
+function updateLang({ langCode, data }) {
+	if (!langExist(langCode)) {
 		throw new Error('There is no such a language!');
 	}
-	let payload = { langCode: lang, tags: {} };
+	let payload = { langCode: langCode, tags: {} };
 
 	Object.keys(data).forEach(tag => {
-		let oldValue = dbs[lang].get(tag);
+		let oldValue = dbs[langCode].get(tag);
 		let newValue = data[tag];
 		if (oldValue !== newValue) {
-			dbs[lang].set(tag, data[tag]);
+			dbs[langCode].set(tag, data[tag]);
 			payload.tags[tag] = newValue;
 		}
 	});

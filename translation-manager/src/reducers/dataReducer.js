@@ -5,6 +5,8 @@ import {
 	INITIAL_LANGUAGE_SET
 } from '../actions/data';
 
+import { LOGOUT } from '../actions/app';
+
 const INITIAL_STATE = {
 	langData: {}
 };
@@ -29,6 +31,10 @@ function appReducer(state = INITIAL_STATE, action) {
 					}
 				}
 			};
+		}
+
+		case LOGOUT: {
+			return INITIAL_STATE;
 		}
 
 		default:
