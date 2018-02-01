@@ -12,35 +12,15 @@ import NoMatchPage from './NoMatch';
 import Login from './Login';
 import Manager from './Manager';
 import Auth from '../modules/Auth';
-// import { propagateDbEvent } from '../actionCreators/data';
 
 class App extends Component {
 	constructor() {
 		super();
-		// this.state = {
-		// 	socketConnection: null
-		// };
-
-		// this.checkSocketConnection = this.checkSocketConnection.bind(this);
 	}
 
 	componentWillMount() {
 		this.getAndSetToken();
 	}
-
-	// componentDidMount() {
-	// 	this.checkSocketConnection(this.props);
-	// }
-	//
-	// componentWillReceiveProps(nextProps) {
-	// 	this.checkSocketConnection(nextProps);
-	// }
-	//
-	// componentWillUnmount() {
-	// 	if (this.state.socketConnection) {
-	// 		this.state.socketConnection.disconnect();
-	// 	}
-	// }
 
 	getAndSetToken() {
 		let payload = null;
@@ -50,31 +30,6 @@ class App extends Component {
 		}
 		this.props.dispatch({ type: SET_TOKEN, payload });
 	}
-
-	// checkSocketConnection(props) {
-	// 	if (!this.state.socketConnection && props.initialized && props.token) {
-	// 		const socket = socketIOClient('http://127.0.0.1:3001', {
-	// 			// todo correctly here just testing socket with jwt
-	// 			query: `token=${props.token}`
-	// 		});
-	// 		socket.on('InitialData', data => {
-	// 			this.props.dispatch(propagateDbEvent(data));
-	// 		});
-	// 		socket.on('dbEvent', data => {
-	// 			console.log('event', data);
-	// 			this.props.dispatch(propagateDbEvent(data));
-	// 		});
-	//
-	// 		socket.emit('clientEvent', { hello: 'world' }); // TODO really emit event instead of api
-	//
-	// 		this.setState({ socketConnection: socket });
-	// 	}
-	//
-	// 	if (this.state.socketConnection && !props.token) {
-	// 		this.state.socketConnection.disconnect();
-	// 		this.setState({ socketConnection: null });
-	// 	}
-	// }
 
 	render() {
 		const { props } = this;
@@ -86,6 +41,7 @@ class App extends Component {
 						<Switch>
 							<Route exact path="/login" component={Login} />
 							<Route exact path="/" component={Manager} />
+							<Route path="/add/" component={Manager} />
 							<Route exact path="/lang/:langCode" component={Manager} />
 							<Route component={NoMatchPage} />
 						</Switch>

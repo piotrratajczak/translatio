@@ -15,6 +15,9 @@ import { Route } from 'react-router-dom';
 import Loader from './Loader';
 import socketIOClient from 'socket.io-client';
 import { propagateDbEvent } from '../actionCreators/data';
+import TagForm from './TagForm';
+import LangForm from './LangForm';
+import StartPage from './StartPage';
 
 class Manager extends Component {
 	constructor() {
@@ -67,9 +70,7 @@ class Manager extends Component {
 				console.log('event', data);
 				this.props.dispatch(propagateDbEvent(data));
 			});
-
-			socket.emit('clientEvent', { hello: 'world' }); // TODO really emit event instead of api
-
+			``;
 			this.setState({ socketConnection: socket });
 		}
 
@@ -97,7 +98,9 @@ class Manager extends Component {
 						/>
 					)}
 				{langCode && !data[langCode] && <Loader />}
-				{!langCode && <div> todo start page </div>}
+				<Route exact path="/" component={StartPage} />
+				<Route exact path="/add/tag" component={TagForm} />
+				<Route exact path="/add/lang" component={LangForm} />
 			</div>
 		) : (
 			<Redirect to="/login" />

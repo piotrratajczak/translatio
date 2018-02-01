@@ -64,7 +64,6 @@ io.on('connection', socket => {
 	//TODO replace emit events instead of api requests!!
 	//TODO unify this there are so many repetitions
 	socket.on('clientEvent', data => {
-		console.log(data);
 		let func = null,
 			payload = null;
 		switch (data.type) {
