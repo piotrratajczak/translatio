@@ -91,12 +91,12 @@ function langExist(lang) {
 	return languages.indexOf(lang) > -1 || dbs[lang];
 }
 
-function addLang(lang) {
-	if (!lang) {
+function addLang({ langCode }) {
+	if (!langCode) {
 		throw new Error('No value found!');
 	}
 
-	if (langExist(lang)) {
+	if (langExist(langCode)) {
 		throw new Error('Already exists!');
 	}
 
@@ -104,13 +104,13 @@ function addLang(lang) {
 	let tags = getAllTags(true);
 	tags.forEach(tag => (newLang[tag] = ''));
 
-	const fileName = config.filesUrl + '/' + lang + '.json';
+	const fileName = config.filesUrl + '/' + langCode + '.json';
 
 	fs.writeFileSync(fileName, JSON.stringify(newLang));
 
 	addDbPointer(fileName);
 
-	return { [lang]: newLang };
+	return { [langCode]: newLang };
 }
 
 function updateLang({ langCode, data }) {
