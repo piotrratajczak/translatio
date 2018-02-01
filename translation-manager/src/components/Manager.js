@@ -30,6 +30,8 @@ class Manager extends Component {
 		this.handleLogout = this.handleLogout.bind(this);
 		this.handleSave = this.handleSave.bind(this);
 		this.checkSocketConnection = this.checkSocketConnection.bind(this);
+		this.handleTagAdd = this.handleTagAdd.bind(this);
+		this.handleLangAdd = this.handleLangAdd.bind(this);
 	}
 
 	componentDidMount() {
@@ -55,6 +57,19 @@ class Manager extends Component {
 			type: LANG_UPDATED,
 			payload: { langCode, data }
 		});
+	}
+
+	handleTagAdd(e) {
+		console.log('todo');
+	}
+
+	handleLangAdd(evt) {
+		this.state.socketConnection.emit('clientEvent', {
+			type: LANG_ADDED,
+			payload: { langCode: evt.target.elements.langCode.value }
+		});
+
+		evt.preventDefault();
 	}
 
 	checkSocketConnection(props) {
@@ -99,8 +114,16 @@ class Manager extends Component {
 					)}
 				{langCode && !data[langCode] && <Loader />}
 				<Route exact path="/" component={StartPage} />
-				<Route exact path="/add/tag" component={TagForm} />
-				<Route exact path="/add/lang" component={LangForm} />
+				<Route
+					exact
+					path="/add/tag"
+					component={() => <TagForm onSubmit={this.handleTagAdd} />}
+				/>
+				<Route
+					exact
+					path="/add/lang"
+					component={() => <LangForm onSubmit={this.handleLangAdd} />}
+				/>
 			</div>
 		) : (
 			<Redirect to="/login" />
