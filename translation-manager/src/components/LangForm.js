@@ -9,20 +9,23 @@ import {
 	FormText,
 	Col
 } from 'reactstrap';
+import { LANG_ADDED } from '../actions/data';
+
+const INITIAL_STATE = { lang: '', error: null };
 
 class LangForm extends Component {
 	constructor() {
 		super();
 
 		this.state = {
-			langCode: '',
-			error: null
+			...INITIAL_STATE
 		};
 
-		this.handlechange = this.handlechange.bind(this);
+		this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
-	handlechange({ target }) {
+	handleChange({ target }) {
 		const { value } = target;
 		let error = this.validateLangCode(value);
 		this.setState({ langCode: value, error });
@@ -42,16 +45,25 @@ class LangForm extends Component {
 		return error;
 	}
 
+	handleSubmit(evt) {
+		this.props.onSubmit({
+			payload: { langCode: evt.target.elements.langCode.value },
+			type: LANG_ADDED
+		});
+		this.setState(() => INITIAL_STATE);
+		evt.preventDefault();
+	}
+
 	render() {
 		return (
-			<Form className="p-3" onSubmit={this.props.onSubmit}>
+			<Form className="p-3" onSubmit={this.handleSubmit}>
 				<FormGroup row>
 					<Label for="exampleEmail" xs={12} sm={2}>
 						LangCode:
 					</Label>
 					<Col xs={12} sm={7}>
 						<Input
-							onChange={this.handlechange}
+							onChange={this.handleChange}
 							value={this.state.langCode}
 							type="text"
 							name="langCode"

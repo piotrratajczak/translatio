@@ -43,6 +43,21 @@ function appReducer(state = INITIAL_STATE, action) {
 			};
 		}
 
+		case TAG_ADDED: {
+			let langData = Object.assign({}, state.langData);
+			Object.keys(action.payload).forEach(langCode => {
+				langData[langCode] = Object.assign(
+					{},
+					langData[langCode],
+					action.payload[langCode]
+				);
+			});
+			return {
+				...state,
+				langData: langData
+			};
+		}
+
 		case LOGOUT: {
 			return INITIAL_STATE;
 		}

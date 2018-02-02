@@ -1,9 +1,4 @@
-import {
-	LANG_ADDED,
-	LANG_UPDATED,
-	TAG_ADDED,
-	INITIAL_LANGUAGE_SET
-} from '../actions/data';
+import { LANG_UPDATED, INITIAL_LANGUAGE_SET } from '../actions/data';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -30,8 +25,7 @@ class Manager extends Component {
 		this.handleLogout = this.handleLogout.bind(this);
 		this.handleSave = this.handleSave.bind(this);
 		this.checkSocketConnection = this.checkSocketConnection.bind(this);
-		this.handleTagAdd = this.handleTagAdd.bind(this);
-		this.handleLangAdd = this.handleLangAdd.bind(this);
+		this.handleFormSubmit = this.handleFormSubmit.bind(this);
 	}
 
 	componentDidMount() {
@@ -59,23 +53,17 @@ class Manager extends Component {
 		});
 	}
 
-	handleTagAdd(e) {
-		console.log('todo');
-	}
-
-	handleLangAdd(evt) {
+	handleFormSubmit({ type, payload }) {
 		this.state.socketConnection.emit('clientEvent', {
-			type: LANG_ADDED,
-			payload: { langCode: evt.target.elements.langCode.value }
+			type,
+			payload
 		});
-
-		evt.preventDefault();
 	}
 
 	checkSocketConnection(props) {
 		if (!this.state.socketConnection && props.token) {
 			const socket = socketIOClient('http://127.0.0.1:3001', {
-				// todo correctly here just testing socket with jwt
+				// todo settings
 				query: `token=${props.token}`
 			});
 			socket.on('InitialData', data => {
@@ -97,7 +85,7 @@ class Manager extends Component {
 
 	render() {
 		const { token, data } = this.props;
-		const languages = Object.keys(data);
+		const languages = Object.keys(data).sort();
 		const { langCode } = this.props.match.params;
 		const langData = data[langCode];
 
@@ -117,13 +105,13 @@ class Manager extends Component {
 				<Route
 					exact
 					path="/add/tag"
-					component={() => <TagForm onSubmit={this.handleTagAdd} />}
+					component={() => <TagForm onSubmit={this.handleFormSubmit} />}
 				/>
 				<Route
 					exact
 					path="/add/lang"
 					component={() => (
-						<LangForm languages={languages} onSubmit={this.handleLangAdd} />
+						<LangForm languages={languages} onSubmit={this.handleFormSubmit} />
 					)}
 				/>
 			</div>

@@ -105,7 +105,7 @@ function addLang({ langCode }) {
 	tags.forEach(tag => (newLang[tag] = ''));
 
 	const fileName = config.filesUrl + '/' + langCode + '.json';
-
+	console.log(fileName);
 	fs.writeFileSync(fileName, JSON.stringify(newLang));
 
 	addDbPointer(fileName);

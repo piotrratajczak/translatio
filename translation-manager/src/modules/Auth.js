@@ -9,10 +9,6 @@ class Auth {
 		return localStorage.removeItem('token');
 	}
 
-	static deauthenticateUser() {
-		console.log('TODO deauthenticateUser'); //localStorage.removeItem('token');
-	}
-
 	static getToken() {
 		return localStorage.getItem('token');
 	}

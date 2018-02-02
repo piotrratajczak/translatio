@@ -114,6 +114,4 @@ class Translation extends Component {
 	}
 }
 
-//todo maybe form text if text is longer than ...xxxx
-
 export default Translation;

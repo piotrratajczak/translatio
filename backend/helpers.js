@@ -15,12 +15,13 @@ function recFindByExt(base, ext, files, result) {
 			}
 		}
 	});
+	console.log(result);
 	return result;
 }
 
 function fileNameToCode(file, configPath) {
 	let to = file.indexOf('.json'),
-		from = configPath.length - 1;
+		from = configPath.length + 1;
 	return file.substr(from, to - from);
 }
 

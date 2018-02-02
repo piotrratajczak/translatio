@@ -33,8 +33,6 @@ class LangPage extends Component {
 		this.props.onSave(this.state.lang, data);
 	}
 
-	//todo completeSAVE
-
 	handleTranslationChange({ target }) {
 		let tag = target.id;
 		let value = target.value;
@@ -50,8 +48,6 @@ class LangPage extends Component {
 			this.setState({ lang, data });
 		}
 	}
-
-	// also todo saving form function
 
 	render() {
 		const { data } = this.state;
