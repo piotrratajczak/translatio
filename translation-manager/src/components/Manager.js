@@ -122,7 +122,9 @@ class Manager extends Component {
 				<Route
 					exact
 					path="/add/lang"
-					component={() => <LangForm onSubmit={this.handleLangAdd} />}
+					component={() => (
+						<LangForm languages={languages} onSubmit={this.handleLangAdd} />
+					)}
 				/>
 			</div>
 		) : (
