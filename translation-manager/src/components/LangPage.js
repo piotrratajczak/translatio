@@ -17,14 +17,19 @@ class LangPage extends Component {
 	}
 
 	componentWillMount() {
-		console.log('MOUNT');
 		this.checkLang();
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.lang !== this.props.lang) {
-			console.log('RECEIVE', nextProps.lang, this.props.lang);
 			this.checkLang(nextProps);
+		}
+
+		const nextKeys = Object.keys(nextProps.data);
+		const presentKeys = Object.keys(this.state.data);
+
+		if (nextKeys.length > presentKeys.length) {
+			this.setState(() => Object.assign({}, nextProps.data, this.state.data));
 		}
 	}
 
@@ -44,7 +49,6 @@ class LangPage extends Component {
 
 	checkLang({ lang, data } = this.props) {
 		if (lang !== this.state.lang) {
-			console.log('CHANGING STATE');
 			this.setState({ lang, data });
 		}
 	}
@@ -55,7 +59,7 @@ class LangPage extends Component {
 		return (
 			<Form>
 				{data &&
-					Object.keys(data)
+					Object.keys(originalData)
 						.sort()
 						.map(tag => (
 							<Translation

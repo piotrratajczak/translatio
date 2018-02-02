@@ -33,6 +33,7 @@ class Manager extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
+		console.log('MANAGER');
 		this.checkSocketConnection(nextProps);
 	}
 
@@ -123,8 +124,7 @@ class Manager extends Component {
 
 const mapStateToProps = state => ({
 	token: state.app.token,
-	data: state.data.langData,
-	dataAction: state.data.action
+	data: state.data.langData
 });
 
 export default connect(mapStateToProps)(Manager);
