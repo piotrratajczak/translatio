@@ -63,7 +63,10 @@ class LangForm extends Component {
 						{this.state.error}
 					</Col>
 					<Col xs={12} sm={3}>
-						<Button className="w-100" type="submit" disabled={this.state.error}>
+						<Button
+							className="w-100"
+							type="submit"
+							disabled={this.state.error !== null}>
 							Submit
 						</Button>
 					</Col>

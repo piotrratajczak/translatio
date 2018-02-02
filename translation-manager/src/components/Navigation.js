@@ -44,7 +44,7 @@ class Navigation extends React.Component {
 									Languages
 								</DropdownToggle>
 								<DropdownMenu>
-									{this.props.languages.map(lang => (
+									{this.props.languages.sort().map(lang => (
 										<DropdownItem key={lang}>
 											<Link className="nav-link" to={`/lang/${lang}`}>
 												{lang}

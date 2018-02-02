@@ -33,6 +33,16 @@ function appReducer(state = INITIAL_STATE, action) {
 			};
 		}
 
+		case LANG_ADDED: {
+			return {
+				...state,
+				langData: {
+					...state.langData,
+					...action.payload
+				}
+			};
+		}
+
 		case LOGOUT: {
 			return INITIAL_STATE;
 		}
