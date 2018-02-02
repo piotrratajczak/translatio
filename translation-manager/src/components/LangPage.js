@@ -60,8 +60,8 @@ class LangPage extends Component {
 			<Form>
 				{data &&
 					Object.keys(data)
-					.sort()
-					.map(tag => (
+						.sort()
+						.map(tag => (
 							<Translation
 								tag={tag}
 								translation={data[tag]}
