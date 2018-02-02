@@ -52,6 +52,18 @@ function apiFunction(req, res, action) {
 	}
 }
 
+function downloadLanguageFile(req, res) {
+	const langCode = req.params.langCode;
+	if (db.langExist(langCode)) {
+		res.download(
+			config.filesUrl + '/' + langCode + '.json',
+			langCode + '.json'
+		);
+	} else {
+		res.send('there is no such a language!');
+	}
+}
+
 //-------------login ----------------
 
 router.post('/login', function(req, res) {
@@ -59,12 +71,14 @@ router.post('/login', function(req, res) {
 });
 
 // ----------- lang ---------------------
+
 router.get('/lang', (req, res) => res.send(db.getLangs())); //list
 router.post('/lang', (req, res, next) => {
 	apiFunction(req, res, langPost);
 	next();
 });
-
+// ----------- downloads ------------------
+router.get('/lang/file/:langCode', downloadLanguageFile);
 //------------ lang / :LANGCODE ------------------
 router.put('/lang/:langCode', (req, res, next) => {
 	apiFunction(req, res, langPut);

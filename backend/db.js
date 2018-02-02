@@ -169,5 +169,6 @@ module.exports = {
 	addLang: addLang,
 	updateLang: updateLang,
 	checkUser: checkUser,
-	getAllData: getAllData
+	getAllData: getAllData,
+	langExist: langExist
 };
