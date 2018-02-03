@@ -33,7 +33,6 @@ class Manager extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		console.log('MANAGER');
 		this.checkSocketConnection(nextProps);
 	}
 
@@ -47,10 +46,10 @@ class Manager extends Component {
 		this.props.dispatch(logoutUser());
 	}
 
-	handleSave(langCode, data) {
+	handleSave(data) {
 		this.state.socketConnection.emit('clientEvent', {
 			type: LANG_UPDATED,
-			payload: { langCode, data }
+			payload: { langCode: this.props.match.params.langCode, data }
 		});
 	}
 

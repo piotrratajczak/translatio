@@ -16,7 +16,8 @@ import {
 const INITIAL_STATE = {
 	changed: false,
 	outdated: false,
-	show: false
+	show: false,
+	value: ''
 };
 
 class Translation extends Component {
@@ -24,9 +25,7 @@ class Translation extends Component {
 		super();
 
 		this.state = {
-			changed: false,
-			outdated: false,
-			show: false
+			...INITIAL_STATE
 		};
 
 		this.handleUndoChanges = this.handleUndoChanges.bind(this);
@@ -35,16 +34,14 @@ class Translation extends Component {
 		this.toggleOriginal = this.toggleOriginal.bind(this);
 	}
 
+	componentWillMount() {
+		this.setState({ value: this.props.original });
+	}
+
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.original !== this.props.original) {
-			if (
-				!this.state.changed ||
-				this.props.translation === nextProps.original
-			) {
-				this.setState(INITIAL_STATE);
-				this.props.onChange({
-					target: { id: this.props.tag, value: nextProps.original }
-				});
+			if (!this.state.changed || this.state.value === nextProps.original) {
+				this.setState({ ...INITIAL_STATE, value: nextProps.original });
 			} else {
 				this.setState({ outdated: true });
 			}
@@ -56,20 +53,22 @@ class Translation extends Component {
 	}
 
 	handleChanges(evt) {
-		this.setState({ changed: this.props.original !== evt.target.value });
-		this.props.onChange(evt);
+		this.setState({
+			value: evt.target.value,
+			changed: this.props.original !== evt.target.value
+		});
 	}
 
 	handleUndoChanges() {
-		this.setState(INITIAL_STATE);
+		this.setState({ ...INITIAL_STATE, value: this.props.original });
 		this.props.onChange({
 			target: { id: this.props.tag, value: this.props.original }
 		});
 	}
 
 	handleSaveChanges() {
+		this.props.onSave({ [this.props.tag]: this.state.value });
 		this.setState(INITIAL_STATE);
-		this.props.onSave(this.props.tag);
 	}
 
 	render() {
@@ -87,7 +86,7 @@ class Translation extends Component {
 						onChange={this.handleChanges}
 						type="text"
 						id={tag}
-						value={translation}
+						value={this.state.value}
 						placeholder="NO TRANSLATION"
 					/>
 					{changed && (
@@ -100,14 +99,20 @@ class Translation extends Component {
 									Undo
 								</Button>
 								<Button color="warning" onClick={this.toggleOriginal}>
-									{`${show ? 'Hide' : 'Show'} original`}
+									{`${show ? 'Hide' : 'Show'} actual`}
 								</Button>
 							</ButtonGroup>
 						</InputGroupAddon>
 					)}
 				</InputGroup>
 				<Collapse isOpen={show}>
-					<Input className="original" value={original} type="text" disabled />
+					<Input
+						className="original"
+						value={original}
+						type="text"
+						disabled
+						placeholder="NO TRANSLATION"
+					/>
 				</Collapse>
 			</FormGroup>
 		);

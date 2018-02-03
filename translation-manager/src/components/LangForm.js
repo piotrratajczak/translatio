@@ -11,7 +11,7 @@ import {
 } from 'reactstrap';
 import { LANG_ADDED } from '../actions/data';
 
-const INITIAL_STATE = { lang: '', error: null };
+const INITIAL_STATE = { langCode: '', error: null };
 
 class LangForm extends Component {
 	constructor() {
