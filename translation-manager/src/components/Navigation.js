@@ -7,6 +7,7 @@ import {
 	UncontrolledDropdown,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { PropTypes } from 'prop-types';
 import React from 'react';
 
 class Navigation extends React.Component {
@@ -25,6 +26,7 @@ class Navigation extends React.Component {
 		});
 	}
 	render() {
+		const { languages, onLogoutClick } = this.props;
 		return (
 			<nav className="navbar navbar-toggleable-md navbar-light bg-faded">
 				<button
@@ -39,13 +41,13 @@ class Navigation extends React.Component {
 				</Link>
 				<Collapse isOpen={!this.state.collapsed} navbar>
 					<ul className="nav navbar-nav ml-auto w-100 justify-content-end">
-						{this.props.languages.length && (
+						{languages.length && (
 							<UncontrolledDropdown nav="true">
 								<DropdownToggle nav caret>
 									Languages
 								</DropdownToggle>
 								<DropdownMenu>
-									{this.props.languages.map(lang => (
+									{languages.map(lang => (
 										<DropdownItem key={lang}>
 											<Link className="nav-link" to={`/lang/${lang}`}>
 												{lang}
@@ -72,12 +74,21 @@ class Navigation extends React.Component {
 								</DropdownItem>
 							</DropdownMenu>
 						</UncontrolledDropdown>
-						<NavLink onClick={this.props.onLogoutClick}>Logout</NavLink>
+						<NavLink onClick={onLogoutClick}>Logout</NavLink>
 					</ul>
 				</Collapse>
 			</nav>
 		);
 	}
 }
+
+Navigation.propTypes = {
+	languages: PropTypes.arrayOf(PropTypes.string),
+	onLogoutClick: PropTypes.func.isRequired,
+};
+
+Navigation.defaultProps = {
+	languages: [],
+};
 
 export default Navigation;

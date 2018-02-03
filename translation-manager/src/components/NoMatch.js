@@ -1,4 +1,5 @@
 import './NoMatch.css';
+import { PropTypes } from 'prop-types';
 import React from 'react';
 
 const NoMatchPage = ({ location }) => (
@@ -7,5 +8,11 @@ const NoMatchPage = ({ location }) => (
 		<small>... sorry, never heard about it. </small>
 	</div>
 );
+
+NoMatchPage.propTypes = {
+	location: PropTypes.shape({
+		pathname: PropTypes.string.isRequired,
+	}).isRequired,
+};
 
 export default NoMatchPage;

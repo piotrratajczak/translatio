@@ -1,15 +1,16 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
-import { SET_TOKEN } from '../actions/app';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import Loader from './Loader';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import Auth from '../modules/Auth';
 import { Container } from 'reactstrap';
-import NoMatchPage from './NoMatch';
+import Loader from './Loader';
 import Login from './Login';
 import Manager from './Manager';
-import Auth from '../modules/Auth';
+import NoMatchPage from './NoMatch';
+import { PropTypes } from 'prop-types';
+import { SET_TOKEN } from '../actions/app';
+import { connect } from 'react-redux';
 
 class App extends Component {
 	componentWillMount() {
@@ -46,16 +47,8 @@ class App extends Component {
 	}
 }
 
-App.defaultProps = {
-	initialized: false,
-	token: null,
+App.propTypes = {
+	dispatch: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state) {
-	return {
-		initialized: state.app.initialized,
-		token: state.app.token,
-	};
-}
-
-export default connect(mapStateToProps)(App);
+export default connect(null)(App);

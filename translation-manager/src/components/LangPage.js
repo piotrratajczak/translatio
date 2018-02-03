@@ -1,6 +1,6 @@
+import { Form } from 'reactstrap';
 import React from 'react';
 import Translation from './Translation';
-import { Form } from 'reactstrap';
 
 const LangPage = ({ data, onSave }) => (
 	<Form>

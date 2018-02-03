@@ -35,9 +35,9 @@ export function updateLanguage(langCode, data) {
 				}
 			})
 			.catch((err) => {
-				console.log(err);
 				dispatch({
 					type: UPDATE_LANG_REJECTED,
+					payload: err,
 				});
 			});
 	};

@@ -23,7 +23,6 @@ export function loginUser(userData, history) {
 		})
 			.then(response => response.json())
 			.then((resp) => {
-				console.log(resp);
 				if (resp.success) {
 					if (resp.data) {
 						// token
@@ -40,6 +39,7 @@ export function loginUser(userData, history) {
 			.catch((err) => {
 				dispatch({
 					type: FETCH_TOKEN_REJECTED,
+					payload: err,
 				});
 			});
 	};

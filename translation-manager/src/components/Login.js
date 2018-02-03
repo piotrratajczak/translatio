@@ -2,17 +2,18 @@ import './Login.css';
 
 import React, { Component } from 'react';
 import { Container } from 'reactstrap';
+import Loader from './Loader';
+import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { loginUser } from '../actionCreators/app';
-import Loader from './Loader';
 
 const INITIAL_STATE = {
 	email: '',
-	password: ''
+	password: '',
 };
 
 const byPropKey = (propertyName, value) => () => ({
-	[propertyName]: value
+	[propertyName]: value,
 });
 
 class Login extends Component {
@@ -22,11 +23,11 @@ class Login extends Component {
 		this.state = { ...INITIAL_STATE };
 	}
 
-	onSubmit = event => {
-		let { email, password } = this.state;
+	onSubmit(event) {
+		const { email, password } = this.state;
 		this.props.dispatch(loginUser({ email, password }, this.props.history));
 		event.preventDefault();
-	};
+	}
 
 	render() {
 		const { email, password } = this.state;
@@ -52,7 +53,6 @@ class Login extends Component {
 								this.setState(byPropKey('email', event.target.value))
 							}
 							required
-							autoFocus
 						/>
 						<label htmlFor="inputPassword" className="sr-only">
 							Password
@@ -72,7 +72,8 @@ class Login extends Component {
 						<button
 							className="btn btn-lg btn-primary btn-block"
 							type="submit"
-							disabled={isInvalid}>
+							disabled={isInvalid}
+						>
 							Sign in
 						</button>
 						<p className="errors">{status}</p>
@@ -83,13 +84,18 @@ class Login extends Component {
 	}
 }
 
+Login.propTypes = {
+	dispatch: PropTypes.func.isRequired,
+	status: PropTypes.string,
+};
+
 Login.defaultProps = {
-	status: null
+	status: null,
 };
 
 function mapStateToProps(state) {
 	return {
-		status: state.app.loginStatus
+		status: state.app.loginStatus,
 	};
 }
 

@@ -1,7 +1,8 @@
 import './AddForm.css';
 import { Button, Col, Form, FormGroup, Input, Label } from 'reactstrap';
-import React, { Component } from 'react';
 import { LANG_ADDED, TAG_ADDED } from '../actions/data';
+import React, { Component } from 'react';
+import { PropTypes } from 'prop-types';
 
 const INITIAL_STATE = { value: '', error: null };
 
@@ -103,5 +104,15 @@ class AddForm extends Component {
 		);
 	}
 }
+
+AddForm.propTypes = {
+	onSubmit: PropTypes.func.isRequired,
+	type: PropTypes.string.isRequired,
+	languages: PropTypes.arrayOf(PropTypes.string),
+};
+
+AddForm.defaultProps = {
+	languages: [],
+};
 
 export default AddForm;
