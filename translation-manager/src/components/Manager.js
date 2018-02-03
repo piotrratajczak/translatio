@@ -9,8 +9,7 @@ import { Route } from 'react-router-dom';
 import Loader from './Loader';
 import socketIOClient from 'socket.io-client';
 import { propagateDbEvent } from '../actionCreators/data';
-import TagForm from './TagForm';
-import LangForm from './LangForm';
+import AddForm from './AddForm';
 import StartPage from './StartPage';
 
 class Manager extends Component {
@@ -103,13 +102,19 @@ class Manager extends Component {
 				<Route
 					exact
 					path="/add/tag"
-					component={() => <TagForm onSubmit={this.handleFormSubmit} />}
+					component={() => (
+						<AddForm type="tag" onSubmit={this.handleFormSubmit} />
+					)}
 				/>
 				<Route
 					exact
 					path="/add/lang"
 					component={() => (
-						<LangForm languages={languages} onSubmit={this.handleFormSubmit} />
+						<AddForm
+							type="langCode"
+							languages={languages}
+							onSubmit={this.handleFormSubmit}
+						/>
 					)}
 				/>
 			</div>
