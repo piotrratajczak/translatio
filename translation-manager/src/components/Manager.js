@@ -1,10 +1,9 @@
-import { LANG_UPDATED, INITIAL_LANGUAGE_SET } from '../actions/data';
+import { LANG_UPDATED } from '../actions/data';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import Navigation from './Navigation';
 import { logoutUser } from '../actionCreators/app';
-import { updateLanguage } from '../actionCreators/data';
 import LangPage from './LangPage';
 import { Route } from 'react-router-dom';
 import Loader from './Loader';
@@ -73,7 +72,6 @@ class Manager extends Component {
 				console.log('event', data);
 				this.props.dispatch(propagateDbEvent(data));
 			});
-			``;
 			this.setState({ socketConnection: socket });
 		}
 

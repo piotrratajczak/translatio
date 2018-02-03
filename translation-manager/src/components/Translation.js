@@ -9,7 +9,6 @@ import {
 	FormGroup,
 	Label,
 	Input,
-	FormText,
 	Badge
 } from 'reactstrap';
 
@@ -72,7 +71,7 @@ class Translation extends Component {
 	}
 
 	render() {
-		const { tag, translation, original } = this.props;
+		const { tag, original } = this.props;
 		const { changed, outdated, show } = this.state;
 		return (
 			<FormGroup>

@@ -1,12 +1,10 @@
 import {
-	LANG_ADDED,
-	LANG_UPDATED,
-	TAG_ADDED,
-	INITIAL_LANGUAGE_SET,
 	UPDATE_LANG_PENDING,
 	UPDATE_LANG_REJECTED,
 	UPDATE_LANG_FULFILLED
 } from '../actions/data';
+
+//TODO DO I EVER USE IT?????
 
 const API_URL = 'http://localhost:3001/'; // todo move to settings
 

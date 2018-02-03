@@ -1,11 +1,9 @@
 import {
-	FETCH_TOKEN,
 	FETCH_TOKEN_FULFILLED,
 	FETCH_TOKEN_FULFILLED_NONE,
 	FETCH_TOKEN_PENDING,
 	FETCH_TOKEN_REJECTED,
-	LOGOUT,
-	SET_TOKEN
+	LOGOUT
 } from '../actions/app';
 import Auth from '../modules/Auth';
 

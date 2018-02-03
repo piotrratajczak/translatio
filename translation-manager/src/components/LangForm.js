@@ -1,14 +1,6 @@
 import React, { Component } from 'react';
 import './LangForm.css';
-import {
-	Button,
-	Form,
-	FormGroup,
-	Label,
-	Input,
-	FormText,
-	Col
-} from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, Col } from 'reactstrap';
 import { LANG_ADDED } from '../actions/data';
 
 const INITIAL_STATE = { langCode: '', error: null };

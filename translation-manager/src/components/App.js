@@ -2,9 +2,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 import { SET_TOKEN } from '../actions/app';
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import socketIOClient from 'socket.io-client';
 import Loader from './Loader';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Container } from 'reactstrap';
@@ -14,10 +12,6 @@ import Manager from './Manager';
 import Auth from '../modules/Auth';
 
 class App extends Component {
-	constructor() {
-		super();
-	}
-
 	componentWillMount() {
 		this.getAndSetToken();
 	}
