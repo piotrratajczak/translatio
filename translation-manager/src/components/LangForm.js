@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './LangForm.css';
-import { Button, Form, FormGroup, Label, Input, Col } from 'reactstrap';
+import { Button, Col, Form, FormGroup, Input, Label } from 'reactstrap';
 import { LANG_ADDED } from '../actions/data';
 
 const INITIAL_STATE = { langCode: '', error: null };
@@ -10,7 +10,7 @@ class LangForm extends Component {
 		super();
 
 		this.state = {
-			...INITIAL_STATE
+			...INITIAL_STATE,
 		};
 
 		this.handleChange = this.handleChange.bind(this);
@@ -19,7 +19,7 @@ class LangForm extends Component {
 
 	handleChange({ target }) {
 		const { value } = target;
-		let error = this.validateLangCode(value);
+		const error = this.validateLangCode(value);
 		this.setState({ langCode: value, error });
 	}
 
@@ -40,7 +40,7 @@ class LangForm extends Component {
 	handleSubmit(evt) {
 		this.props.onSubmit({
 			payload: { langCode: evt.target.elements.langCode.value },
-			type: LANG_ADDED
+			type: LANG_ADDED,
 		});
 		this.setState(() => INITIAL_STATE);
 		evt.preventDefault();
@@ -70,7 +70,8 @@ class LangForm extends Component {
 						<Button
 							className="w-100"
 							type="submit"
-							disabled={this.state.error !== null}>
+							disabled={this.state.error !== null}
+						>
 							Submit
 						</Button>
 					</Col>

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
 import './AddForm.css';
-import { Button, Form, FormGroup, Label, Input, Col } from 'reactstrap';
-import { TAG_ADDED, LANG_ADDED } from '../actions/data';
+import { Button, Col, Form, FormGroup, Input, Label } from 'reactstrap';
+import React, { Component } from 'react';
+import { LANG_ADDED, TAG_ADDED } from '../actions/data';
 
 const INITIAL_STATE = { value: '', error: null };
 
@@ -19,7 +19,7 @@ const langCodeValidation = (langCode, languages) => {
 	return error;
 };
 
-const tagValidation = tag => {
+const tagValidation = (tag) => {
 	let error = null;
 	if (!tag || tag.length < 2) {
 		error = 'has to have at least 2 characters';
@@ -36,7 +36,7 @@ class AddForm extends Component {
 		super();
 
 		this.state = {
-			...INITIAL_STATE
+			...INITIAL_STATE,
 		};
 
 		this.handleChange = this.handleChange.bind(this);
@@ -45,7 +45,7 @@ class AddForm extends Component {
 
 	handleChange({ target }) {
 		const { value } = target;
-		let error = this.validateValue(value);
+		const error = this.validateValue(value);
 		this.setState({ value, error });
 	}
 
@@ -58,7 +58,7 @@ class AddForm extends Component {
 	handleSubmit(evt) {
 		this.props.onSubmit({
 			payload: { [this.props.type]: evt.target.elements.value.value },
-			type: this.props.type === 'tag' ? TAG_ADDED : LANG_ADDED
+			type: this.props.type === 'tag' ? TAG_ADDED : LANG_ADDED,
 		});
 		this.setState(() => INITIAL_STATE);
 		evt.preventDefault();
@@ -90,7 +90,8 @@ class AddForm extends Component {
 							type="submit"
 							disabled={
 								this.state.error !== null || this.state.value.length === 0
-							}>
+							}
+						>
 							Submit
 						</Button>
 					</Col>

@@ -1,23 +1,22 @@
-import { LANG_UPDATED } from '../actions/data';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import Navigation from './Navigation';
-import { logoutUser } from '../actionCreators/app';
-import LangPage from './LangPage';
-import { Route } from 'react-router-dom';
-import Loader from './Loader';
-import socketIOClient from 'socket.io-client';
-import { propagateDbEvent } from '../actionCreators/data';
+import { Redirect, Route } from 'react-router-dom';
 import AddForm from './AddForm';
+import { LANG_UPDATED } from '../actions/data';
+import LangPage from './LangPage';
+import Loader from './Loader';
+import Navigation from './Navigation';
 import StartPage from './StartPage';
+import { connect } from 'react-redux';
+import { logoutUser } from '../actionCreators/app';
+import { propagateDbEvent } from '../actionCreators/data';
+import socketIOClient from 'socket.io-client';
 
 class Manager extends Component {
 	constructor() {
 		super();
 
 		this.state = {
-			socketConnection: null
+			socketConnection: null,
 		};
 
 		this.handleLogout = this.handleLogout.bind(this);
@@ -47,14 +46,14 @@ class Manager extends Component {
 	handleSave(data) {
 		this.state.socketConnection.emit('clientEvent', {
 			type: LANG_UPDATED,
-			payload: { langCode: this.props.match.params.langCode, data }
+			payload: { langCode: this.props.match.params.langCode, data },
 		});
 	}
 
 	handleFormSubmit({ type, payload }) {
 		this.state.socketConnection.emit('clientEvent', {
 			type,
-			payload
+			payload,
 		});
 	}
 
@@ -62,13 +61,12 @@ class Manager extends Component {
 		if (!this.state.socketConnection && props.token) {
 			const socket = socketIOClient('http://127.0.0.1:3001', {
 				// todo settings
-				query: `token=${props.token}`
+				query: `token=${props.token}`,
 			});
-			socket.on('InitialData', data => {
+			socket.on('InitialData', (data) => {
 				this.props.dispatch(propagateDbEvent(data));
 			});
-			socket.on('dbEvent', data => {
-				console.log('event', data);
+			socket.on('dbEvent', (data) => {
 				this.props.dispatch(propagateDbEvent(data));
 			});
 			this.setState({ socketConnection: socket });
@@ -126,7 +124,7 @@ class Manager extends Component {
 
 const mapStateToProps = state => ({
 	token: state.app.token,
-	data: state.data.langData
+	data: state.data.langData,
 });
 
 export default connect(mapStateToProps)(Manager);

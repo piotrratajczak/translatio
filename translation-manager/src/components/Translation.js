@@ -1,22 +1,24 @@
 import './Translation.css';
-import React, { Component } from 'react';
+
 import {
-	Collapse,
-	InputGroupAddon,
-	InputGroup,
+	Badge,
 	Button,
 	ButtonGroup,
+	Collapse,
 	FormGroup,
-	Label,
 	Input,
-	Badge
+	InputGroup,
+	InputGroupAddon,
+	Label,
 } from 'reactstrap';
+import React, { Component } from 'react';
+import { PropTypes } from 'prop-types';
 
 const INITIAL_STATE = {
 	changed: false,
 	outdated: false,
 	show: false,
-	value: ''
+	value: '',
 };
 
 class Translation extends Component {
@@ -24,7 +26,7 @@ class Translation extends Component {
 		super();
 
 		this.state = {
-			...INITIAL_STATE
+			...INITIAL_STATE,
 		};
 
 		this.handleUndoChanges = this.handleUndoChanges.bind(this);
@@ -54,14 +56,14 @@ class Translation extends Component {
 	handleChanges(evt) {
 		this.setState({
 			value: evt.target.value,
-			changed: this.props.original !== evt.target.value
+			changed: this.props.original !== evt.target.value,
 		});
 	}
 
 	handleUndoChanges() {
 		this.setState({ ...INITIAL_STATE, value: this.props.original });
 		this.props.onChange({
-			target: { id: this.props.tag, value: this.props.original }
+			target: { id: this.props.tag, value: this.props.original },
 		});
 	}
 

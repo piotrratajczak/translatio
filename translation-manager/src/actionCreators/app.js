@@ -3,30 +3,30 @@ import {
 	FETCH_TOKEN_FULFILLED_NONE,
 	FETCH_TOKEN_PENDING,
 	FETCH_TOKEN_REJECTED,
-	LOGOUT
+	LOGOUT,
 } from '../actions/app';
 import Auth from '../modules/Auth';
 
 const API_URL = 'http://localhost:3001/'; // todo move to settings
 
 export function loginUser(userData, history) {
-	return dispatch => {
+	return (dispatch) => {
 		dispatch({ type: FETCH_TOKEN_PENDING });
 
 		return fetch(`${API_URL}login/`, {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json, text/plain, */*',
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(userData)
+			body: JSON.stringify(userData),
 		})
 			.then(response => response.json())
-			.then(resp => {
+			.then((resp) => {
 				console.log(resp);
 				if (resp.success) {
 					if (resp.data) {
-						//token
+						// token
 						dispatch({ type: FETCH_TOKEN_FULFILLED, payload: resp.data });
 						Auth.setToken(resp.data);
 						history.push('/');
@@ -37,16 +37,16 @@ export function loginUser(userData, history) {
 					throw new Error(resp.error || 'unknown error has happened!');
 				}
 			})
-			.catch(err => {
+			.catch((err) => {
 				dispatch({
-					type: FETCH_TOKEN_REJECTED
+					type: FETCH_TOKEN_REJECTED,
 				});
 			});
 	};
 }
 
 export function logoutUser() {
-	return dispatch => {
+	return (dispatch) => {
 		Auth.removeToken();
 		dispatch({ type: LOGOUT });
 	};

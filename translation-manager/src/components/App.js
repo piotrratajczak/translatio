@@ -4,7 +4,7 @@ import { SET_TOKEN } from '../actions/app';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Loader from './Loader';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import { Container } from 'reactstrap';
 import NoMatchPage from './NoMatch';
 import Login from './Login';
@@ -48,13 +48,13 @@ class App extends Component {
 
 App.defaultProps = {
 	initialized: false,
-	token: null
+	token: null,
 };
 
 function mapStateToProps(state) {
 	return {
 		initialized: state.app.initialized,
-		token: state.app.token
+		token: state.app.token,
 	};
 }
 
