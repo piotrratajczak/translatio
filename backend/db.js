@@ -136,8 +136,6 @@ function updateLang({ langCode, data }) {
 }
 
 function checkUser(email, password) {
-	//  just a mockup todo
-
 	const profile = {
 		first_name: 'Admin',
 		last_name: 'Admin',

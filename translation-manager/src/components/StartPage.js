@@ -1,13 +1,9 @@
 import React from 'react';
+import startImg from '../img/startPage.jpg';
 
 const StartPage = () => (
 	<div>
-		<ul>
-			<li>extras wyszukaj puste</li>
-			<li>extras wyszukaj niekoheretne</li>
-			<li>extras eksportuj do spakowanego jsona</li>
-			<li>extras pobierz pojedynczy jezyk w json</li>
-		</ul>
+		<img src={startImg} className="img-fluid" alt="start page translations" />
 	</div>
 );
 
