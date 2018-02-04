@@ -5,10 +5,13 @@
 		"jest": true
 	},
 	"rules": {
+		"arrow-parens": 0,
+		"comma-dangle": ["error", "never"],
 		"indent": ["error", "tab"],
+		"no-tabs": 0,
+		"react/jsx-closing-bracket-location": 0,
 		"react/jsx-indent-props": ["warn", "tab"],
 		"react/jsx-indent": ["warn", "tab"],
-		"no-tabs": 0,
 		"react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
 		"sort-imports": "warn",
 		"import/first": ["warn", "off"],
@@ -19,6 +22,16 @@
 				"components": ["Link"],
 				"specialLink": ["to", "hrefLeft", "hrefRight"],
 				"aspects": ["noHref", "invalidHref", "preferButton"]
+			}
+		],
+		"jsx-a11y/label-has-for": [
+			2,
+			{
+				"components": ["Label"],
+				"required": {
+					"some": ["nesting", "id"]
+				},
+				"allowChildren": false
 			}
 		]
 	}

@@ -4,7 +4,7 @@ import {
 	DropdownMenu,
 	DropdownToggle,
 	NavLink,
-	UncontrolledDropdown,
+	UncontrolledDropdown
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
@@ -16,13 +16,13 @@ class Navigation extends React.Component {
 
 		this.toggleNavbar = this.toggleNavbar.bind(this);
 		this.state = {
-			collapsed: true,
+			collapsed: true
 		};
 	}
 
 	toggleNavbar() {
 		this.setState({
-			collapsed: !this.state.collapsed,
+			collapsed: !this.state.collapsed
 		});
 	}
 	render() {
@@ -32,8 +32,7 @@ class Navigation extends React.Component {
 				<button
 					className="navbar-toggler navbar-toggler-right"
 					type="button"
-					onClick={this.toggleNavbar}
-				>
+					onClick={this.toggleNavbar}>
 					<span className="navbar-toggler-icon" />
 				</button>
 				<Link className="navbar-brand" to="/">
@@ -84,11 +83,11 @@ class Navigation extends React.Component {
 
 Navigation.propTypes = {
 	languages: PropTypes.arrayOf(PropTypes.string),
-	onLogoutClick: PropTypes.func.isRequired,
+	onLogoutClick: PropTypes.func.isRequired
 };
 
 Navigation.defaultProps = {
-	languages: [],
+	languages: []
 };
 
 export default Navigation;

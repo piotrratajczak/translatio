@@ -9,7 +9,7 @@ import {
 	Input,
 	InputGroup,
 	InputGroupAddon,
-	Label,
+	Label
 } from 'reactstrap';
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
@@ -18,7 +18,7 @@ const INITIAL_STATE = {
 	changed: false,
 	outdated: false,
 	show: false,
-	value: '',
+	value: ''
 };
 
 class Translation extends Component {
@@ -26,7 +26,7 @@ class Translation extends Component {
 		super();
 
 		this.state = {
-			...INITIAL_STATE,
+			...INITIAL_STATE
 		};
 
 		this.handleUndoChanges = this.handleUndoChanges.bind(this);
@@ -56,14 +56,14 @@ class Translation extends Component {
 	handleChanges(evt) {
 		this.setState({
 			value: evt.target.value,
-			changed: this.props.original !== evt.target.value,
+			changed: this.props.original !== evt.target.value
 		});
 	}
 
 	handleUndoChanges() {
 		this.setState({ ...INITIAL_STATE, value: this.props.original });
 		this.props.onChange({
-			target: { id: this.props.tag, value: this.props.original },
+			target: { id: this.props.tag, value: this.props.original }
 		});
 	}
 
@@ -77,7 +77,7 @@ class Translation extends Component {
 		const { changed, outdated, show } = this.state;
 		return (
 			<FormGroup>
-				<Label for={tag}>
+				<Label htmlFor={tag}>
 					{tag}:{changed && <Badge color="danger">Unsaved</Badge>}
 					{outdated && <Badge color="danger">Outdated</Badge>}
 				</Label>
@@ -119,5 +119,12 @@ class Translation extends Component {
 		);
 	}
 }
+
+Translation.propTypes = {
+	original: PropTypes.string.isRequired,
+	tag: PropTypes.string.isRequired,
+	onChange: PropTypes.func.isRequired,
+	onSave: PropTypes.func.isRequired
+};
 
 export default Translation;

@@ -9,11 +9,11 @@ import { loginUser } from '../actionCreators/app';
 
 const INITIAL_STATE = {
 	email: '',
-	password: '',
+	password: ''
 };
 
 const byPropKey = (propertyName, value) => () => ({
-	[propertyName]: value,
+	[propertyName]: value
 });
 
 class Login extends Component {
@@ -72,8 +72,7 @@ class Login extends Component {
 						<button
 							className="btn btn-lg btn-primary btn-block"
 							type="submit"
-							disabled={isInvalid}
-						>
+							disabled={isInvalid}>
 							Sign in
 						</button>
 						<p className="errors">{status}</p>
@@ -87,15 +86,16 @@ class Login extends Component {
 Login.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	status: PropTypes.string,
+	history: PropTypes.object // eslint-disable-line
 };
 
 Login.defaultProps = {
-	status: null,
+	status: null
 };
 
 function mapStateToProps(state) {
 	return {
-		status: state.app.loginStatus,
+		status: state.app.loginStatus
 	};
 }
 

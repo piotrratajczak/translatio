@@ -2,13 +2,13 @@ import {
 	INITIAL_LANGUAGE_SET,
 	LANG_ADDED,
 	LANG_UPDATED,
-	TAG_ADDED,
+	TAG_ADDED
 } from '../actions/data';
 
 import { LOGOUT } from '../actions/app';
 
 const INITIAL_STATE = {
-	langData: {},
+	langData: {}
 };
 
 function appReducer(state = INITIAL_STATE, action) {
@@ -16,7 +16,7 @@ function appReducer(state = INITIAL_STATE, action) {
 	case INITIAL_LANGUAGE_SET: {
 		return {
 			...state,
-			langData: action.payload,
+			langData: action.payload
 		};
 	}
 
@@ -27,9 +27,9 @@ function appReducer(state = INITIAL_STATE, action) {
 				...state.langData,
 				[action.payload.langCode]: {
 					...state.langData[action.payload.langCode],
-					...action.payload.tags,
-				},
-			},
+					...action.payload.tags
+				}
+			}
 		};
 	}
 
@@ -38,8 +38,8 @@ function appReducer(state = INITIAL_STATE, action) {
 			...state,
 			langData: {
 				...state.langData,
-				...action.payload,
-			},
+				...action.payload
+			}
 		};
 	}
 
@@ -54,7 +54,7 @@ function appReducer(state = INITIAL_STATE, action) {
 		});
 		return {
 			...state,
-			langData,
+			langData
 		};
 	}
 

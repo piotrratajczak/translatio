@@ -11,8 +11,8 @@ const NoMatchPage = ({ location }) => (
 
 NoMatchPage.propTypes = {
 	location: PropTypes.shape({
-		pathname: PropTypes.string.isRequired,
-	}).isRequired,
+		pathname: PropTypes.string.isRequired
+	}).isRequired
 };
 
 export default NoMatchPage;

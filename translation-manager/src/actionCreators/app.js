@@ -3,7 +3,7 @@ import {
 	FETCH_TOKEN_FULFILLED_NONE,
 	FETCH_TOKEN_PENDING,
 	FETCH_TOKEN_REJECTED,
-	LOGOUT,
+	LOGOUT
 } from '../actions/app';
 import Auth from '../modules/Auth';
 
@@ -17,9 +17,9 @@ export function loginUser(userData, history) {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json, text/plain, */*',
-				'Content-Type': 'application/json',
+				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify(userData),
+			body: JSON.stringify(userData)
 		})
 			.then(response => response.json())
 			.then((resp) => {
@@ -39,7 +39,7 @@ export function loginUser(userData, history) {
 			.catch((err) => {
 				dispatch({
 					type: FETCH_TOKEN_REJECTED,
-					payload: err,
+					payload: err
 				});
 			});
 	};

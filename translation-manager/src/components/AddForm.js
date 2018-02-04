@@ -20,7 +20,7 @@ const langCodeValidation = (langCode, languages) => {
 	return error;
 };
 
-const tagValidation = (tag) => {
+const tagValidation = tag => {
 	let error = null;
 	if (!tag || tag.length < 2) {
 		error = 'has to have at least 2 characters';
@@ -37,7 +37,7 @@ class AddForm extends Component {
 		super();
 
 		this.state = {
-			...INITIAL_STATE,
+			...INITIAL_STATE
 		};
 
 		this.handleChange = this.handleChange.bind(this);
@@ -59,7 +59,7 @@ class AddForm extends Component {
 	handleSubmit(evt) {
 		this.props.onSubmit({
 			payload: { [this.props.type]: evt.target.elements.value.value },
-			type: this.props.type === 'tag' ? TAG_ADDED : LANG_ADDED,
+			type: this.props.type === 'tag' ? TAG_ADDED : LANG_ADDED
 		});
 		this.setState(() => INITIAL_STATE);
 		evt.preventDefault();
@@ -69,7 +69,7 @@ class AddForm extends Component {
 		return (
 			<Form className="p-3" onSubmit={this.handleSubmit}>
 				<FormGroup row>
-					<Label for="value" xs={12} sm={2}>
+					<Label htmlFor="value" xs={12} sm={2}>
 						{this.props.type}:
 					</Label>
 					<Col xs={12} sm={7}>
@@ -91,8 +91,7 @@ class AddForm extends Component {
 							type="submit"
 							disabled={
 								this.state.error !== null || this.state.value.length === 0
-							}
-						>
+							}>
 							Submit
 						</Button>
 					</Col>
@@ -108,11 +107,11 @@ class AddForm extends Component {
 AddForm.propTypes = {
 	onSubmit: PropTypes.func.isRequired,
 	type: PropTypes.string.isRequired,
-	languages: PropTypes.arrayOf(PropTypes.string),
+	languages: PropTypes.arrayOf(PropTypes.string)
 };
 
 AddForm.defaultProps = {
-	languages: [],
+	languages: []
 };
 
 export default AddForm;

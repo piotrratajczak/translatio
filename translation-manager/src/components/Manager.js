@@ -5,6 +5,7 @@ import { LANG_UPDATED } from '../actions/data';
 import LangPage from './LangPage';
 import Loader from './Loader';
 import Navigation from './Navigation';
+import { PropTypes } from 'prop-types';
 import StartPage from './StartPage';
 import { connect } from 'react-redux';
 import { logoutUser } from '../actionCreators/app';
@@ -16,7 +17,7 @@ class Manager extends Component {
 		super();
 
 		this.state = {
-			socketConnection: null,
+			socketConnection: null
 		};
 
 		this.handleLogout = this.handleLogout.bind(this);
@@ -46,14 +47,14 @@ class Manager extends Component {
 	handleSave(data) {
 		this.state.socketConnection.emit('clientEvent', {
 			type: LANG_UPDATED,
-			payload: { langCode: this.props.match.params.langCode, data },
+			payload: { langCode: this.props.match.params.langCode, data }
 		});
 	}
 
 	handleFormSubmit({ type, payload }) {
 		this.state.socketConnection.emit('clientEvent', {
 			type,
-			payload,
+			payload
 		});
 	}
 
@@ -61,12 +62,12 @@ class Manager extends Component {
 		if (!this.state.socketConnection && props.token) {
 			const socket = socketIOClient('http://127.0.0.1:3001', {
 				// todo settings
-				query: `token=${props.token}`,
+				query: `token=${props.token}`
 			});
-			socket.on('InitialData', (data) => {
+			socket.on('InitialData', data => {
 				this.props.dispatch(propagateDbEvent(data));
 			});
-			socket.on('dbEvent', (data) => {
+			socket.on('dbEvent', data => {
 				this.props.dispatch(propagateDbEvent(data));
 			});
 			this.setState({ socketConnection: socket });
@@ -122,9 +123,21 @@ class Manager extends Component {
 	}
 }
 
+Manager.propTypes = {
+	dispatch: PropTypes.func.isRequired,
+	match: PropTypes.object.isRequired, //eslint-disable-line
+	data: PropTypes.object, //eslint-disable-line
+	token: PropTypes.string
+};
+
+Manager.defaultProps = {
+	token: null,
+	data: {}
+};
+
 const mapStateToProps = state => ({
 	token: state.app.token,
-	data: state.data.langData,
+	data: state.data.langData
 });
 
 export default connect(mapStateToProps)(Manager);

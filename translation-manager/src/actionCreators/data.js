@@ -1,7 +1,7 @@
 import {
 	UPDATE_LANG_FULFILLED,
 	UPDATE_LANG_PENDING,
-	UPDATE_LANG_REJECTED,
+	UPDATE_LANG_REJECTED
 } from '../actions/data';
 
 // TODO DO I EVER USE IT?????
@@ -22,9 +22,9 @@ export function updateLanguage(langCode, data) {
 			method: 'PUT',
 			headers: {
 				Accept: 'application/json, text/plain, */*',
-				'Content-Type': 'application/json',
+				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ data }),
+			body: JSON.stringify({ data })
 		})
 			.then(response => response.json())
 			.then((resp) => {
@@ -37,7 +37,7 @@ export function updateLanguage(langCode, data) {
 			.catch((err) => {
 				dispatch({
 					type: UPDATE_LANG_REJECTED,
-					payload: err,
+					payload: err
 				});
 			});
 	};
