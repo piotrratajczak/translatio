@@ -86,8 +86,8 @@ io.on('connection', socket => {
 				response.error = err.toString();
 				response.success = false;
 			} finally {
+				socket.emit('responseStatus', response);
 				if (payload) {
-					socket.emit('responseStatus', response);
 					io.emit('dbEvent', { payload, type: data.type });
 				}
 			}
