@@ -82,6 +82,7 @@ io.on('connection', socket => {
 		if (func) {
 			payload = db[func](data.payload); // TODO will not work, have to change db func params
 			if (payload) {
+				socket.emit('responseStatus', { error: false, success: true });
 				io.emit('dbEvent', { payload, type: data.type });
 			}
 		}

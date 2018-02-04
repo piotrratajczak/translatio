@@ -62,7 +62,6 @@ class Manager extends Component {
 	checkSocketConnection(props) {
 		if (!this.state.socketConnection && props.token) {
 			const socket = socketIOClient(API_URL, {
-				// todo settings
 				query: `token=${props.token}`
 			});
 			socket.on('InitialData', data => {
@@ -70,6 +69,11 @@ class Manager extends Component {
 			});
 			socket.on('dbEvent', data => {
 				this.props.dispatch(propagateDbEvent(data));
+			});
+
+			socket.on('responseStatus', data => {
+				// eslint-disable-next-line
+				console.log('responseStatus:', data, 'to be used for notifications');
 			});
 			this.setState({ socketConnection: socket });
 		}
