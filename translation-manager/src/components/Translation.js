@@ -62,9 +62,6 @@ class Translation extends Component {
 
 	handleUndoChanges() {
 		this.setState({ ...INITIAL_STATE, value: this.props.original });
-		this.props.onChange({
-			target: { id: this.props.tag, value: this.props.original }
-		});
 	}
 
 	handleSaveChanges() {
@@ -123,7 +120,6 @@ class Translation extends Component {
 Translation.propTypes = {
 	original: PropTypes.string.isRequired,
 	tag: PropTypes.string.isRequired,
-	onChange: PropTypes.func.isRequired,
 	onSave: PropTypes.func.isRequired
 };
 

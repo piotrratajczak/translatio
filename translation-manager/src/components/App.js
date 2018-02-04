@@ -27,12 +27,12 @@ class App extends Component {
 	}
 
 	render() {
-		const { props } = this;
+		const { initialized } = this.props;
 		return (
 			<Router>
 				<Container>
-					{!props.initialized && <Loader />}
-					{props.initialized && (
+					{!initialized && <Loader />}
+					{initialized && (
 						<Switch>
 							<Route exact path="/login" component={Login} />
 							<Route exact path="/" component={Manager} />
@@ -48,7 +48,19 @@ class App extends Component {
 }
 
 App.propTypes = {
+	initialized: PropTypes.bool, //eslint-disable-line
 	dispatch: PropTypes.func.isRequired
 };
 
-export default connect(null)(App);
+App.defaultProps = {
+	initialized: false
+};
+
+function mapStateToProps(state) {
+	return {
+		initialized: state.app.initialized
+		// token: state.app.token
+	};
+}
+
+export default connect(mapStateToProps)(App);

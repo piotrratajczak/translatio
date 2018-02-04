@@ -5,12 +5,11 @@ import {
 	FETCH_TOKEN_REJECTED,
 	LOGOUT
 } from '../actions/app';
+import { API_URL } from '../Settings';
 import Auth from '../modules/Auth';
 
-const API_URL = 'http://localhost:3001/'; // todo move to settings
-
 export function loginUser(userData, history) {
-	return (dispatch) => {
+	return dispatch => {
 		dispatch({ type: FETCH_TOKEN_PENDING });
 
 		return fetch(`${API_URL}login/`, {
@@ -22,7 +21,7 @@ export function loginUser(userData, history) {
 			body: JSON.stringify(userData)
 		})
 			.then(response => response.json())
-			.then((resp) => {
+			.then(resp => {
 				if (resp.success) {
 					if (resp.data) {
 						// token
@@ -36,7 +35,7 @@ export function loginUser(userData, history) {
 					throw new Error(resp.error || 'unknown error has happened!');
 				}
 			})
-			.catch((err) => {
+			.catch(err => {
 				dispatch({
 					type: FETCH_TOKEN_REJECTED,
 					payload: err
@@ -46,7 +45,7 @@ export function loginUser(userData, history) {
 }
 
 export function logoutUser() {
-	return (dispatch) => {
+	return dispatch => {
 		Auth.removeToken();
 		dispatch({ type: LOGOUT });
 	};

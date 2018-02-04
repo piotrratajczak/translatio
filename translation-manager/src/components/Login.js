@@ -21,6 +21,7 @@ class Login extends Component {
 		super(props);
 
 		this.state = { ...INITIAL_STATE };
+		this.onSubmit = this.onSubmit.bind(this);
 	}
 
 	onSubmit(event) {
