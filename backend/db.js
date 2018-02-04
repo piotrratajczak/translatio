@@ -3,7 +3,6 @@ const config = require('./config.js');
 const helpers = require('./helpers');
 const _ = require('lodash');
 const fs = require('fs');
-// const jwt = require('jsonwebtoken');
 
 let dbs = {};
 let languages = [];
@@ -45,6 +44,12 @@ function getEmptyTags() {
 	return result;
 }
 
+function regexCheck(value) {
+	if (!/^[a-z/-]+$/.test(value)) {
+		throw new Error('Contains some prohibited characters!');
+	}
+}
+
 function tagExist(tag) {
 	let exists = false;
 	for (let i = 0; i < languages.length; i++) {
@@ -66,6 +71,8 @@ function addTag(params) {
 	if (tagExist(tag)) {
 		throw new Error('Already exists!');
 	}
+
+	regexCheck(tag);
 
 	let payload = {};
 	let text;
@@ -99,6 +106,8 @@ function addLang({ langCode }) {
 	if (langExist(langCode)) {
 		throw new Error('Already exists!');
 	}
+
+	regexCheck(langCode);
 
 	let newLang = {};
 	let tags = getAllTags(true);

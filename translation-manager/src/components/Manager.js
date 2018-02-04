@@ -85,7 +85,7 @@ class Manager extends Component {
 	}
 
 	render() {
-		const { token, data } = this.props;
+		const { token, data, initialized } = this.props;
 		const languages = Object.keys(data).sort();
 		const { langCode } = this.props.match.params;
 		const langData = data[langCode];
@@ -101,7 +101,14 @@ class Manager extends Component {
 							onSave={this.handleSave}
 						/>
 					)}
-				{langCode && !data[langCode] && <Loader />}
+				{langCode && !data[langCode] && !initialized && <Loader />}
+				{langCode &&
+					!data[langCode] &&
+					initialized && (
+						<p className="text-center">
+							Are you sure there should be such a language avaible?
+						</p>
+					)}
 				<Route exact path="/" component={StartPage} />
 				<Route
 					exact
@@ -132,17 +139,20 @@ Manager.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	match: PropTypes.object.isRequired, //eslint-disable-line
 	data: PropTypes.object, //eslint-disable-line
-	token: PropTypes.string
+	token: PropTypes.string,
+	initialized: PropTypes.bool
 };
 
 Manager.defaultProps = {
 	token: null,
-	data: {}
+	data: {},
+	initialized: false
 };
 
 const mapStateToProps = state => ({
 	token: state.app.token,
-	data: state.data.langData
+	data: state.data.langData,
+	initialized: state.data.initialized
 });
 
 export default connect(mapStateToProps)(Manager);

@@ -8,7 +8,8 @@ import {
 import { LOGOUT } from '../actions/app';
 
 const INITIAL_STATE = {
-	langData: {}
+	langData: {},
+	initialized: false
 };
 
 function appReducer(state = INITIAL_STATE, action) {
@@ -16,7 +17,8 @@ function appReducer(state = INITIAL_STATE, action) {
 	case INITIAL_LANGUAGE_SET: {
 		return {
 			...state,
-			langData: action.payload
+			langData: action.payload,
+			initialized: true
 		};
 	}
 
@@ -45,11 +47,11 @@ function appReducer(state = INITIAL_STATE, action) {
 
 	case TAG_ADDED: {
 		const langData = Object.assign({}, state.langData);
-		Object.keys(action.payload).forEach((langCode) => {
+		Object.keys(action.payload).forEach(langCode => {
 			langData[langCode] = Object.assign(
 				{},
 				langData[langCode],
-				action.payload[langCode],
+				action.payload[langCode]
 			);
 		});
 		return {
