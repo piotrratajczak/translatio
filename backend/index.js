@@ -61,9 +61,8 @@ io.on('connection', socket => {
 		new Date()
 	);
 
-	//TODO replace emit events instead of api requests!!
-	//TODO unify this there are so many repetitions
 	socket.on('clientEvent', data => {
+		// this can be moved outside as function???
 		let func = null,
 			payload = null;
 		switch (data.type) {
@@ -80,10 +79,17 @@ io.on('connection', socket => {
 				break;
 		}
 		if (func) {
-			payload = db[func](data.payload); // TODO will not work, have to change db func params
-			if (payload) {
-				socket.emit('responseStatus', { error: false, success: true });
-				io.emit('dbEvent', { payload, type: data.type });
+			let response = { error: false, success: true, action: data.type };
+			try {
+				payload = db[func](data.payload);
+			} catch (err) {
+				response.error = err.toString();
+				response.success = false;
+			} finally {
+				if (payload) {
+					socket.emit('responseStatus', response);
+					io.emit('dbEvent', { payload, type: data.type });
+				}
 			}
 		}
 	});
