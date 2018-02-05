@@ -4,9 +4,9 @@ import React, { Component } from 'react';
 import { Container } from 'reactstrap';
 import Loader from './Loader';
 import { PropTypes } from 'prop-types';
-import startImg from '../img/startPage.jpg';
 import { connect } from 'react-redux';
 import { loginUser } from '../actionCreators/app';
+import startImg from '../img/startPage.jpg';
 
 const INITIAL_STATE = {
 	email: '',
