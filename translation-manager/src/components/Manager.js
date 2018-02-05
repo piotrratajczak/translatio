@@ -9,7 +9,7 @@ import { PropTypes } from 'prop-types';
 import StartPage from './StartPage';
 import { connect } from 'react-redux';
 import { logoutUser } from '../actionCreators/app';
-import { propagateDbEvent } from '../actionCreators/data';
+import propagateDbEvent from '../actionCreators/data';
 import socketIOClient from 'socket.io-client';
 
 class Manager extends Component {
