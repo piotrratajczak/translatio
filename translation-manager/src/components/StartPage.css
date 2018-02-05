@@ -8,10 +8,20 @@ h4 {
 }
 
 a {
+	width: 100%;
 	margin-bottom: 10px;
 }
 
 .horizontal-list {
 	flex-direction: row;
 	flex-wrap: wrap;
+}
+
+.list-group-item {
+	display: flex;
+	flex-direction: column;
+}
+
+h6 {
+	text-transform: uppercase;
 }
