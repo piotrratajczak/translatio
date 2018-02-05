@@ -27,7 +27,7 @@ app.use(function(req, res, next) {
 });
 
 // import and inject routing
-app.use(require('./routes.js'));
+app.use(require('./apiRoutes'));
 
 //inject socket emit on db changes by api
 app.use(function(req, res, next) {

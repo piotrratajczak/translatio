@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+const apiRoutes = express.Router();
 const db = require('./db.js');
 const config = require('./config.js');
 const jwt = require('jsonwebtoken');
@@ -64,46 +64,77 @@ function downloadLanguageFile(req, res) {
 	}
 }
 
+//----------JWT verification ------------
+function checkJWT(req, res, next) {
+	// check header or url parameters or post parameters for token
+	var token =
+		req.body.token || req.query.token || req.headers['x-access-token'];
+
+	// decode token
+	if (token) {
+		// verifies secret and checks exp
+		jwt.verify(token, config.jwtSecret, function(err, decoded) {
+			if (err) {
+				return res.json({
+					success: false,
+					message: 'Failed to authenticate token.'
+				});
+			} else {
+				// if everything is good, save to request for use in other routes
+				req.decoded = decoded;
+				next();
+			}
+		});
+	} else {
+		// if there is no token
+		// return an error
+		return res.status(403).send({
+			success: false,
+			message: 'No token provided.'
+		});
+	}
+}
+
 //-------------login ----------------
 
-router.post('/api/login', function(req, res) {
+apiRoutes.post('/api/login', function(req, res) {
 	apiFunction(req, res, logUser);
 });
 
 // ----------- lang ---------------------
 
-router.get('/api/lang', (req, res) => res.send(db.getLangs())); //list
-router.post('/api/lang', (req, res, next) => {
+apiRoutes.get('/api/lang', (req, res) => res.send(db.getLangs())); //list
+apiRoutes.post('/api/lang', checkJWT, (req, res, next) => {
 	apiFunction(req, res, langPost);
 	next();
 });
 // ----------- downloads ------------------
-router.get('/api/lang/file/:langCode', downloadLanguageFile);
+apiRoutes.get('/api/lang/file/:langCode', downloadLanguageFile);
 //------------ lang / :LANGCODE ------------------
-router.put('/api/lang/:langCode', (req, res, next) => {
+apiRoutes.put('/api/lang/:langCode', checkJWT, (req, res, next) => {
 	apiFunction(req, res, langPut);
 	next();
 });
 
 //------------tag ----------------------
-router.post('/api/tag', (req, res, next) => {
+apiRoutes.post('/api/tag', checkJWT, (req, res, next) => {
 	apiFunction(req, res, tagPost);
 	next();
 });
 
 //-----------extra features -----------
-router.get('/api/extra/emptytags', (req, res) => {
+apiRoutes.get('/api/extra/emptytags', (req, res) => {
 	apiFunction(req, res, db.getEmptyTags);
 });
 
 // return info about incoherente tags
-router.get('/api/extra/coherence', (req, res) => {
+apiRoutes.get('/api/extra/coherence', (req, res) => {
 	apiFunction(req, res, db.checkCoherence);
 });
 
 // any other route
-router.get('*', (req, res) => {
+apiRoutes.get('*', (req, res) => {
 	res.status(404).send('404 Page not found');
 });
 
-module.exports = router;
+module.exports = apiRoutes;
