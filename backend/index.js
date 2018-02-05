@@ -55,7 +55,7 @@ io.set(
 
 // configure SOCKET.IO
 io.on('connection', socket => {
-	console.log(
+	console.info(
 		socket.client.request.decoded_token.email,
 		'connected',
 		new Date()
@@ -94,16 +94,7 @@ io.on('connection', socket => {
 		}
 	});
 
-	socket.on('data/SOCKET_LANG_ADDED', data => {
-		let payload = db.addLang(data.langCode);
-		io.emit('dbEvent', { payload, type: 'data/SOCKET_LANG_ADDED' });
-	});
-
-	socket.on('data/SOCKET_TAG_ADDED', data => {
-		console.log('todo tag added', data);
-	});
-
-	socket.on('disconnect', () => console.log('Client disconnected'));
+	socket.on('disconnect', () => console.info('Client disconnected'));
 
 	socket.emit('InitialData', {
 		type: 'data/SOCKET_INITIAL_LANGUAGE_SET',
@@ -113,5 +104,5 @@ io.on('connection', socket => {
 
 // start listenign on server
 server.listen(config.port, () =>
-	console.log('Translation server is listening on port ' + config.port)
+	console.info('Translation server is listening on port ' + config.port)
 );

@@ -15,7 +15,6 @@ function recFindByExt(base, ext, files, result) {
 			}
 		}
 	});
-	console.log(result);
 	return result;
 }
 

@@ -7,7 +7,7 @@ import startImg from '../img/startPage.jpg';
 const StartPage = ({ languages }) => (
 	<div>
 		<img src={startImg} className="img-fluid" alt="start page translations" />
-		<h4>Avaible translation file downloads </h4>
+		<h4>Avaible translation file downloads:</h4>
 		<ListGroup className="horizontal-list">
 			{languages.map(langCode => (
 				<ListGroupItem key={langCode}>
