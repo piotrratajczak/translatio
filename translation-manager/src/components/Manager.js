@@ -108,7 +108,11 @@ class Manager extends Component {
 							Are you sure there should be such a language avaible?
 						</p>
 					)}
-				<Route exact path="/" component={StartPage} />
+				<Route
+					exact
+					path="/"
+					component={() => <StartPage languages={languages} />}
+				/>
 				<Route
 					exact
 					path="/add/tag"

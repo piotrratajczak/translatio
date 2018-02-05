@@ -1,0 +1,17 @@
+h4 {
+	text-align: center;
+	padding-top: 15px;
+}
+
+.card {
+	text-align: center;
+}
+
+a {
+	margin-bottom: 10px;
+}
+
+.horizontal-list {
+	flex-direction: row;
+	flex-wrap: wrap;
+}
