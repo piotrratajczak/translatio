@@ -11,6 +11,7 @@
 .start-page .horizontal-list {
 	flex-direction: row;
 	flex-wrap: wrap;
+	justify-content: center;
 }
 
 .start-page .list-group-item {
@@ -20,4 +21,9 @@
 
 .start-page h6 {
 	text-transform: uppercase;
+	text-decoration: underline;
+}
+
+.start-page .list-group-item {
+	min-width: 125px;
 }

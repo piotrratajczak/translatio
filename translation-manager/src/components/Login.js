@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Container } from 'reactstrap';
 import Loader from './Loader';
 import { PropTypes } from 'prop-types';
+import startImg from '../img/startPage.jpg';
 import { connect } from 'react-redux';
 import { loginUser } from '../actionCreators/app';
 
@@ -40,6 +41,11 @@ class Login extends Component {
 				{status === 'pending' && <Loader />}
 				{status !== 'pending' && (
 					<form className="form-signin" onSubmit={this.onSubmit}>
+						<img
+							src={startImg}
+							className="img-fluid"
+							alt="start page translations"
+						/>
 						<h2 className="form-signin-heading">Please sign in</h2>
 						<label htmlFor="inputEmail" className="sr-only">
 							Email address
