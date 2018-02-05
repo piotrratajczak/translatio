@@ -5,7 +5,7 @@ const config = require('./config.js');
 const jwt = require('jsonwebtoken');
 
 function langPost(req, res) {
-	let payload = db.addLang(req.body.langCode);
+	let payload = db.addLang(req.body);
 	res.locals.toEmit = { payload, type: 'data/SOCKET_LANG_ADDED' };
 	return payload;
 }
