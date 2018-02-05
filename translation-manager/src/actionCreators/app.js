@@ -5,14 +5,13 @@ import {
 	FETCH_TOKEN_REJECTED,
 	LOGOUT
 } from '../actions/app';
-import { API_URL } from '../Settings';
 import Auth from '../modules/Auth';
 
 export function loginUser(userData, history) {
 	return dispatch => {
 		dispatch({ type: FETCH_TOKEN_PENDING });
 
-		return fetch(`${API_URL}login/`, {
+		return fetch('api/login/', {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json, text/plain, */*',

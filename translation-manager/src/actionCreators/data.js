@@ -3,7 +3,6 @@ import {
 	UPDATE_LANG_PENDING,
 	UPDATE_LANG_REJECTED
 } from '../actions/data';
-import { API_URL } from '../Settings';
 // TODO DO I EVER USE IT?????
 
 export function propagateDbEvent(event) {
@@ -16,7 +15,7 @@ export function updateLanguage(langCode, data) {
 	return dispatch => {
 		dispatch({ type: UPDATE_LANG_PENDING });
 
-		return fetch(`${API_URL}lang/${langCode}`, {
+		return fetch(`lang/${langCode}`, {
 			method: 'PUT',
 			headers: {
 				Accept: 'application/json, text/plain, */*',

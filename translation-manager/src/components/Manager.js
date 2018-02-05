@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { API_URL } from '../Settings';
 import AddForm from './AddForm';
 import { LANG_UPDATED } from '../actions/data';
 import LangPage from './LangPage';
@@ -61,7 +60,7 @@ class Manager extends Component {
 
 	checkSocketConnection(props) {
 		if (!this.state.socketConnection && props.token) {
-			const socket = socketIOClient(API_URL, {
+			const socket = socketIOClient('', {
 				query: `token=${props.token}`
 			});
 			socket.on('InitialData', data => {

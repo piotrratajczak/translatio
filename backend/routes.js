@@ -66,44 +66,44 @@ function downloadLanguageFile(req, res) {
 
 //-------------login ----------------
 
-router.post('/login', function(req, res) {
+router.post('/api/login', function(req, res) {
 	apiFunction(req, res, logUser);
 });
 
 // ----------- lang ---------------------
 
-router.get('/lang', (req, res) => res.send(db.getLangs())); //list
-router.post('/lang', (req, res, next) => {
+router.get('/api/lang', (req, res) => res.send(db.getLangs())); //list
+router.post('/api/lang', (req, res, next) => {
 	apiFunction(req, res, langPost);
 	next();
 });
 // ----------- downloads ------------------
-router.get('/lang/file/:langCode', downloadLanguageFile);
+router.get('/api/lang/file/:langCode', downloadLanguageFile);
 //------------ lang / :LANGCODE ------------------
-router.put('/lang/:langCode', (req, res, next) => {
+router.put('/api/lang/:langCode', (req, res, next) => {
 	apiFunction(req, res, langPut);
 	next();
 });
 
 //------------tag ----------------------
-router.post('/tag', (req, res, next) => {
+router.post('/api/tag', (req, res, next) => {
 	apiFunction(req, res, tagPost);
 	next();
 });
 
 //-----------extra features -----------
-router.get('/extra/emptytags', (req, res) => {
+router.get('/api/extra/emptytags', (req, res) => {
 	apiFunction(req, res, db.getEmptyTags);
 });
 
 // return info about incoherente tags
-router.get('/extra/coherence', (req, res) => {
+router.get('/api/extra/coherence', (req, res) => {
 	apiFunction(req, res, db.checkCoherence);
 });
 
-// ---------- server home page --------------
-router.get('/', (req, res) => {
-	res.send({ response: 'Translation Server Works' }).status(200);
+// any other route
+router.get('*', (req, res) => {
+	res.status(404).send('404 Page not found');
 });
 
 module.exports = router;
