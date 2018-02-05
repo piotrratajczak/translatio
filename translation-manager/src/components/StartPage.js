@@ -6,9 +6,9 @@ import React from 'react';
 import startImg from '../img/startPage.jpg';
 
 const StartPage = ({ languages }) => (
-	<div>
+	<div className="start-page">
 		<img src={startImg} className="img-fluid" alt="start page translations" />
-		<h4>Available languages:</h4>
+		<h4 className="languages-title">Available languages:</h4>
 		<ListGroup className="horizontal-list">
 			{languages.map(langCode => (
 				<ListGroupItem key={langCode}>

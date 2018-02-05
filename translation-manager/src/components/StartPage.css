@@ -1,27 +1,23 @@
-h4 {
+.start-page .languages-title {
 	text-align: center;
 	padding-top: 15px;
 }
 
-.card {
-	text-align: center;
-}
-
-a {
+.start-page a {
 	width: 100%;
 	margin-bottom: 10px;
 }
 
-.horizontal-list {
+.start-page .horizontal-list {
 	flex-direction: row;
 	flex-wrap: wrap;
 }
 
-.list-group-item {
+.start-page .list-group-item {
 	display: flex;
 	flex-direction: column;
 }
 
-h6 {
+.start-page h6 {
 	text-transform: uppercase;
 }
