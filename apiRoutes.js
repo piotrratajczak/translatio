@@ -132,9 +132,9 @@ apiRoutes.get('/api/extra/coherence', (req, res) => {
 	apiFunction(req, res, db.checkCoherence);
 });
 
-// any other route
-apiRoutes.get('*', (req, res) => {
-	res.status(404).send('404 Page not found');
-});
+// // any other route
+// apiRoutes.get('*', (req, res) => {
+// 	res.status(404).send('404 Page not found');
+// });
 
 module.exports = apiRoutes;

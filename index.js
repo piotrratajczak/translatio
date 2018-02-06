@@ -7,7 +7,7 @@ const socketIo = require('socket.io');
 const socketioJwt = require('socketio-jwt');
 const helpers = require('./helpers');
 const db = require('./db');
-
+const path = require('path');
 // ----- create server app with routing from external file
 const app = express();
 
@@ -26,8 +26,14 @@ app.use(function(req, res, next) {
 	next();
 });
 
+// return client - React app
+app.use(express.static(path.join(__dirname, 'client/build')));
 // import and inject routing
 app.use(require('./apiRoutes'));
+// catchall
+app.get('*', (req, res) => {
+	res.sendFile(path.join(__dirname + '/client/build/index.html'));
+});
 
 //inject socket emit on db changes by api
 app.use(function(req, res, next) {
