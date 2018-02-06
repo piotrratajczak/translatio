@@ -89,7 +89,7 @@ class AddForm extends Component {
 						<Button
 							className="w-100"
 							type="submit"
-							disabled={this.state.error !== null}>
+							disabled={this.state.error !== null || !this.state.value.length}>
 							Submit
 						</Button>
 					</Col>

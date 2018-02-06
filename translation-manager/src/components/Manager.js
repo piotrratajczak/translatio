@@ -5,6 +5,7 @@ import { LANG_UPDATED } from '../actions/data';
 import LangPage from './LangPage';
 import Loader from './Loader';
 import Navigation from './Navigation';
+import Notification from '../modules/Notification';
 import { PropTypes } from 'prop-types';
 import StartPage from './StartPage';
 import { connect } from 'react-redux';
@@ -71,8 +72,7 @@ class Manager extends Component {
 			});
 
 			socket.on('responseStatus', data => {
-				// eslint-disable-next-line
-				console.log('responseStatus:', data, 'to be used for notifications');
+				this.props.dispatch(Notification.getDbEventNotification(data));
 			});
 			this.setState({ socketConnection: socket });
 		}

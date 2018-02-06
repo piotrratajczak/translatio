@@ -7,6 +7,7 @@ import { Container } from 'reactstrap';
 import Loader from './Loader';
 import Login from './Login';
 import Manager from './Manager';
+import Notifications from './Notifications';
 import { PropTypes } from 'prop-types';
 import { SET_TOKEN } from '../actions/app';
 import { connect } from 'react-redux';
@@ -30,6 +31,7 @@ class App extends Component {
 		return (
 			<Router>
 				<Container>
+					<Notifications />
 					{!initialized && <Loader />}
 					{initialized && (
 						<Switch>
