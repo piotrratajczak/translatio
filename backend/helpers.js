@@ -2,7 +2,13 @@ const fs = require('fs');
 const path = require('path');
 
 function recFindByExt(base, ext, files, result) {
-	files = files || fs.readdirSync(base);
+	if (fs.existsSync(base)) {
+		files = fs.readdirSync(base);
+	} else {
+		fs.mkdirSync(base);
+		files = [];
+	}
+
 	result = result || [];
 
 	files.forEach(function(file) {
