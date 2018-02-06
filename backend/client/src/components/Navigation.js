@@ -40,7 +40,7 @@ class Navigation extends React.Component {
 				</Link>
 				<Collapse isOpen={!this.state.collapsed} navbar>
 					<ul className="nav navbar-nav ml-auto w-100 justify-content-end">
-						{languages.length && (
+						{languages.length > 0 && (
 							<UncontrolledDropdown nav="true">
 								<DropdownToggle nav caret>
 									Languages
