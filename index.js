@@ -109,6 +109,6 @@ io.on('connection', socket => {
 });
 
 // start listenign on server
-server.listen(config.port, () =>
+server.listen(process.env.PORT || config.port, () =>
 	console.info('Translation server is listening on port ' + config.port)
 );
