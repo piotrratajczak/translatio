@@ -16,6 +16,7 @@
 		"sort-imports": "warn",
 		"import/first": ["warn", "off"],
 		"import/imports-first": "off",
+		"import/no-extraneous-dependencies": "off",
 		"jsx-a11y/anchor-is-valid": [
 			"error",
 			{
