@@ -7,6 +7,7 @@ import { Container } from 'reactstrap';
 import Loader from './Loader';
 import Login from './Login';
 import Manager from './Manager';
+import NoMatchPage from './NoMatch';
 import Notifications from './Notifications';
 import { PropTypes } from 'prop-types';
 import { SET_TOKEN } from '../actions/app';
@@ -39,6 +40,7 @@ class App extends Component {
 							<Route exact path="/" component={Manager} />
 							<Route path="/add/" component={Manager} />
 							<Route exact path="/lang/:langCode" component={Manager} />
+							<Route component={NoMatchPage} />
 						</Switch>
 					)}
 				</Container>
