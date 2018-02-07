@@ -6,7 +6,11 @@ import React from 'react';
 
 const StartPage = ({ languages }) => (
 	<div className="start-page mx-auto">
-		<h4 className="languages-title">Available languages:</h4>
+		<h4 className="languages-title">
+			{languages.length
+				? 'Available languages:'
+				: 'No languages in Database. Please create one!'}
+		</h4>
 		<ListGroup className="horizontal-list">
 			<ListGroupItem>
 				<h6>NEW</h6>
