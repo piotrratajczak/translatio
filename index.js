@@ -76,12 +76,16 @@ io.on('connection', socket => {
 				func = 'addLang';
 				break;
 
+			case 'data/SOCKET_LANG_UPDATED':
+				func = 'updateLang';
+				break;
+
 			case 'data/SOCKET_TAG_ADDED':
 				func = 'addTag';
 				break;
 
-			case 'data/SOCKET_LANG_UPDATED':
-				func = 'updateLang';
+			case 'data/SOCKET_TAG_DELETED':
+				func = 'deleteTag';
 				break;
 		}
 		if (func) {

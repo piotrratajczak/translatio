@@ -90,6 +90,26 @@ function addTag(params) {
 	return payload;
 }
 
+function deleteTag(params) {
+	let tag = params.tag;
+
+	if (!tag) {
+		throw new Error('Na tag value found!');
+	}
+
+	if (!tagExist(tag)) {
+		throw new Error('Nothing to delete!');
+	}
+
+	regexCheck(tag);
+
+	languages.forEach(lang => {
+		dbs[lang].delete(tag);
+	});
+
+	return { tag };
+}
+
 function getAllTags(unique = false) {
 	let keys = [];
 
@@ -177,6 +197,7 @@ module.exports = {
 	getLangs: () => languages,
 	checkCoherence: checkCoherence,
 	addTag: addTag,
+	deleteTag: deleteTag,
 	getEmptyTags: getEmptyTags,
 	addLang: addLang,
 	updateLang: updateLang,

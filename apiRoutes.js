@@ -28,6 +28,12 @@ function tagPost(req, res) {
 	return payload;
 }
 
+function tagDelete(req, res) {
+	let payload = db.deleteTag(req.body);
+	res.locals.toEmit = { payload, type: 'data/SOCKET_TAG_DELETED' };
+	return payload;
+}
+
 function logUser(req, res) {
 	let { email, password } = req.body;
 	let token = null;
@@ -119,6 +125,11 @@ apiRoutes.put('/api/lang/:langCode', checkJWT, (req, res, next) => {
 //------------tag ----------------------
 apiRoutes.post('/api/tag', checkJWT, (req, res, next) => {
 	apiFunction(req, res, tagPost);
+	next();
+});
+
+apiRoutes.delete('/api/tag', checkJWT, (req, res, next) => {
+	apiFunction(req, res, tagDelete);
 	next();
 });
 
