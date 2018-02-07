@@ -1,4 +1,4 @@
-import { LANG_UPDATED, TAG_DELETED, LANG_DELETED } from '../actions/data';
+import { LANG_DELETED, LANG_UPDATED, TAG_DELETED } from '../actions/data';
 import React, { Component } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import AddForm from './AddForm';
