@@ -5,7 +5,7 @@ import { PropTypes } from 'prop-types';
 import React from 'react';
 import Translation from './Translation';
 
-const LangPage = ({ data, onSave }) => (
+const LangPage = ({ data, onSave, onDelete }) => (
 	<Form className="lang-page">
 		{!Object.keys(data).length && (
 			<div className="info-text">
@@ -23,6 +23,7 @@ const LangPage = ({ data, onSave }) => (
 						tag={tag}
 						key={tag}
 						original={data[tag]}
+						onDelete={onDelete}
 						onSave={onSave}
 					/>
 				))}
@@ -30,6 +31,7 @@ const LangPage = ({ data, onSave }) => (
 );
 
 LangPage.propTypes = {
+	onDelete: PropTypes.func.isRequired,
 	onSave: PropTypes.func.isRequired,
 	data: PropTypes.object.isRequired //eslint-disable-line
 };

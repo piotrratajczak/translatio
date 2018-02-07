@@ -1,4 +1,9 @@
-import { LANG_ADDED, LANG_UPDATED, TAG_ADDED } from '../actions/data';
+import {
+	LANG_ADDED,
+	LANG_UPDATED,
+	TAG_ADDED,
+	TAG_DELETED
+} from '../actions/data';
 import Notifications from 'react-notification-system-redux';
 
 function getTitle(action) {
@@ -12,6 +17,9 @@ function getTitle(action) {
 		break;
 	case TAG_ADDED:
 		title = 'Adding New Tag';
+		break;
+	case TAG_DELETED:
+		title = 'Deleting Tag';
 		break;
 	default:
 		title = 'DB Event!';

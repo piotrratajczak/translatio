@@ -1,7 +1,7 @@
+import { LANG_UPDATED, TAG_DELETED } from '../actions/data';
 import React, { Component } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import AddForm from './AddForm';
-import { LANG_UPDATED } from '../actions/data';
 import LangPage from './LangPage';
 import Loader from './Loader';
 import Navigation from './Navigation';
@@ -23,6 +23,7 @@ class Manager extends Component {
 
 		this.handleLogout = this.handleLogout.bind(this);
 		this.handleSave = this.handleSave.bind(this);
+		this.handleTagDelete = this.handleTagDelete.bind(this);
 		this.checkSocketConnection = this.checkSocketConnection.bind(this);
 		this.handleFormSubmit = this.handleFormSubmit.bind(this);
 	}
@@ -49,6 +50,13 @@ class Manager extends Component {
 		this.state.socketConnection.emit('clientEvent', {
 			type: LANG_UPDATED,
 			payload: { langCode: this.props.match.params.langCode, data }
+		});
+	}
+
+	handleTagDelete(tag) {
+		this.state.socketConnection.emit('clientEvent', {
+			type: TAG_DELETED,
+			payload: { tag }
 		});
 	}
 
@@ -98,6 +106,7 @@ class Manager extends Component {
 							data={langData}
 							lang={langCode}
 							onSave={this.handleSave}
+							onDelete={this.handleTagDelete}
 						/>
 					)}
 				{langCode && !data[langCode] && !initialized && <Loader />}

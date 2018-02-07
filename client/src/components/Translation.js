@@ -32,6 +32,7 @@ class Translation extends Component {
 		this.handleUndoChanges = this.handleUndoChanges.bind(this);
 		this.handleSaveChanges = this.handleSaveChanges.bind(this);
 		this.handleChanges = this.handleChanges.bind(this);
+		this.handleDelete = this.handleDelete.bind(this);
 		this.toggleOriginal = this.toggleOriginal.bind(this);
 	}
 
@@ -58,6 +59,10 @@ class Translation extends Component {
 			value: evt.target.value,
 			changed: this.props.original !== evt.target.value
 		});
+	}
+
+	handleDelete() {
+		this.props.onDelete(this.props.tag);
 	}
 
 	handleUndoChanges() {
@@ -87,21 +92,25 @@ class Translation extends Component {
 						value={this.state.value}
 						placeholder="NO TRANSLATION"
 					/>
-					{changed && (
-						<InputGroupAddon>
-							<ButtonGroup>
+
+					<InputGroupAddon>
+						<ButtonGroup>
+							{changed && [
 								<Button onClick={this.handleSaveChanges} color="primary">
 									Save
-								</Button>
-								<Button color="danger" onClick={this.handleUndoChanges}>
+								</Button>,
+								<Button color="faded" onClick={this.handleUndoChanges}>
 									Undo
-								</Button>
+								</Button>,
 								<Button color="warning" onClick={this.toggleOriginal}>
 									{`${show ? 'Hide' : 'Show'} actual`}
 								</Button>
-							</ButtonGroup>
-						</InputGroupAddon>
-					)}
+							]}
+							<Button color="danger" onClick={this.handleDelete}>
+								Delete
+							</Button>
+						</ButtonGroup>
+					</InputGroupAddon>
 				</InputGroup>
 				<Collapse isOpen={show}>
 					<Input
@@ -120,6 +129,7 @@ class Translation extends Component {
 Translation.propTypes = {
 	original: PropTypes.string.isRequired,
 	tag: PropTypes.string.isRequired,
+	onDelete: PropTypes.func.isRequired,
 	onSave: PropTypes.func.isRequired
 };
 
