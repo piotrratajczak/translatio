@@ -57,8 +57,14 @@ class AddForm extends Component {
 	}
 
 	handleSubmit(evt) {
+		const payload = { [this.props.type]: evt.target.elements.value.value };
+		if (this.props.type === 'tag') {
+			this.props.languages.forEach(lang => {
+				payload[lang] = evt.target.elements[lang].value;
+			});
+		}
 		this.props.onSubmit({
-			payload: { [this.props.type]: evt.target.elements.value.value },
+			payload,
 			type: this.props.type === 'tag' ? TAG_ADDED : LANG_ADDED
 		});
 		this.setState(() => INITIAL_STATE);
@@ -66,16 +72,16 @@ class AddForm extends Component {
 	}
 
 	render() {
-		const doNotRenderForm =
+		const renderInfo =
 			this.props.type === 'tag' && !this.props.languages.length;
 		return (
 			<Form className="p-3 add-form" onSubmit={this.handleSubmit}>
-				{doNotRenderForm && (
+				{renderInfo && (
 					<p className="info-text">
 						Please create any language before you create a tag!
 					</p>
 				)}
-				{!doNotRenderForm && (
+				{!renderInfo && (
 					<FormGroup row>
 						<Label htmlFor="value" xs={12} sm={2}>
 							{this.props.type}:
@@ -108,6 +114,27 @@ class AddForm extends Component {
 						</Col>
 					</FormGroup>
 				)}
+				{!renderInfo &&
+					this.props.type === 'tag' && (
+						<div>
+							<hr />
+							{this.props.languages.map(lang => (
+								<FormGroup row key={lang}>
+									<Label htmlFor={lang} xs={12} sm={2}>
+										{lang}:
+									</Label>
+									<Col xs={12} sm={7}>
+										<Input
+											type="text"
+											name={lang}
+											id={lang}
+											placeholder={this.props.type}
+										/>
+									</Col>
+								</FormGroup>
+							))}
+						</div>
+					)}
 			</Form>
 		);
 	}
