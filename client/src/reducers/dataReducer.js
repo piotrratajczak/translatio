@@ -2,7 +2,8 @@ import {
 	INITIAL_LANGUAGE_SET,
 	LANG_ADDED,
 	LANG_UPDATED,
-	TAG_ADDED
+	TAG_ADDED,
+	TAG_DELETED
 } from '../actions/data';
 
 import { LOGOUT } from '../actions/app';
@@ -53,6 +54,17 @@ function appReducer(state = INITIAL_STATE, action) {
 				langData[langCode],
 				action.payload[langCode]
 			);
+		});
+		return {
+			...state,
+			langData
+		};
+	}
+
+	case TAG_DELETED: {
+		const langData = Object.assign({}, state.langData);
+		Object.keys(langData).forEach(langCode => {
+			delete langData[langCode][action.payload.tag];
 		});
 		return {
 			...state,

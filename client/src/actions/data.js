@@ -4,11 +4,14 @@ export const LANG_UPDATED = 'data/SOCKET_LANG_UPDATED';
 
 export const TAG_ADDED = 'data/SOCKET_TAG_ADDED';
 
+export const TAG_DELETED = 'data/SOCKET_TAG_DELETED';
+
 export const INITIAL_LANGUAGE_SET = 'data/SOCKET_INITIAL_LANGUAGE_SET';
 
 export default {
 	LANG_ADDED,
 	LANG_UPDATED,
 	TAG_ADDED,
+	TAG_DELETED,
 	INITIAL_LANGUAGE_SET
 };
