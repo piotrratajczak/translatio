@@ -117,7 +117,11 @@ class Manager extends Component {
 					exact
 					path="/add/tag"
 					component={() => (
-						<AddForm type="tag" onSubmit={this.handleFormSubmit} />
+						<AddForm
+							type="tag"
+							languages={languages}
+							onSubmit={this.handleFormSubmit}
+						/>
 					)}
 				/>
 				<Route
