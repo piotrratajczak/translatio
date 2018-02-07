@@ -66,37 +66,48 @@ class AddForm extends Component {
 	}
 
 	render() {
+		const doNotRenderForm =
+			this.props.type === 'tag' && !this.props.languages.length;
 		return (
-			<Form className="p-3" onSubmit={this.handleSubmit}>
-				<FormGroup row>
-					<Label htmlFor="value" xs={12} sm={2}>
-						{this.props.type}:
-					</Label>
-					<Col xs={12} sm={7}>
-						<Input
-							onChange={this.handleChange}
-							value={this.state.value}
-							type="text"
-							name="value"
-							id="value"
-							placeholder={this.props.type}
-						/>
-					</Col>
-					<Col xs={12} className="hidden-sm-up errors">
-						{this.state.error}
-					</Col>
-					<Col xs={12} sm={3}>
-						<Button
-							className="w-100"
-							type="submit"
-							disabled={this.state.error !== null || !this.state.value.length}>
-							Submit
-						</Button>
-					</Col>
-					<Col className="hidden-xs-down errors" xs={12}>
-						{this.state.error}
-					</Col>
-				</FormGroup>
+			<Form className="p-3 add-form" onSubmit={this.handleSubmit}>
+				{doNotRenderForm && (
+					<p className="info-text">
+						Please create any language before you create a tag!
+					</p>
+				)}
+				{!doNotRenderForm && (
+					<FormGroup row>
+						<Label htmlFor="value" xs={12} sm={2}>
+							{this.props.type}:
+						</Label>
+						<Col xs={12} sm={7}>
+							<Input
+								onChange={this.handleChange}
+								value={this.state.value}
+								type="text"
+								name="value"
+								id="value"
+								placeholder={this.props.type}
+							/>
+						</Col>
+						<Col xs={12} className="hidden-sm-up errors">
+							{this.state.error}
+						</Col>
+						<Col xs={12} sm={3}>
+							<Button
+								className="w-100"
+								type="submit"
+								disabled={
+									this.state.error !== null || !this.state.value.length
+								}>
+								Submit
+							</Button>
+						</Col>
+						<Col className="hidden-xs-down errors" xs={12}>
+							{this.state.error}
+						</Col>
+					</FormGroup>
+				)}
 			</Form>
 		);
 	}

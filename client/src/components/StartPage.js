@@ -17,9 +17,11 @@ const StartPage = ({ languages }) => (
 				<Link className="btn btn-success btn-sm" to="/add/lang">
 					Add lang
 				</Link>
-				<Link className="btn btn-warning btn-sm" to="/add/tag">
-					Add tag
-				</Link>
+				{languages.length > 0 && (
+					<Link className="btn btn-warning btn-sm" to="/add/tag">
+						Add tag
+					</Link>
+				)}
 			</ListGroupItem>
 			{languages.map(langCode => (
 				<ListGroupItem key={langCode}>

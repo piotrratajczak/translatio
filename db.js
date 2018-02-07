@@ -72,6 +72,12 @@ function addTag(params) {
 		throw new Error('Already exists!');
 	}
 
+	if (!languages.length) {
+		throw new Error(
+			'There is no language! Cannot add tag to null! Please create any language first!'
+		);
+	}
+
 	regexCheck(tag);
 
 	let payload = {};

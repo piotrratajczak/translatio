@@ -61,11 +61,13 @@ class Navigation extends React.Component {
 								Fast adding
 							</DropdownToggle>
 							<DropdownMenu>
-								<DropdownItem>
-									<Link className="nav-link" to="/add/tag">
-										Add tag
-									</Link>
-								</DropdownItem>
+								{languages.length > 0 && (
+									<DropdownItem>
+										<Link className="nav-link" to="/add/tag">
+											Add tag
+										</Link>
+									</DropdownItem>
+								)}
 								<DropdownItem>
 									<Link className="nav-link" to="/add/lang">
 										Add lang

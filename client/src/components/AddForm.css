@@ -1,7 +1,13 @@
-.errors {
+.add-form .errors {
 	text-align: center;
 }
 
-label {
+.add-form label {
 	text-transform: capitalize;
+}
+
+.add-form .info-text {
+	text-align: center;
+	font-size: larger;
+	padding: 25px;
 }
