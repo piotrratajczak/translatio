@@ -27,3 +27,11 @@
 .start-page .list-group-item {
 	min-width: 125px;
 }
+
+.start-page .close {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 3px;
+	color: red;
+}

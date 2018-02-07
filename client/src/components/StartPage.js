@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
 import React from 'react';
 
-const StartPage = ({ languages }) => (
+const StartPage = ({ languages, onDelete }) => (
 	<div className="start-page mx-auto">
 		<h4 className="languages-title">
 			{languages.length
@@ -25,6 +25,13 @@ const StartPage = ({ languages }) => (
 			</ListGroupItem>
 			{languages.map(langCode => (
 				<ListGroupItem key={langCode}>
+					<button
+						type="button"
+						className="close"
+						aria-label="Close"
+						onClick={() => onDelete(langCode)}>
+						<span aria-hidden="true">&times;</span>
+					</button>
 					<h6>{langCode}</h6>
 					<Link className="btn btn-primary btn-sm" to={`/lang/${langCode}`}>
 						Edit
@@ -45,7 +52,8 @@ const StartPage = ({ languages }) => (
 );
 
 StartPage.propTypes = {
-	languages: PropTypes.arrayOf(PropTypes.string)
+	languages: PropTypes.arrayOf(PropTypes.string),
+	onDelete: PropTypes.func.isRequired
 };
 
 StartPage.defaultProps = {

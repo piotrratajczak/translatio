@@ -1,4 +1,4 @@
-import { LANG_UPDATED, TAG_DELETED } from '../actions/data';
+import { LANG_UPDATED, TAG_DELETED, LANG_DELETED } from '../actions/data';
 import React, { Component } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import AddForm from './AddForm';
@@ -24,6 +24,7 @@ class Manager extends Component {
 		this.handleLogout = this.handleLogout.bind(this);
 		this.handleSave = this.handleSave.bind(this);
 		this.handleTagDelete = this.handleTagDelete.bind(this);
+		this.handleLangDelete = this.handleLangDelete.bind(this);
 		this.checkSocketConnection = this.checkSocketConnection.bind(this);
 		this.handleFormSubmit = this.handleFormSubmit.bind(this);
 	}
@@ -57,6 +58,13 @@ class Manager extends Component {
 		this.state.socketConnection.emit('clientEvent', {
 			type: TAG_DELETED,
 			payload: { tag }
+		});
+	}
+
+	handleLangDelete(langCode) {
+		this.state.socketConnection.emit('clientEvent', {
+			type: LANG_DELETED,
+			payload: { langCode }
 		});
 	}
 
@@ -120,7 +128,9 @@ class Manager extends Component {
 				<Route
 					exact
 					path="/"
-					component={() => <StartPage languages={languages} />}
+					component={() => (
+						<StartPage languages={languages} onDelete={this.handleLangDelete} />
+					)}
 				/>
 				<Route
 					exact
