@@ -1,5 +1,6 @@
 import {
 	LANG_ADDED,
+	LANG_DELETED,
 	LANG_UPDATED,
 	TAG_ADDED,
 	TAG_DELETED
@@ -11,6 +12,9 @@ function getTitle(action) {
 	switch (action) {
 	case LANG_ADDED:
 		title = 'Adding New Language';
+		break;
+	case LANG_DELETED:
+		title = 'Deleting Language';
 		break;
 	case LANG_UPDATED:
 		title = 'Updating Language Data';

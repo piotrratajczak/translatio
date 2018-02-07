@@ -22,6 +22,12 @@ function langPut(req, res) {
 	return payload;
 }
 
+function langDelete(req, res) {
+	let payload = db.deleteLang(req.body);
+	res.locals.toEmit = { payload, type: 'data/SOCKET_LANG_DELETED' };
+	return payload;
+}
+
 function tagPost(req, res) {
 	let payload = db.addTag(req.body);
 	res.locals.toEmit = { payload, type: 'data/SOCKET_TAG_ADDED' };
@@ -112,6 +118,10 @@ apiRoutes.post('/api/login', function(req, res) {
 apiRoutes.get('/api/lang', (req, res) => res.send(db.getLangs())); //list
 apiRoutes.post('/api/lang', checkJWT, (req, res, next) => {
 	apiFunction(req, res, langPost);
+	next();
+});
+apiRoutes.delete('/api/lang', checkJWT, (req, res, next) => {
+	apiFunction(req, res, langDelete);
 	next();
 });
 // ----------- downloads ------------------

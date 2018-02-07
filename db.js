@@ -169,6 +169,30 @@ function updateLang({ langCode, data }) {
 	return payload;
 }
 
+function deleteLang({ langCode }) {
+	if (!langCode) {
+		throw new Error('No value found!');
+	}
+
+	if (!langExist(langCode)) {
+		throw new Error('There is no such a language!');
+	}
+
+	regexCheck(langCode);
+
+	const index = languages.indexOf(langCode);
+	if (index > -1) {
+		// remove from languages
+		languages.splice(index, 1);
+		// remove db file
+		fs.unlinkSync(config.filesUrl + '/' + langCode + '.json');
+		// remove from dbs
+		delete dbs[langCode];
+	}
+
+	return { langCode };
+}
+
 function checkUser(email, password) {
 	const profile = {
 		first_name: 'Admin',
@@ -200,6 +224,7 @@ module.exports = {
 	deleteTag: deleteTag,
 	getEmptyTags: getEmptyTags,
 	addLang: addLang,
+	deleteLang: deleteLang,
 	updateLang: updateLang,
 	checkUser: checkUser,
 	getAllData: getAllData,
