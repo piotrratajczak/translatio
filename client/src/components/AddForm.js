@@ -69,6 +69,7 @@ class AddForm extends Component {
 			type: this.props.type === 'tag' ? TAG_ADDED : LANG_ADDED
 		});
 		this.setState(() => INITIAL_STATE);
+		evt.target.reset();
 		evt.preventDefault();
 	}
 
@@ -129,7 +130,7 @@ class AddForm extends Component {
 											type="text"
 											name={lang}
 											id={lang}
-											placeholder={this.props.type}
+											placeholder="NO TRANSLATION"
 										/>
 									</Col>
 								</FormGroup>
