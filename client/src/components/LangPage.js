@@ -1,18 +1,19 @@
 import './LangPage.css';
-import { Form } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Button, Form } from 'reactstrap';
 import { PropTypes } from 'prop-types';
 import React from 'react';
 import Translation from './Translation';
 
-const LangPage = ({ data, onSave, onDelete }) => (
+const LangPage = ({
+	data, onSave, onDelete, onAddClick
+}) => (
 	<Form className="lang-page">
 		{!Object.keys(data).length && (
 			<div className="info-text">
 				<p>There are no tags yet! Please add one!</p>
-				<Link className="btn btn-warning btn-sm" to="/add/tag">
-					Add tag
-				</Link>
+				<Button size="sm" color="warning" onClick={() => onAddClick('tag')}>
+					Add Tag
+				</Button>
 			</div>
 		)}
 		{data &&
@@ -31,6 +32,7 @@ const LangPage = ({ data, onSave, onDelete }) => (
 );
 
 LangPage.propTypes = {
+	onAddClick: PropTypes.func.isRequired,
 	onDelete: PropTypes.func.isRequired,
 	onSave: PropTypes.func.isRequired,
 	data: PropTypes.object.isRequired //eslint-disable-line

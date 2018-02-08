@@ -26,7 +26,7 @@ class Navigation extends React.Component {
 		});
 	}
 	render() {
-		const { languages, onLogoutClick } = this.props;
+		const { languages, onLogoutClick, onAddClick } = this.props;
 		return (
 			<nav className="navbar navbar-toggleable-md navbar-light bg-faded">
 				<button
@@ -62,16 +62,12 @@ class Navigation extends React.Component {
 							</DropdownToggle>
 							<DropdownMenu>
 								{languages.length > 0 && (
-									<DropdownItem>
-										<Link className="nav-link" to="/add/tag">
-											Add tag
-										</Link>
+									<DropdownItem onClick={() => onAddClick('tag')}>
+										Add Tag
 									</DropdownItem>
 								)}
-								<DropdownItem>
-									<Link className="nav-link" to="/add/lang">
-										Add lang
-									</Link>
+								<DropdownItem onClick={() => onAddClick('lang')}>
+									Add Lang
 								</DropdownItem>
 							</DropdownMenu>
 						</UncontrolledDropdown>
@@ -84,6 +80,7 @@ class Navigation extends React.Component {
 }
 
 Navigation.propTypes = {
+	onAddClick: PropTypes.func.isRequired,
 	languages: PropTypes.arrayOf(PropTypes.string),
 	onLogoutClick: PropTypes.func.isRequired
 };

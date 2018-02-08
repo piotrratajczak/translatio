@@ -6,6 +6,10 @@
 	text-transform: capitalize;
 }
 
+.add-form .lang-code {
+	text-transform: none;
+}
+
 .add-form .info-text {
 	text-align: center;
 	font-size: larger;

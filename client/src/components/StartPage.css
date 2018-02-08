@@ -3,7 +3,8 @@
 	padding: 25px;
 }
 
-.start-page a {
+.start-page a,
+.start-page .btn-sm {
 	width: 100%;
 	margin-bottom: 10px;
 }

@@ -1,12 +1,14 @@
+import './Modal.css';
 import { LANG_DELETED, LANG_UPDATED, TAG_DELETED } from '../actions/data';
+import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import React, { Component } from 'react';
-import { Redirect, Route } from 'react-router-dom';
 import AddForm from './AddForm';
 import LangPage from './LangPage';
 import Loader from './Loader';
 import Navigation from './Navigation';
 import Notification from '../modules/Notification';
 import { PropTypes } from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import StartPage from './StartPage';
 import { connect } from 'react-redux';
 import { logoutUser } from '../actionCreators/app';
@@ -18,7 +20,8 @@ class Manager extends Component {
 		super();
 
 		this.state = {
-			socketConnection: null
+			socketConnection: null,
+			modal: null
 		};
 
 		this.handleLogout = this.handleLogout.bind(this);
@@ -27,6 +30,8 @@ class Manager extends Component {
 		this.handleLangDelete = this.handleLangDelete.bind(this);
 		this.checkSocketConnection = this.checkSocketConnection.bind(this);
 		this.handleFormSubmit = this.handleFormSubmit.bind(this);
+		this.showModal = this.showModal.bind(this);
+		this.hideModal = this.hideModal.bind(this);
 	}
 
 	componentDidMount() {
@@ -41,6 +46,14 @@ class Manager extends Component {
 		if (this.state.socketConnection) {
 			this.state.socketConnection.disconnect();
 		}
+	}
+
+	showModal(type) {
+		this.setState({ modal: type });
+	}
+
+	hideModal() {
+		this.setState({ modal: null });
 	}
 
 	handleLogout() {
@@ -106,8 +119,24 @@ class Manager extends Component {
 		const langData = data[langCode];
 
 		return token ? (
-			<div>
-				<Navigation onLogoutClick={this.handleLogout} languages={languages} />
+			<div className="manager">
+				<Navigation
+					onLogoutClick={this.handleLogout}
+					languages={languages}
+					onAddClick={this.showModal}
+				/>
+				<Modal isOpen={this.state.modal !== null}>
+					<ModalHeader toggle={this.hideModal}>
+						Create New {this.state.modal}
+					</ModalHeader>
+					<ModalBody>
+						<AddForm
+							type={this.state.modal}
+							languages={languages}
+							onSubmit={this.handleFormSubmit}
+						/>
+					</ModalBody>
+				</Modal>
 				{langCode &&
 					data[langCode] && (
 						<LangPage
@@ -115,6 +144,7 @@ class Manager extends Component {
 							lang={langCode}
 							onSave={this.handleSave}
 							onDelete={this.handleTagDelete}
+							onAddClick={this.showModal}
 						/>
 					)}
 				{langCode && !data[langCode] && !initialized && <Loader />}
@@ -125,35 +155,13 @@ class Manager extends Component {
 							Are you sure there should be such a language avaible?
 						</p>
 					)}
-				<Route
-					exact
-					path="/"
-					component={() => (
-						<StartPage languages={languages} onDelete={this.handleLangDelete} />
-					)}
-				/>
-				<Route
-					exact
-					path="/add/tag"
-					component={() => (
-						<AddForm
-							type="tag"
-							languages={languages}
-							onSubmit={this.handleFormSubmit}
-						/>
-					)}
-				/>
-				<Route
-					exact
-					path="/add/lang"
-					component={() => (
-						<AddForm
-							type="langCode"
-							languages={languages}
-							onSubmit={this.handleFormSubmit}
-						/>
-					)}
-				/>
+				{!langCode && (
+					<StartPage
+						languages={languages}
+						onDelete={this.handleLangDelete}
+						onAddClick={this.showModal}
+					/>
+				)}
 			</div>
 		) : (
 			<Redirect to="/login" />

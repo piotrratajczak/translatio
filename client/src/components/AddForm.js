@@ -57,7 +57,8 @@ class AddForm extends Component {
 	}
 
 	handleSubmit(evt) {
-		const payload = { [this.props.type]: evt.target.elements.value.value };
+		const type = this.props.type === 'tag' ? 'tag' : 'langCode';
+		const payload = { [type]: evt.target.elements.value.value };
 		if (this.props.type === 'tag') {
 			this.props.languages.forEach(lang => {
 				payload[lang] = evt.target.elements[lang].value;
@@ -120,7 +121,7 @@ class AddForm extends Component {
 							<hr />
 							{this.props.languages.map(lang => (
 								<FormGroup row key={lang}>
-									<Label htmlFor={lang} xs={12} sm={2}>
+									<Label className="lang-code" htmlFor={lang} xs={12} sm={2}>
 										{lang}:
 									</Label>
 									<Col xs={12} sm={7}>
@@ -142,12 +143,13 @@ class AddForm extends Component {
 
 AddForm.propTypes = {
 	onSubmit: PropTypes.func.isRequired,
-	type: PropTypes.string.isRequired,
+	type: PropTypes.string,
 	languages: PropTypes.arrayOf(PropTypes.string)
 };
 
 AddForm.defaultProps = {
-	languages: []
+	languages: [],
+	type: null
 };
 
 export default AddForm;

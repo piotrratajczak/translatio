@@ -1,10 +1,10 @@
 import './StartPage.css';
-import { ListGroup, ListGroupItem } from 'reactstrap';
+import { Button, ListGroup, ListGroupItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
 import React from 'react';
 
-const StartPage = ({ languages, onDelete }) => (
+const StartPage = ({ languages, onDelete, onAddClick }) => (
 	<div className="start-page mx-auto">
 		<h4 className="languages-title">
 			{languages.length
@@ -14,13 +14,13 @@ const StartPage = ({ languages, onDelete }) => (
 		<ListGroup className="horizontal-list">
 			<ListGroupItem>
 				<h6>NEW</h6>
-				<Link className="btn btn-success btn-sm" to="/add/lang">
-					Add lang
-				</Link>
+				<Button size="sm" color="success" onClick={() => onAddClick('lang')}>
+					Add Lang
+				</Button>
 				{languages.length > 0 && (
-					<Link className="btn btn-warning btn-sm" to="/add/tag">
-						Add tag
-					</Link>
+					<Button size="sm" color="warning" onClick={() => onAddClick('tag')}>
+						Add Tag
+					</Button>
 				)}
 			</ListGroupItem>
 			{languages.map(langCode => (
@@ -53,7 +53,8 @@ const StartPage = ({ languages, onDelete }) => (
 
 StartPage.propTypes = {
 	languages: PropTypes.arrayOf(PropTypes.string),
-	onDelete: PropTypes.func.isRequired
+	onDelete: PropTypes.func.isRequired,
+	onAddClick: PropTypes.func.isRequired
 };
 
 StartPage.defaultProps = {
