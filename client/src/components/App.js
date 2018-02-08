@@ -49,7 +49,7 @@ class App extends Component {
 }
 
 App.propTypes = {
-	initialized: PropTypes.bool, //eslint-disable-line
+	initialized: PropTypes.bool,
 	dispatch: PropTypes.func.isRequired
 };
 

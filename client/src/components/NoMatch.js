@@ -10,7 +10,9 @@ const NoMatchPage = ({ location }) => (
 );
 
 NoMatchPage.propTypes = {
-	location: PropTypes.object //eslint-disable-line
+	location: PropTypes.shape({
+		pathname: PropTypes.string.isRequired
+	}).isRequired
 };
 
 export default NoMatchPage;

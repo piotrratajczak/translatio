@@ -95,13 +95,22 @@ class Translation extends Component {
 					<InputGroupAddon>
 						<ButtonGroup>
 							{changed && [
-								<Button onClick={this.handleSaveChanges} color="primary">
+								<Button
+									onClick={this.handleSaveChanges}
+									color="primary"
+									key="btnSave">
 									Save
 								</Button>,
-								<Button color="faded" onClick={this.handleUndoChanges}>
+								<Button
+									color="faded"
+									onClick={this.handleUndoChanges}
+									key="btnUndo">
 									Undo
 								</Button>,
-								<Button color="warning" onClick={this.toggleOriginal}>
+								<Button
+									color="warning"
+									onClick={this.toggleOriginal}
+									key="btnShow">
 									{`${show ? 'Hide' : 'Show'} actual`}
 								</Button>
 							]}

@@ -170,8 +170,12 @@ class Manager extends Component {
 
 Manager.propTypes = {
 	dispatch: PropTypes.func.isRequired,
-	match: PropTypes.object.isRequired, //eslint-disable-line
-	data: PropTypes.object, //eslint-disable-line
+	match: PropTypes.shape({
+		params: PropTypes.shape({
+			langCode: PropTypes.string
+		})
+	}).isRequired,
+	data: PropTypes.objectOf(PropTypes.objectOf(PropTypes.string)),
 	token: PropTypes.string,
 	initialized: PropTypes.bool
 };

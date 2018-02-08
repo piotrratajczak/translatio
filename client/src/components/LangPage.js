@@ -76,7 +76,7 @@ LangPage.propTypes = {
 	onAddClick: PropTypes.func.isRequired,
 	onDelete: PropTypes.func.isRequired,
 	onSave: PropTypes.func.isRequired,
-	data: PropTypes.object.isRequired, //eslint-disable-line
+	data: PropTypes.objectOf(PropTypes.string).isRequired,
 	langCode: PropTypes.string
 };
 
