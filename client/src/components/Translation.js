@@ -1,5 +1,4 @@
 import './Translation.css';
-
 import {
 	Badge,
 	Button,
@@ -12,13 +11,15 @@ import {
 	Label
 } from 'reactstrap';
 import React, { Component } from 'react';
+import Confirmation from './Confirmation';
 import { PropTypes } from 'prop-types';
 
 const INITIAL_STATE = {
 	changed: false,
 	outdated: false,
 	show: false,
-	value: ''
+	value: '',
+	modal: false
 };
 
 class Translation extends Component {
@@ -34,6 +35,8 @@ class Translation extends Component {
 		this.handleChanges = this.handleChanges.bind(this);
 		this.handleDelete = this.handleDelete.bind(this);
 		this.toggleOriginal = this.toggleOriginal.bind(this);
+		this.handleModalCancel = this.handleModalCancel.bind(this);
+		this.openModal = this.openModal.bind(this);
 	}
 
 	componentWillMount() {
@@ -74,11 +77,25 @@ class Translation extends Component {
 		this.setState(INITIAL_STATE);
 	}
 
+	handleModalCancel() {
+		this.setState({ modal: false });
+	}
+
+	openModal() {
+		this.setState({ modal: true });
+	}
+
 	render() {
 		const { tag, original } = this.props;
 		const { changed, outdated, show } = this.state;
 		return (
 			<FormGroup className="bg-faded translation">
+				<Confirmation
+					open={this.state.modal}
+					type="tag"
+					onConfirm={this.handleDelete}
+					onCancel={this.handleModalCancel}
+				/>
 				<Label htmlFor={tag}>
 					{tag}:{changed && <Badge color="danger">Unsaved</Badge>}
 					{outdated && <Badge color="danger">Outdated</Badge>}
@@ -106,7 +123,7 @@ class Translation extends Component {
 									{`${show ? 'Hide' : 'Show'} actual`}
 								</Button>
 							]}
-							<Button color="danger" onClick={this.handleDelete}>
+							<Button color="danger" onClick={this.openModal}>
 								Delete
 							</Button>
 						</ButtonGroup>

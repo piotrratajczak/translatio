@@ -114,6 +114,7 @@ class Manager extends Component {
 
 	render() {
 		const { token, data, initialized } = this.props;
+		const { modal } = this.state;
 		const languages = Object.keys(data).sort();
 		const { langCode } = this.props.match.params;
 		const langData = data[langCode];
@@ -125,13 +126,11 @@ class Manager extends Component {
 					languages={languages}
 					onAddClick={this.showModal}
 				/>
-				<Modal isOpen={this.state.modal !== null}>
-					<ModalHeader toggle={this.hideModal}>
-						Create New {this.state.modal}
-					</ModalHeader>
+				<Modal isOpen={modal !== null}>
+					<ModalHeader toggle={this.hideModal}>Create New {modal}</ModalHeader>
 					<ModalBody>
 						<AddForm
-							type={this.state.modal}
+							type={modal}
 							languages={languages}
 							onSubmit={this.handleFormSubmit}
 						/>
@@ -141,7 +140,7 @@ class Manager extends Component {
 					data[langCode] && (
 						<LangPage
 							data={langData}
-							langCode={langCode}
+							lang={langCode}
 							onSave={this.handleSave}
 							onDelete={this.handleTagDelete}
 							onAddClick={this.showModal}
