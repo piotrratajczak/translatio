@@ -3,3 +3,9 @@
 	font-size: larger;
 	padding: 25px;
 }
+
+.lang-page h1 {
+	text-align: center;
+	padding: 5px;
+	margin-top: 15px;
+}

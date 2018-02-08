@@ -78,7 +78,7 @@ class Translation extends Component {
 		const { tag, original } = this.props;
 		const { changed, outdated, show } = this.state;
 		return (
-			<FormGroup>
+			<FormGroup className="bg-faded translation">
 				<Label htmlFor={tag}>
 					{tag}:{changed && <Badge color="danger">Unsaved</Badge>}
 					{outdated && <Badge color="danger">Outdated</Badge>}

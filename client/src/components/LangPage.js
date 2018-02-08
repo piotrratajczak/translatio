@@ -1,13 +1,16 @@
 import './LangPage.css';
-import { Button, Form } from 'reactstrap';
+import { Badge, Button, Form } from 'reactstrap';
 import { PropTypes } from 'prop-types';
 import React from 'react';
 import Translation from './Translation';
 
 const LangPage = ({
-	data, onSave, onDelete, onAddClick
+	data, onSave, onDelete, onAddClick, langCode
 }) => (
 	<Form className="lang-page">
+		<h1 className="bg-faded">
+			<Badge color="primary">{langCode}</Badge>
+		</h1>
 		{!Object.keys(data).length && (
 			<div className="info-text">
 				<p>There are no tags yet! Please add one!</p>
@@ -35,7 +38,12 @@ LangPage.propTypes = {
 	onAddClick: PropTypes.func.isRequired,
 	onDelete: PropTypes.func.isRequired,
 	onSave: PropTypes.func.isRequired,
-	data: PropTypes.object.isRequired //eslint-disable-line
+	data: PropTypes.object.isRequired, //eslint-disable-line
+	langCode: PropTypes.string
+};
+
+LangPage.defaultProps = {
+	langCode: null
 };
 
 export default LangPage;

@@ -141,7 +141,7 @@ class Manager extends Component {
 					data[langCode] && (
 						<LangPage
 							data={langData}
-							lang={langCode}
+							langCode={langCode}
 							onSave={this.handleSave}
 							onDelete={this.handleTagDelete}
 							onAddClick={this.showModal}

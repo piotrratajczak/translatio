@@ -1,7 +1,11 @@
-.badge {
+.translation {
+	padding: 15px;
+}
+
+.translation .badge {
 	margin-left: 10px;
 }
 
-.original {
+.translation .original {
 	margin-top: 10px;
 }
