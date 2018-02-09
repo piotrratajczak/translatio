@@ -18,7 +18,7 @@ NotificationComponent.contextTypes = {
 };
 
 NotificationComponent.propTypes = {
-	notifications: PropTypes.array //eslint-disable-line
+	notifications: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 NotificationComponent.defaultProps = { notifications: [] };

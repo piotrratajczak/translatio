@@ -93,7 +93,7 @@ class Login extends Component {
 Login.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	status: PropTypes.string,
-	history: PropTypes.object // eslint-disable-line
+	history: PropTypes.shape({}).isRequired
 };
 
 Login.defaultProps = {
