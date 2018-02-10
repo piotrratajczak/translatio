@@ -14,7 +14,7 @@ const INITIAL_STATE = {
 	initialized: false
 };
 
-function appReducer(state = INITIAL_STATE, action) {
+function dataReducer(state = INITIAL_STATE, action) {
 	switch (action.type) {
 	case INITIAL_LANGUAGE_SET: {
 		return {
@@ -91,4 +91,4 @@ function appReducer(state = INITIAL_STATE, action) {
 	}
 }
 
-export default appReducer;
+export default dataReducer;

@@ -68,7 +68,7 @@ io.on('connection', socket => {
 	);
 
 	socket.on('clientEvent', data => {
-		// this can be moved outside as function???
+		console.log(data);
 		let func = null,
 			payload = null;
 		switch (data.type) {

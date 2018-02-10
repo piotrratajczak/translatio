@@ -1,5 +1,5 @@
-export default function propagateDbEvent(event) {
+export default function propagateDbEvent(data) {
 	return dispatch => {
-		dispatch(event);
+		dispatch(data);
 	};
 }

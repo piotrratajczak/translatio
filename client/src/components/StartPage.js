@@ -2,8 +2,12 @@ import './StartPage.css';
 import { Button, ListGroup, ListGroupItem } from 'reactstrap';
 import React, { Component } from 'react';
 import Confirmation from './Confirmation';
+import { LANG_DELETED } from '../actions/data';
 import { Link } from 'react-router-dom';
+import { OPEN_FORM } from '../actions/form';
 import { PropTypes } from 'prop-types';
+import Socket from '../modules/Socket';
+import { connect } from 'react-redux';
 
 const INITIAL_STATE = {
 	modal: false,
@@ -19,6 +23,7 @@ class StartPage extends Component {
 		this.handleModalCancel = this.handleModalCancel.bind(this);
 		this.openModal = this.openModal.bind(this);
 		this.handleModalConfirm = this.handleModalConfirm.bind(this);
+		this.handleAddClick = this.handleAddClick.bind(this);
 	}
 
 	openModal(langCode) {
@@ -26,7 +31,10 @@ class StartPage extends Component {
 	}
 
 	handleModalConfirm() {
-		this.props.onDelete(this.state.langCode);
+		Socket.emitClientEvent({
+			type: LANG_DELETED,
+			payload: { langCode: this.state.langCode }
+		});
 		this.setState({
 			modal: false,
 			langCode: null
@@ -37,8 +45,12 @@ class StartPage extends Component {
 		this.setState(INITIAL_STATE);
 	}
 
+	handleAddClick(evt) {
+		this.props.dispatch({ type: OPEN_FORM, payload: evt.target.name });
+	}
+
 	render() {
-		const { languages, onAddClick } = this.props;
+		const { languages } = this.props;
 		return (
 			<div className="start-page mx-auto">
 				<Confirmation
@@ -58,14 +70,16 @@ class StartPage extends Component {
 						<Button
 							size="sm"
 							color="success"
-							onClick={() => onAddClick('lang')}>
+							name="lang"
+							onClick={this.handleAddClick}>
 							Add Lang
 						</Button>
 						{languages.length > 0 && (
 							<Button
 								size="sm"
 								color="warning"
-								onClick={() => onAddClick('tag')}>
+								name="tag"
+								onClick={this.handleAddClick}>
 								Add Tag
 							</Button>
 						)}
@@ -101,13 +115,16 @@ class StartPage extends Component {
 }
 
 StartPage.propTypes = {
-	languages: PropTypes.arrayOf(PropTypes.string),
-	onDelete: PropTypes.func.isRequired,
-	onAddClick: PropTypes.func.isRequired
+	dispatch: PropTypes.func.isRequired,
+	languages: PropTypes.arrayOf(PropTypes.string)
 };
 
 StartPage.defaultProps = {
 	languages: []
 };
 
-export default StartPage;
+const mapStateToProps = state => ({
+	languages: Object.keys(state.data.langData)
+});
+
+export default connect(mapStateToProps)(StartPage);

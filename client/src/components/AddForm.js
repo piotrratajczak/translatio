@@ -3,6 +3,7 @@ import { Button, Col, Form, FormGroup, Input, Label } from 'reactstrap';
 import { LANG_ADDED, TAG_ADDED } from '../actions/data';
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
+import Socket from '../modules/Socket';
 
 const INITIAL_STATE = { value: '', error: null };
 
@@ -64,10 +65,11 @@ class AddForm extends Component {
 				payload[lang] = evt.target.elements[lang].value;
 			});
 		}
-		this.props.onSubmit({
+		Socket.emitClientEvent({
 			payload,
 			type: this.props.type === 'tag' ? TAG_ADDED : LANG_ADDED
 		});
+
 		this.setState(() => INITIAL_STATE);
 		evt.target.reset();
 		evt.preventDefault();
@@ -143,7 +145,6 @@ class AddForm extends Component {
 }
 
 AddForm.propTypes = {
-	onSubmit: PropTypes.func.isRequired,
 	type: PropTypes.string,
 	languages: PropTypes.arrayOf(PropTypes.string)
 };

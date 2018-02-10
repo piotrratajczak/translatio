@@ -7,14 +7,20 @@ import {
 	UncontrolledDropdown
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { OPEN_FORM } from '../actions/form';
 import { PropTypes } from 'prop-types';
 import React from 'react';
+import { connect } from 'react-redux';
+import { logoutUser } from '../actionCreators/app';
 
 class Navigation extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.toggleNavbar = this.toggleNavbar.bind(this);
+		this.handleLogout = this.handleLogout.bind(this);
+		this.handleAddClick = this.handleAddClick.bind(this);
+
 		this.state = {
 			collapsed: true
 		};
@@ -25,8 +31,17 @@ class Navigation extends React.Component {
 			collapsed: !this.state.collapsed
 		});
 	}
+
+	handleLogout() {
+		this.props.dispatch(logoutUser());
+	}
+
+	handleAddClick(evt) {
+		this.props.dispatch({ type: OPEN_FORM, payload: evt.target.name });
+	}
+
 	render() {
-		const { languages, onLogoutClick, onAddClick } = this.props;
+		const { languages } = this.props;
 		return (
 			<nav className="navbar navbar-toggleable-md navbar-light bg-faded">
 				<button
@@ -62,16 +77,16 @@ class Navigation extends React.Component {
 							</DropdownToggle>
 							<DropdownMenu>
 								{languages.length > 0 && (
-									<DropdownItem onClick={() => onAddClick('tag')}>
+									<DropdownItem name="tag" onClick={this.handleAddClick}>
 										Add Tag
 									</DropdownItem>
 								)}
-								<DropdownItem onClick={() => onAddClick('lang')}>
+								<DropdownItem name="lang" onClick={this.handleAddClick}>
 									Add Lang
 								</DropdownItem>
 							</DropdownMenu>
 						</UncontrolledDropdown>
-						<NavLink onClick={onLogoutClick}>Logout</NavLink>
+						<NavLink onClick={this.handleLogout}>Logout</NavLink>
 					</ul>
 				</Collapse>
 			</nav>
@@ -80,13 +95,16 @@ class Navigation extends React.Component {
 }
 
 Navigation.propTypes = {
-	onAddClick: PropTypes.func.isRequired,
-	languages: PropTypes.arrayOf(PropTypes.string),
-	onLogoutClick: PropTypes.func.isRequired
+	dispatch: PropTypes.func.isRequired,
+	languages: PropTypes.arrayOf(PropTypes.string)
 };
 
 Navigation.defaultProps = {
 	languages: []
 };
 
-export default Navigation;
+const mapStateToProps = state => ({
+	languages: Object.keys(state.data.langData)
+});
+
+export default connect(mapStateToProps)(Navigation);
