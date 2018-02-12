@@ -17,9 +17,11 @@ class Navigation extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.toggleNavbar = this.toggleNavbar.bind(this);
-		this.handleLogout = this.handleLogout.bind(this);
-		this.handleAddClick = this.handleAddClick.bind(this);
+		Object.getOwnPropertyNames(Navigation.prototype)
+			.filter(method => method.indexOf('handle') === 0)
+			.forEach(method => {
+				this[method] = this[method].bind(this);
+			});
 
 		this.state = {
 			collapsed: true
@@ -47,7 +49,7 @@ class Navigation extends React.Component {
 				<button
 					className="navbar-toggler navbar-toggler-right"
 					type="button"
-					onClick={this.toggleNavbar}>
+					onClick={this.handleNavbarSwitch}>
 					<span className="navbar-toggler-icon" />
 				</button>
 				<Link className="navbar-brand" to="/">

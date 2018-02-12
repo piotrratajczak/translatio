@@ -28,11 +28,11 @@ class Translation extends Component {
 			...INITIAL_STATE
 		};
 
-		this.handleUndoChanges = this.handleUndoChanges.bind(this);
-		this.handleSaveChanges = this.handleSaveChanges.bind(this);
-		this.handleChanges = this.handleChanges.bind(this);
-		this.handleDelete = this.handleDelete.bind(this);
-		this.toggleOriginal = this.toggleOriginal.bind(this);
+		Object.getOwnPropertyNames(Translation.prototype)
+			.filter(method => method.indexOf('handle') === 0)
+			.forEach(method => {
+				this[method] = this[method].bind(this);
+			});
 	}
 
 	componentWillMount() {
@@ -49,7 +49,7 @@ class Translation extends Component {
 		}
 	}
 
-	toggleOriginal() {
+	handleOriginalClick() {
 		this.setState({ show: !this.state.show });
 	}
 
@@ -109,7 +109,7 @@ class Translation extends Component {
 								</Button>,
 								<Button
 									color="warning"
-									onClick={this.toggleOriginal}
+									onClick={this.handleOriginalClick}
 									key="btnShow">
 									{`${show ? 'Hide' : 'Show'} actual`}
 								</Button>

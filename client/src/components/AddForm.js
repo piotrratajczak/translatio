@@ -41,8 +41,11 @@ class AddForm extends Component {
 			...INITIAL_STATE
 		};
 
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
+		Object.getOwnPropertyNames(AddForm.prototype)
+			.filter(method => method.indexOf('handle') === 0)
+			.forEach(method => {
+				this[method] = this[method].bind(this);
+			});
 	}
 
 	handleChange({ target }) {

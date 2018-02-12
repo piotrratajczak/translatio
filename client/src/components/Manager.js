@@ -18,17 +18,19 @@ class Manager extends Component {
 			socketConnection: null
 		};
 
-		this.checkSocketConnection = this.checkSocketConnection.bind(this);
-		this.socketEventEmmiter = this.socketEventEmmiter.bind(this);
-		this.notificationEmmiter = this.notificationEmmiter.bind(this);
+		Object.getOwnPropertyNames(Manager.prototype)
+			.filter(method => method.indexOf('handle') === 0)
+			.forEach(method => {
+				this[method] = this[method].bind(this);
+			});
 	}
 
 	componentDidMount() {
-		this.checkSocketConnection(this.props);
+		this.handleSocketConnection(this.props);
 	}
 
 	componentWillReceiveProps(nextProps) {
-		this.checkSocketConnection(nextProps);
+		this.handleSocketConnection(nextProps);
 	}
 
 	componentWillUnmount() {
@@ -37,21 +39,21 @@ class Manager extends Component {
 		}
 	}
 
-	notificationEmmiter(action) {
+	handleNotificationEmission(action) {
 		const not = Notification.getDbEventNotification(action);
-		this.socketEventEmmiter(not);
+		this.handleEventEmission(not);
 	}
 
-	socketEventEmmiter(data) {
+	handleEventEmission(data) {
 		this.props.dispatch(propagateDbEvent(data));
 	}
 
-	checkSocketConnection(props) {
+	handleSocketConnection(props) {
 		if (!this.state.socketConnection && props.token) {
 			const socket = Socket.setConnetion(props.token);
-			Socket.subscribe('InitialData', this.socketEventEmmiter);
-			Socket.subscribe('dbEvent', this.socketEventEmmiter);
-			Socket.subscribe('responseStatus', this.notificationEmmiter);
+			Socket.subscribe('InitialData', this.handleEventEmission);
+			Socket.subscribe('dbEvent', this.handleEventEmission);
+			Socket.subscribe('responseStatus', this.handleNotificationEmission);
 			this.setState({ socketConnection: socket });
 		}
 

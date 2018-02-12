@@ -18,18 +18,18 @@ class LangPage extends Component {
 
 		this.state = INITIAL_STATE;
 
-		this.handleModalConfirm = this.handleModalConfirm.bind(this);
-		this.handleModalCancel = this.handleModalCancel.bind(this);
-		this.openModal = this.openModal.bind(this);
-		this.handleSave = this.handleSave.bind(this);
-		this.handleAddClick = this.handleAddClick.bind(this);
+		Object.getOwnPropertyNames(LangPage.prototype)
+			.filter(method => method.indexOf('handle') === 0)
+			.forEach(method => {
+				this[method] = this[method].bind(this);
+			});
 	}
 
 	handleModalCancel() {
 		this.setState(INITIAL_STATE);
 	}
 
-	openModal(tag) {
+	handleDelete(tag) {
 		this.setState({ modal: true, tag });
 	}
 
@@ -101,7 +101,7 @@ class LangPage extends Component {
 								tag={tag}
 								key={tag}
 								original={dataFix[tag]}
-								onDelete={this.openModal}
+								onDelete={this.handleDelete}
 								onSave={this.handleSave}
 							/>
 						))}
