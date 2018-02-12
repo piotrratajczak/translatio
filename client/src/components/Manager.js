@@ -1,10 +1,6 @@
-import './Modal.css';
-
-import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import React, { Component } from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import AddForm from './AddForm';
-import { CLOSE_FORM } from '../actions/form';
+import AddModal from './AddModal';
 import LangPage from './LangPage';
 import Navigation from './Navigation';
 import Notification from '../modules/Notification';
@@ -23,7 +19,6 @@ class Manager extends Component {
 		};
 
 		this.checkSocketConnection = this.checkSocketConnection.bind(this);
-		this.hideModal = this.hideModal.bind(this);
 		this.socketEventEmmiter = this.socketEventEmmiter.bind(this);
 		this.notificationEmmiter = this.notificationEmmiter.bind(this);
 	}
@@ -42,13 +37,9 @@ class Manager extends Component {
 		}
 	}
 
-	hideModal() {
-		this.props.dispatch({ type: CLOSE_FORM });
-	}
-
 	notificationEmmiter(action) {
 		const not = Notification.getDbEventNotification(action);
-		this.props.dispatch(propagateDbEvent(not));
+		this.socketEventEmmiter(not);
 	}
 
 	socketEventEmmiter(data) {
@@ -71,20 +62,11 @@ class Manager extends Component {
 	}
 
 	render() {
-		const { token, data, modal } = this.props;
-		const languages = Object.keys(data).sort();
-
+		const { token } = this.props;
 		return token ? (
 			<div className="manager">
 				<Navigation />
-				<Modal isOpen={modal.show}>
-					<ModalHeader toggle={this.hideModal}>
-						Create New {modal.type}
-					</ModalHeader>
-					<ModalBody>
-						<AddForm type={modal.type} languages={languages} />
-					</ModalBody>
-				</Modal>
+				<AddModal />
 				<Route exact path="/" component={StartPage} />
 				<Route exact path="/lang/:langCode" component={LangPage} />
 			</div>
@@ -96,24 +78,15 @@ class Manager extends Component {
 
 Manager.propTypes = {
 	dispatch: PropTypes.func.isRequired,
-	data: PropTypes.objectOf(PropTypes.objectOf(PropTypes.string)),
-	token: PropTypes.string,
-	modal: PropTypes.shape({
-		show: PropTypes.bool,
-		type: PropTypes.string
-	})
+	token: PropTypes.string
 };
 
 Manager.defaultProps = {
-	token: null,
-	data: {},
-	modal: null
+	token: null
 };
 
 const mapStateToProps = state => ({
-	token: state.app.token,
-	data: state.data.langData,
-	modal: state.form
+	token: state.app.token
 });
 
 export default connect(mapStateToProps)(Manager);
