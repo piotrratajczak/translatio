@@ -1,6 +1,6 @@
 {
 	"name": "translation-manager",
-	"version": "0.1.2",
+	"version": "0.2.0",
 	"private": true,
 	"scripts": {
 		"start": "react-scripts start",
