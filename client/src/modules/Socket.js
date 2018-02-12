@@ -23,8 +23,6 @@ class Socket {
 	static emitClientEvent(event) {
 		socket.emit('clientEvent', event);
 	}
-
-	// todo wszystkie inne funkcje które bedę wywoływał dla clientEvent
 }
 
 export default Socket;
