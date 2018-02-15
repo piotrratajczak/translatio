@@ -86,7 +86,7 @@ class Translation extends Component {
 				<InputGroup>
 					<Input
 						onChange={this.handleChanges}
-						type="text"
+						type={original.length < 50 ? "text" : "textarea"}
 						id={tag}
 						value={this.state.value}
 						placeholder="NO TRANSLATION"
@@ -98,19 +98,19 @@ class Translation extends Component {
 								<Button
 									onClick={this.handleSaveChanges}
 									color="primary"
-									key="btnSave">
+								key="btnSave">
 									Save
 								</Button>,
 								<Button
 									color="faded"
 									onClick={this.handleUndoChanges}
-									key="btnUndo">
+								key="btnUndo">
 									Undo
 								</Button>,
 								<Button
 									color="warning"
 									onClick={this.handleOriginalClick}
-									key="btnShow">
+								key="btnShow">
 									{`${show ? 'Hide' : 'Show'} actual`}
 								</Button>
 							]}
@@ -120,6 +120,9 @@ class Translation extends Component {
 						</ButtonGroup>
 					</InputGroupAddon>
 				</InputGroup>
+
+
+
 				<Collapse isOpen={show}>
 					<Input
 						className="original"
