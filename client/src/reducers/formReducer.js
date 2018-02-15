@@ -13,7 +13,7 @@ function formReducer(state = INITIAL_STATE, action) {
 	case FORM_OPEN: {
 		return {
 			...state,
-			show: !state.loading,
+			show: state.loading ? state.show : true,
 			type: state.loading ? null : action.payload
 		};
 	}
