@@ -2,9 +2,9 @@ import './StartPage.css';
 import { Button, ListGroup, ListGroupItem } from 'reactstrap';
 import React, { Component } from 'react';
 import Confirmation from './Confirmation';
+import { FORM_OPEN } from '../actions/form';
 import { LANG_DELETED } from '../actions/data';
 import { Link } from 'react-router-dom';
-import { OPEN_FORM } from '../actions/form';
 import { PropTypes } from 'prop-types';
 import Socket from '../modules/Socket';
 import { connect } from 'react-redux';
@@ -47,7 +47,7 @@ class StartPage extends Component {
 	}
 
 	handleAddClick(evt) {
-		this.props.dispatch({ type: OPEN_FORM, payload: evt.target.name });
+		this.props.dispatch({ type: FORM_OPEN, payload: evt.target.name });
 	}
 
 	render() {

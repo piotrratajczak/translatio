@@ -1,9 +1,12 @@
 import './AddForm.css';
-import { Button, Col, Form, FormGroup, Input, Label } from 'reactstrap';
+import { Button, Col, Form, FormGroup, Input, Label, Modal, ModalBody, ModalHeader } from 'reactstrap';
+import { FORM_CLOSE, FORM_SET_LOADING } from '../actions/form';
 import { LANG_ADDED, TAG_ADDED } from '../actions/data';
 import React, { Component } from 'react';
+import Loader from './Loader';
 import { PropTypes } from 'prop-types';
 import Socket from '../modules/Socket';
+import { connect } from 'react-redux';
 
 const INITIAL_STATE = { value: '', error: null };
 
@@ -48,29 +51,54 @@ class AddForm extends Component {
 			});
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (this.props.modal.loading && !nextProps.modal.loading) {
+			this.handleDbResponse(nextProps);
+		}
+	}
+
+	handleDbResponse({ modal }) {
+		const { error, value } = modal;
+		if (error) {
+			this.setState({ error, value });
+		}
+	}
+
 	handleChange({ target }) {
 		const { value } = target;
 		const error = this.validateValue(value);
 		this.setState({ value, error });
 	}
 
+	handleModalClose() {
+		this.setState(() => INITIAL_STATE);
+		this.props.dispatch({ type: FORM_CLOSE });
+	}
+
 	validateValue(value) {
-		return this.props.type === 'tag'
+		return this.props.modal.type === 'tag'
 			? tagValidation(value)
 			: langCodeValidation(value, this.props.languages);
 	}
 
 	handleSubmit(evt) {
-		const type = this.props.type === 'tag' ? 'tag' : 'langCode';
+		const type = this.props.modal.type === 'tag' ? 'tag' : 'langCode';
 		const payload = { [type]: evt.target.elements.value.value };
-		if (this.props.type === 'tag') {
+		if (this.props.modal.type === 'tag') {
 			this.props.languages.forEach(lang => {
 				payload[lang] = evt.target.elements[lang].value;
 			});
 		}
+		this.props.dispatch({
+			type: FORM_SET_LOADING,
+			payload: {
+				loading: true,
+				value: this.state.value
+			}
+		});
 		Socket.emitClientEvent({
 			payload,
-			type: this.props.type === 'tag' ? TAG_ADDED : LANG_ADDED
+			type: this.props.modal.type === 'tag' ? TAG_ADDED : LANG_ADDED
 		});
 
 		this.setState(() => INITIAL_STATE);
@@ -79,82 +107,101 @@ class AddForm extends Component {
 	}
 
 	render() {
+		const { modal, languages } = this.props;
 		const renderInfo =
-			this.props.type === 'tag' && !this.props.languages.length;
+			modal.type === 'tag' && !languages.length;
 		return (
-			<Form className="p-3 add-form" onSubmit={this.handleSubmit}>
-				{renderInfo && (
-					<p className="info-text">
-						Please create any language before you create a tag!
-					</p>
-				)}
-				{!renderInfo && (
-					<FormGroup row>
-						<Label htmlFor="value" xs={12} sm={2}>
-							{this.props.type}:
-						</Label>
-						<Col xs={12} sm={7}>
-							<Input
-								onChange={this.handleChange}
-								value={this.state.value}
-								type="text"
-								name="value"
-								id="value"
-								placeholder={this.props.type}
-							/>
-						</Col>
-						<Col xs={12} className="hidden-sm-up errors">
-							{this.state.error}
-						</Col>
-						<Col xs={12} sm={3}>
-							<Button
-								className="w-100"
-								type="submit"
-								disabled={
-									this.state.error !== null || !this.state.value.length
-								}>
-								Submit
-							</Button>
-						</Col>
-						<Col className="hidden-xs-down errors" xs={12}>
-							{this.state.error}
-						</Col>
-					</FormGroup>
-				)}
-				{!renderInfo &&
-					this.props.type === 'tag' && (
-						<div>
-							<hr />
-							{this.props.languages.map(lang => (
-								<FormGroup row key={lang}>
-									<Label className="lang-code" htmlFor={lang} xs={12} sm={2}>
-										{lang}:
-									</Label>
-									<Col xs={12} sm={7}>
-										<Input
-											type="text"
-											name={lang}
-											id={lang}
-											placeholder="NO TRANSLATION"
-										/>
-									</Col>
-								</FormGroup>
-							))}
-						</div>
-					)}
-			</Form>
+			<Modal isOpen={modal.show}>
+				<ModalHeader toggle={this.handleModalClose}>
+					Create New {modal.type}
+				</ModalHeader>
+				<ModalBody>
+					<Form className="p-3 add-form" onSubmit={this.handleSubmit}>
+						{modal.loading && <Loader />}
+						{!modal.loading && renderInfo && (
+							<p className="info-text">
+								Please create any language before you create a tag!
+							</p>
+						)}
+						{!modal.loading && !renderInfo && (
+							<FormGroup row>
+								<Label htmlFor="value" xs={12} sm={2}>
+									{modal.type}:
+								</Label>
+								<Col xs={12} sm={7}>
+									<Input
+										onChange={this.handleChange}
+										value={this.state.value}
+										type="text"
+										name="value"
+										id="value"
+										placeholder={modal.type}
+									/>
+								</Col>
+								<Col xs={12} className="hidden-sm-up errors">
+									{this.state.error}
+								</Col>
+								<Col xs={12} sm={3}>
+									<Button
+										className="w-100"
+										type="submit"
+										disabled={
+											this.state.error !== null || !this.state.value.length
+										}>
+										Submit
+									</Button>
+								</Col>
+								<Col className="hidden-xs-down errors" xs={12}>
+									{this.state.error}
+								</Col>
+							</FormGroup>
+						)}
+						{!renderInfo &&
+							modal.type === 'tag' && (
+								<div>
+									<hr />
+									{languages.map(lang => (
+										<FormGroup row key={lang}>
+											<Label className="lang-code" htmlFor={lang} xs={12} sm={2}>
+												{lang}:
+											</Label>
+											<Col xs={12} sm={7}>
+												<Input
+													type="text"
+													name={lang}
+													id={lang}
+													placeholder="NO TRANSLATION"
+												/>
+											</Col>
+										</FormGroup>
+									))}
+								</div>
+							)}
+					</Form>
+				</ModalBody>
+			</Modal>
 		);
 	}
 }
 
 AddForm.propTypes = {
-	type: PropTypes.string,
+	dispatch: PropTypes.func.isRequired,
+	modal: PropTypes.shape({
+		show: PropTypes.bool,
+		type: PropTypes.string,
+		loading: PropTypes.bool
+	}),
 	languages: PropTypes.arrayOf(PropTypes.string)
 };
 
 AddForm.defaultProps = {
-	languages: [],
-	type: null
+	modal: null,
+	languages: []
 };
 
-export default AddForm;
+const mapStateToProps = state => ({
+	modal: state.form,
+	languages: Object.keys(state.data.langData)
+});
+
+export default connect(mapStateToProps)(AddForm);

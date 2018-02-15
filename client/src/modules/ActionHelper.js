@@ -5,6 +5,7 @@ import {
 	TAG_ADDED,
 	TAG_DELETED
 } from '../actions/data';
+import { FORM_SET_LOADING } from '../actions/form';
 import Notifications from 'react-notification-system-redux';
 
 function getTitle(action) {
@@ -31,7 +32,7 @@ function getTitle(action) {
 	return title;
 }
 
-class Notification {
+class ActionHelper {
 	static getDbEventNotification(data) {
 		return Notifications[data.success ? 'success' : 'error']({
 			title: getTitle(data.action),
@@ -40,6 +41,25 @@ class Notification {
 			autoDismiss: 5
 		});
 	}
+
+	static getFormAction(data) {
+		let action = null;
+		if (data.action === LANG_ADDED || data.action === TAG_ADDED) {
+			action = {
+				type: FORM_SET_LOADING,
+				payload: {
+					loading: false,
+					show: !data.success,
+					error: data.error
+				}
+			};
+
+			if (data.success) {
+				action.value = '';
+			}
+		}
+		return action;
+	}
 }
 
-export default Notification;
+export default ActionHelper;

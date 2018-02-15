@@ -6,8 +6,8 @@ import {
 	NavLink,
 	UncontrolledDropdown
 } from 'reactstrap';
+import { FORM_OPEN } from '../actions/form';
 import { Link } from 'react-router-dom';
-import { OPEN_FORM } from '../actions/form';
 import { PropTypes } from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -39,7 +39,7 @@ class Navigation extends React.Component {
 	}
 
 	handleAddClick(evt) {
-		this.props.dispatch({ type: OPEN_FORM, payload: evt.target.name });
+		this.props.dispatch({ type: FORM_OPEN, payload: evt.target.name });
 	}
 
 	render() {

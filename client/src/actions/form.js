@@ -1,8 +1,11 @@
-export const OPEN_FORM = 'form/OPEN_FORM';
+export const FORM_OPEN = 'form/FORM_OPEN';
 
-export const CLOSE_FORM = 'form/CLOSE_FORM';
+export const FORM_CLOSE = 'form/CLOSE_FORM';
+
+export const FORM_SET_LOADING = 'form/SET_LOADING';
 
 export default {
-	OPEN_FORM,
-	CLOSE_FORM
+	FORM_OPEN,
+	FORM_CLOSE,
+	FORM_SET_LOADING
 };

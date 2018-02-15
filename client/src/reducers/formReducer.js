@@ -1,13 +1,16 @@
-import { CLOSE_FORM, OPEN_FORM } from '../actions/form';
+import { FORM_CLOSE, FORM_OPEN, FORM_SET_LOADING } from '../actions/form';
 
 const INITIAL_STATE = {
 	show: false,
-	type: null
+	type: null,
+	loading: false,
+	error: null,
+	value: ''
 };
 
 function formReducer(state = INITIAL_STATE, action) {
 	switch (action.type) {
-	case OPEN_FORM: {
+	case FORM_OPEN: {
 		return {
 			...state,
 			show: true,
@@ -15,8 +18,15 @@ function formReducer(state = INITIAL_STATE, action) {
 		};
 	}
 
-	case CLOSE_FORM: {
+	case FORM_CLOSE: {
 		return INITIAL_STATE;
+	}
+
+	case FORM_SET_LOADING: {
+		return {
+			...state,
+			...action.payload
+		};
 	}
 
 	default:

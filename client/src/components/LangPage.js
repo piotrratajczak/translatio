@@ -3,8 +3,8 @@ import { Badge, Button, Form } from 'reactstrap';
 import { LANG_UPDATED, TAG_DELETED } from '../actions/data';
 import React, { Component } from 'react';
 import Confirmation from './Confirmation';
+import { FORM_OPEN } from '../actions/form';
 import Loader from './Loader';
-import { OPEN_FORM } from '../actions/form';
 import { PropTypes } from 'prop-types';
 import Socket from '../modules/Socket';
 import Translation from './Translation';
@@ -50,7 +50,7 @@ class LangPage extends Component {
 	}
 
 	handleAddClick(evt) {
-		this.props.dispatch({ type: OPEN_FORM, payload: evt.target.name });
+		this.props.dispatch({ type: FORM_OPEN, payload: evt.target.name });
 	}
 
 	render() {

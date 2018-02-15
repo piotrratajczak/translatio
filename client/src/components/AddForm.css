@@ -15,3 +15,7 @@
 	font-size: larger;
 	padding: 25px;
 }
+
+.modal-title {
+	text-transform: capitalize;
+}

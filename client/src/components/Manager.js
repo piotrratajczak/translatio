@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import AddModal from './AddModal';
+import ActionHelper from '../modules/ActionHelper';
+import AddForm from './AddForm';
 import LangPage from './LangPage';
 import Navigation from './Navigation';
-import Notification from '../modules/Notification';
 import { PropTypes } from 'prop-types';
 import Socket from '../modules/Socket';
 import StartPage from './StartPage';
@@ -38,21 +38,26 @@ class Manager extends Component {
 		}
 	}
 
-	handleNotificationEmission(action) {
-		const not = Notification.getDbEventNotification(action);
+	handleDbResponse(data) {
+		const formAction = ActionHelper.getFormAction(data);
+		if (formAction) {
+			this.props.dispatch(formAction);
+		}
+
+		const not = ActionHelper.getDbEventNotification(data);
 		this.props.dispatch(not);
 	}
 
-	handleSocketConnection(props) {
-		if (!this.state.socketConnection && props.token) {
-			const socket = Socket.setConnetion(props.token);
-			Socket.subscribe('InitialData', props.dispatch);
-			Socket.subscribe('dbEvent', props.dispatch);
-			Socket.subscribe('responseStatus', this.handleNotificationEmission);
+	handleSocketConnection({ token, dispatch }) {
+		if (!this.state.socketConnection && token) {
+			const socket = Socket.setConnetion(token);
+			Socket.subscribe('InitialData', dispatch);
+			Socket.subscribe('dbEvent', dispatch);
+			Socket.subscribe('responseStatus', this.handleDbResponse);
 			this.setState({ socketConnection: socket });
 		}
 
-		if (this.state.socketConnection && !props.token) {
+		if (this.state.socketConnection && !token) {
 			Socket.disconnect();
 			this.setState({ socketConnection: null });
 		}
@@ -63,7 +68,7 @@ class Manager extends Component {
 		return token ? (
 			<div className="manager">
 				<Navigation />
-				<AddModal />
+				<AddForm />
 				<Route exact path="/" component={StartPage} />
 				<Route exact path="/lang/:langCode" component={LangPage} />
 			</div>
