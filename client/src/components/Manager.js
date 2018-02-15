@@ -64,7 +64,11 @@ class Manager extends Component {
 	}
 
 	render() {
-		const { token } = this.props;
+		const { token, match } = this.props;
+		let redirectUrl = '/login';
+		if (match.url !== '/') {
+			redirectUrl += `?url=${match.url}`;
+		}
 		return token ? (
 			<div className="manager">
 				<Navigation />
@@ -73,7 +77,7 @@ class Manager extends Component {
 				<Route exact path="/lang/:langCode" component={LangPage} />
 			</div>
 		) : (
-			<Redirect to="/login" />
+			<Redirect to={redirectUrl} />
 		);
 	}
 }

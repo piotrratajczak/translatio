@@ -6,6 +6,7 @@ import Loader from './Loader';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { loginUser } from '../actionCreators/app';
+import queryString from 'query-string';
 import startImg from '../img/startPage.jpg';
 
 const INITIAL_STATE = {
@@ -26,15 +27,15 @@ class Login extends Component {
 	}
 
 	onSubmit(event) {
+		const { url } = queryString.parse(this.props.location.search);
 		const { email, password } = this.state;
-		this.props.dispatch(loginUser({ email, password }, this.props.history));
+		this.props.dispatch(loginUser({ email, password }, this.props.history, url));
 		event.preventDefault();
 	}
 
 	render() {
 		const { email, password } = this.state;
 		const { status } = this.props;
-
 		const isInvalid = password === '' || email === '';
 		return (
 			<Container>

@@ -7,7 +7,7 @@ import {
 } from '../actions/app';
 import Auth from '../modules/Auth';
 
-export function loginUser(userData, history) {
+export function loginUser(userData, history, url = '/') {
 	return dispatch => {
 		dispatch({ type: FETCH_TOKEN_PENDING });
 
@@ -26,7 +26,7 @@ export function loginUser(userData, history) {
 						// token
 						dispatch({ type: FETCH_TOKEN_FULFILLED, payload: resp.data });
 						Auth.setToken(resp.data);
-						history.push('/');
+						history.push(url);
 					} else {
 						dispatch({ type: FETCH_TOKEN_FULFILLED_NONE });
 					}
