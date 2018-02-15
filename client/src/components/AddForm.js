@@ -112,7 +112,7 @@ class AddForm extends Component {
 			modal.type === 'tag' && !languages.length;
 		return (
 			<Modal isOpen={modal.show}>
-				<ModalHeader toggle={this.handleModalClose}>
+				<ModalHeader toggle={modal.loading ? null : this.handleModalClose}>
 					Create New {modal.type}
 				</ModalHeader>
 				<ModalBody>
