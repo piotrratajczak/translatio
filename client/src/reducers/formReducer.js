@@ -14,7 +14,7 @@ function formReducer(state = INITIAL_STATE, action) {
 		return {
 			...state,
 			show: !state.loading,
-			type: action.payload
+			type: state.loading ? null : action.payload
 		};
 	}
 
