@@ -8,7 +8,6 @@ import { PropTypes } from 'prop-types';
 import Socket from '../modules/Socket';
 import StartPage from './StartPage';
 import { connect } from 'react-redux';
-import propagateDbEvent from '../actionCreators/data';
 
 class Manager extends Component {
 	constructor() {
@@ -41,18 +40,14 @@ class Manager extends Component {
 
 	handleNotificationEmission(action) {
 		const not = Notification.getDbEventNotification(action);
-		this.handleEventEmission(not);
-	}
-
-	handleEventEmission(data) {
-		this.props.dispatch(propagateDbEvent(data));
+		this.props.dispatch(not);
 	}
 
 	handleSocketConnection(props) {
 		if (!this.state.socketConnection && props.token) {
 			const socket = Socket.setConnetion(props.token);
-			Socket.subscribe('InitialData', this.handleEventEmission);
-			Socket.subscribe('dbEvent', this.handleEventEmission);
+			Socket.subscribe('InitialData', props.dispatch);
+			Socket.subscribe('dbEvent', props.dispatch);
 			Socket.subscribe('responseStatus', this.handleNotificationEmission);
 			this.setState({ socketConnection: socket });
 		}
