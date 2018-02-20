@@ -3,7 +3,6 @@ import {
 	DropdownItem,
 	DropdownMenu,
 	DropdownToggle,
-	NavLink,
 	UncontrolledDropdown
 } from 'reactstrap';
 import { FORM_OPEN } from '../actions/form';
@@ -88,7 +87,7 @@ class Navigation extends React.Component {
 								</DropdownItem>
 							</DropdownMenu>
 						</UncontrolledDropdown>
-						<NavLink onClick={this.handleLogout}>Logout</NavLink>
+						<a href="/" className="nav-link" onClick={this.handleLogout}>Logout</a>
 					</ul>
 				</Collapse>
 			</nav>
