@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import Auth from '../modules/Auth';
 import { Container } from 'reactstrap';
+import ErrorBoundary from './ErrorBoundary';
 import Loader from './Loader';
 import Login from './Login';
 import Manager from './Manager';
@@ -30,20 +31,22 @@ class App extends Component {
 	render() {
 		const { initialized } = this.props;
 		return (
-			<Router>
-				<Container>
-					<Notifications />
-					{!initialized && <Loader />}
-					{initialized && (
-						<Switch>
-							<Route exact path="/login" component={Login} />
-							<Route exact path="/" component={Manager} />
-							<Route exact path="/lang/:langCode" component={Manager} />
-							<Route component={NoMatchPage} />
-						</Switch>
-					)}
-				</Container>
-			</Router>
+			<ErrorBoundary>
+				<Router>
+					<Container>
+						<Notifications />
+						{!initialized && <Loader />}
+						{initialized && (
+							<Switch>
+								<Route exact path="/login" component={Login} />
+								<Route exact path="/" component={Manager} />
+								<Route exact path="/lang/:langCode" component={Manager} />
+								<Route component={NoMatchPage} />
+							</Switch>
+						)}
+					</Container>
+				</Router>
+			</ErrorBoundary>
 		);
 	}
 }
