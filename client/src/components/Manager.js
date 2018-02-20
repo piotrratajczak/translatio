@@ -84,7 +84,12 @@ class Manager extends Component {
 
 Manager.propTypes = {
 	dispatch: PropTypes.func.isRequired,
-	token: PropTypes.string
+	token: PropTypes.string,
+	match: PropTypes.shape({
+		params: PropTypes.shape({
+			langCode: PropTypes.string
+		})
+	}).isRequired
 };
 
 Manager.defaultProps = {

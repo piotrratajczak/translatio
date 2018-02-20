@@ -28,7 +28,7 @@ class Navigation extends React.Component {
 		};
 	}
 
-	toggleNavbar() {
+	handleNavbarSwitch() {
 		this.setState({
 			collapsed: !this.state.collapsed
 		});

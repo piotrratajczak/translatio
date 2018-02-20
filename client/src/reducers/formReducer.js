@@ -1,4 +1,6 @@
 import { FORM_CLOSE, FORM_OPEN, FORM_SET_LOADING } from '../actions/form';
+import { LOGOUT } from '../actions/app';
+
 
 const INITIAL_STATE = {
 	show: false,
@@ -7,6 +9,7 @@ const INITIAL_STATE = {
 	error: null,
 	value: ''
 };
+
 
 function formReducer(state = INITIAL_STATE, action) {
 	switch (action.type) {
@@ -27,6 +30,10 @@ function formReducer(state = INITIAL_STATE, action) {
 			...state,
 			...action.payload
 		};
+	}
+
+	case LOGOUT: {
+		return INITIAL_STATE;
 	}
 
 	default:

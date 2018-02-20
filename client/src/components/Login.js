@@ -94,7 +94,11 @@ class Login extends Component {
 Login.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	status: PropTypes.string,
-	history: PropTypes.shape({}).isRequired
+	history: PropTypes.shape({}).isRequired,
+	location: PropTypes.shape({
+		pathname: PropTypes.string.isRequired,
+		search: PropTypes.string.isRequired
+	}).isRequired
 };
 
 Login.defaultProps = {
