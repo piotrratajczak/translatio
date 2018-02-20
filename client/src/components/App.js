@@ -41,6 +41,7 @@ class App extends Component {
 								<Route exact path="/login" component={Login} />
 								<Route exact path="/" component={Manager} />
 								<Route exact path="/lang/:langCode" component={Manager} />
+								<Route exact path="/extra/empty" component={Manager} />
 								<Route component={NoMatchPage} />
 							</Switch>
 						)}

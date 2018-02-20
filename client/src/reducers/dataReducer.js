@@ -1,4 +1,7 @@
 import {
+	FETCH_EMPTY_FULFILLED,
+	FETCH_EMPTY_PENDING,
+	FETCH_EMPTY_REJECTED,
 	INITIAL_LANGUAGE_SET,
 	LANG_ADDED,
 	LANG_DELETED,
@@ -11,7 +14,9 @@ import { LOGOUT } from '../actions/app';
 
 const INITIAL_STATE = {
 	langData: {},
-	initialized: false
+	initialized: false,
+	extraData: {},
+	fetchingError: false
 };
 
 function dataReducer(state = INITIAL_STATE, action) {
@@ -84,6 +89,28 @@ function dataReducer(state = INITIAL_STATE, action) {
 
 	case LOGOUT: {
 		return INITIAL_STATE;
+	}
+
+	case FETCH_EMPTY_PENDING: {
+		return {
+			...state,
+			extraData: {}
+		};
+	}
+
+	case FETCH_EMPTY_FULFILLED: {
+		return {
+			...state,
+			extraData: action.payload,
+			fetchingError: false
+		};
+	}
+
+	case FETCH_EMPTY_REJECTED: {
+		return {
+			...state,
+			fetchingError: true
+		};
 	}
 
 	default:

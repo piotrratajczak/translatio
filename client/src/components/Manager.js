@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import ActionHelper from '../modules/ActionHelper';
 import AddForm from './AddForm';
+import Empties from './Empties';
 import LangPage from './LangPage';
 import Navigation from './Navigation';
 import { PropTypes } from 'prop-types';
@@ -44,7 +45,7 @@ class Manager extends Component {
 			this.props.dispatch(formAction);
 		}
 
-		const not = ActionHelper.getDbEventNotification(data);
+		const not = ActionHelper.getNotification(data);
 		this.props.dispatch(not);
 	}
 
@@ -75,6 +76,7 @@ class Manager extends Component {
 				<AddForm />
 				<Route exact path="/" component={StartPage} />
 				<Route exact path="/lang/:langCode" component={LangPage} />
+				<Route exact path="/extra/empty" component={Empties} />
 			</div>
 		) : (
 			<Redirect to={redirectUrl} />

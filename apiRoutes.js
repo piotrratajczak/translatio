@@ -144,7 +144,7 @@ apiRoutes.delete('/api/tag', checkJWT, (req, res, next) => {
 });
 
 //-----------extra features -----------
-apiRoutes.get('/api/extra/emptytags', (req, res) => {
+apiRoutes.get('/api/extra/empty', checkJWT, (req, res) => {
 	apiFunction(req, res, db.getEmptyTags);
 });
 

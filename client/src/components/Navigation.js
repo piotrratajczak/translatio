@@ -55,7 +55,7 @@ class Navigation extends React.Component {
 					Translation Manager
 				</Link>
 				<Collapse isOpen={!this.state.collapsed} navbar>
-					<ul className="nav navbar-nav ml-auto w-100 justify-content-end">
+					<nav className="nav navbar-nav ml-auto w-100 justify-content-end">
 						{languages.length > 0 && (
 							<UncontrolledDropdown nav="true">
 								<DropdownToggle nav caret>
@@ -87,8 +87,21 @@ class Navigation extends React.Component {
 								</DropdownItem>
 							</DropdownMenu>
 						</UncontrolledDropdown>
+						<UncontrolledDropdown nav="true">
+							<DropdownToggle nav caret>
+								Extras
+							</DropdownToggle>
+							<DropdownMenu>
+
+								<DropdownItem>
+									<Link className="nav-link" to="/extra/empty">
+										Empties
+									</Link>
+								</DropdownItem>
+							</DropdownMenu>
+						</UncontrolledDropdown>
 						<a href="/" className="nav-link" onClick={this.handleLogout}>Logout</a>
-					</ul>
+					</nav>
 				</Collapse>
 			</nav>
 		);

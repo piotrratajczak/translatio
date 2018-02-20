@@ -1,4 +1,7 @@
 import {
+	FETCH_EMPTY_FULFILLED,
+	FETCH_EMPTY_PENDING,
+	FETCH_EMPTY_REJECTED,
 	LANG_ADDED,
 	LANG_DELETED,
 	LANG_UPDATED,
@@ -26,6 +29,15 @@ function getTitle(action) {
 	case TAG_DELETED:
 		title = 'Deleting Tag';
 		break;
+	case FETCH_EMPTY_PENDING:
+		title = 'Fetching data!';
+		break;
+	case FETCH_EMPTY_REJECTED:
+		title = 'Fetchin data error!';
+		break;
+	case FETCH_EMPTY_FULFILLED:
+		title = 'Fetching data success!';
+		break;
 	default:
 		title = 'DB Event!';
 	}
@@ -33,7 +45,7 @@ function getTitle(action) {
 }
 
 class ActionHelper {
-	static getDbEventNotification(data) {
+	static getNotification(data) {
 		return Notifications[data.success ? 'success' : 'error']({
 			title: getTitle(data.action),
 			message: data.success ? 'Action was successful' : data.error,
