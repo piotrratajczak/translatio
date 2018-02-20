@@ -9,3 +9,10 @@
 	padding: 5px;
 	margin-top: 15px;
 }
+
+.lang-page .toggle-switcher{
+	display: flex;
+	padding: 15px;
+	justify-content: space-between;
+	margin: 5px 0;
+}

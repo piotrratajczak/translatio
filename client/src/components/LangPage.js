@@ -7,10 +7,11 @@ import { FORM_OPEN } from '../actions/form';
 import Loader from './Loader';
 import { PropTypes } from 'prop-types';
 import Socket from '../modules/Socket';
+import ToggleButton from 'react-toggle-button';
 import Translation from './Translation';
 import { connect } from 'react-redux';
 
-const INITIAL_STATE = { modal: false, tag: null };
+const INITIAL_STATE = { modal: false, tag: null, onlyEmpty: false };
 
 class LangPage extends Component {
 	constructor() {
@@ -53,6 +54,10 @@ class LangPage extends Component {
 		this.props.dispatch({ type: FORM_OPEN, payload: evt.target.name });
 	}
 
+	handleOnlyEmptyToggle(value) {
+		this.setState({ onlyEmpty: !value });
+	}
+
 	render() {
 		const { data, initialized } = this.props;
 		const { langCode } = this.props.match.params;
@@ -80,7 +85,15 @@ class LangPage extends Component {
 				/>
 				<h1 className="bg-faded">
 					<Badge color="primary">{langCode}</Badge>
+
 				</h1>
+				<div className="toggle-switcher bg-faded">
+					<span>Show only empty tags:</span>
+					<ToggleButton
+						value={this.state.onlyEmpty}
+						onToggle={this.handleOnlyEmptyToggle} />
+				</div>
+
 				{!Object.keys(dataFix).length && (
 					<div className="info-text">
 						<p>There are no tags yet! Please add one!</p>
@@ -96,6 +109,7 @@ class LangPage extends Component {
 				{data &&
 					Object.keys(dataFix)
 						.sort()
+						.filter(tag => !this.state.onlyEmpty || dataFix[tag].length === 0)
 						.map(tag => (
 							<Translation
 								tag={tag}
