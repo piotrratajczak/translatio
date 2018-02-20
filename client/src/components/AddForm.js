@@ -130,6 +130,7 @@ class AddForm extends Component {
 								</Label>
 								<Col xs={12} sm={7}>
 									<Input
+										autoFocus
 										onChange={this.handleChange}
 										value={this.state.value}
 										type="text"
